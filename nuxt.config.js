@@ -40,6 +40,12 @@ export default {
         component: resolve(__dirname, 'pages/index.vue'),
         title: 'Главная'
       })
+      routes.push({
+        name: 'Фильтры',
+        path: '/',
+        component: resolve(__dirname, 'pages/Filters.vue'),
+        title: 'Фильтры'
+      })
     }
   },
 

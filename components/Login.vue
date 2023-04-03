@@ -75,11 +75,7 @@ export default {
 
 <style scoped>
 .login .container {
-  display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 40px;
-  height: 100vh;
 }
 
 .login h2 {

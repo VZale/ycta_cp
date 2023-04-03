@@ -183,3 +183,21 @@ h2, h3, h4 {
 .page .title {
   margin-top: 40px;
 }
+
+.container {
+  display: grid;
+  padding: 40px;
+  height: 100vh;
+  background-color: var(--gray-1);
+  gap: 12px;
+}
+
+.main.container {
+  grid-template-columns: 330px 1fr;
+}
+
+.main.container .content {
+  display: grid;
+  grid-template-rows: max-content 1fr;
+  gap: 12px;
+}
