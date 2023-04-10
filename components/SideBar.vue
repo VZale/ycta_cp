@@ -7,13 +7,13 @@
           <NuxtLink to="/filters">Фильтры</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/">Категории</NuxtLink>
+          <NuxtLink to="/categories">Категории</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/">Подкатегории</NuxtLink>
+          <NuxtLink to="/subcategories">Подкатегории</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/">Товары</NuxtLink>
+          <NuxtLink to="/products">Товары</NuxtLink>
         </li>
       </ul>
     </div>

@@ -42,9 +42,27 @@ export default {
       })
       routes.push({
         name: 'Фильтры',
-        path: '/',
+        path: '/filters',
         component: resolve(__dirname, 'pages/Filters.vue'),
         title: 'Фильтры'
+      })
+      routes.push({
+        name: 'Категории',
+        path: '/categories',
+        component: resolve(__dirname, 'pages/Categories.vue'),
+        title: 'Категории'
+      })
+      routes.push({
+        name: 'Подкатегории',
+        path: '/subcategories',
+        component: resolve(__dirname, 'pages/Subcategories.vue'),
+        title: 'Подкатегории'
+      })
+      routes.push({
+        name: 'Товары',
+        path: '/products',
+        component: resolve(__dirname, 'pages/Products.vue'),
+        title: 'Товары'
       })
     }
   },

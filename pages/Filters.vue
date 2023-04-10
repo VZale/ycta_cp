@@ -7,13 +7,18 @@
         <Content class="view" :page="'filters'"/>
       </div>
     </div>
+    <ModalBox :title="'Новый фильтр'">
+
+    </ModalBox>
   </div>
 </template>
 
 <script>
+import ModalBox from "~/components/ModalBox";
 export default {
   name: "Filters",
   components: {
+    ModalBox,
     SideBar: () => import('@/components/SideBar')
   }
 }

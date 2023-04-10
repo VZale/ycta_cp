@@ -11,6 +11,8 @@
             <p>Чтобы начать работу в панели администратора, необходимо авторизоваться</p>
           </div>
         </div>
+        <img class="login-bg" :src="require('@/assets/login-bg.png')" alt="">
+
       </div>
       <div class="right">
         <div class="box">
@@ -106,17 +108,14 @@ export default {
   overflow: hidden;
 }
 
-.left::after {
-  content: '';
+.login-bg {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
-  z-index: -1;
   background-size: cover;
-  background-image: url("./assets/login-bg.png");
 }
 
 .left .box {
@@ -125,6 +124,8 @@ export default {
   height: 100%;
   place-content: space-between;
   padding: 40px 0 60px;
+  position: relative;
+  z-index: 5;
 }
 
 h1 {
