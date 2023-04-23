@@ -1,10 +1,10 @@
 <template>
     <div class="box">
-        <template v-if="Object.keys(pageData?.['categories']).length">
+        <template v-if="Object.keys(pageData?.['products']).length">
             <div class="cards">
-                <template v-for="product in pageData?.['categories']">
+                <template v-for="product in pageData?.['products']">
                     <Card v-if="!product.isHidden"
-                          :type="'category'"
+                          :type="'product'"
                           :title="product.title"
                           :price="product.price"
                           :description="product.description"
@@ -14,13 +14,11 @@
                           :isHidden="product.isHidden"
                           @remove="remove(product.id)"
                           @hide="hide(product)"
-                          :design="['button','white','large']"
-                          :button-text="'моделей'"
                     />
                 </template>
             </div>
         </template>
-        <WarningMessage v-else :warning-message="'Начните добавлять фильтры и они появятся здесь'"/>
+        <WarningMessage v-else :warning-message="'Начните добавлять товары и они появятся здесь'"/>
     </div>
 </template>
 
@@ -28,7 +26,7 @@
 import {mapGetters} from "vuex"
 
 export default {
-    name: "CategoriesView",
+    name: "ProductsView",
     components: {
         WarningMessage: () => import('@/components/WarningMessage'),
         Actions: () => import("@/components/Actions"),
@@ -43,13 +41,13 @@ export default {
     methods: {
         remove(id) {
             this.$store.commit('removePageData', {
-                page: 'categories',
+                page: 'products',
                 id: id
             })
         },
         hide(product) {
             this.$store.commit('hidePageData', {
-                page: 'categories',
+                page: 'products',
                 data: product
             })
         }
@@ -59,6 +57,7 @@ export default {
 
 <style scoped>
 .box {
+    width: 100%;
     height: 100%;
 }
 
@@ -68,4 +67,5 @@ export default {
     grid-template-rows: max-content;
     gap: 12px;
 }
+
 </style>

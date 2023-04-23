@@ -1,0 +1,86 @@
+<template>
+    <div class="form-item base-input" :class="{'is-focus': inputIsActive}">
+        <p>{{ title }}</p>
+        <input v-model="inputData" type="text"
+               @focus="inputIsActive = true"
+               @blur="removeFocus()">
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        title: {
+            type: String
+        },
+        field: {
+            type: String
+        }
+    },
+    name: "InputBox",
+    data() {
+        return {
+            inputIsActive: false,
+            inputData: ""
+        }
+    },
+    methods: {
+        sendInputData() {
+            setTimeout(() => {
+                let field = {
+                    field: this.field,
+                    inputData: this.inputData
+                }
+                this.$emit('update', field)
+            }, 500)
+        },
+        removeFocus() {
+            this.sendInputData()
+            if (!this.inputData) {
+                this.inputIsActive = false
+            }
+        }
+    }
+}
+</script>
+
+<style scoped>
+.form-item {
+    margin-bottom: 12px;
+}
+
+.form-item:last-child {
+    margin-bottom: 0;
+}
+
+.form-item:focus {
+    background-color: black;
+}
+
+.form-item p {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    color: var(--gray-4);
+    z-index: 2;
+    transition: all .3s ease-in-out;
+}
+
+.form-item.is-focus p {
+    font-size: 12px;
+    top: 15px;
+}
+
+input {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    background-color: transparent;
+    color: var(--black);
+    position: relative;
+    z-index: 3;
+    font-size: 18px;
+    font-weight: 400;
+}
+</style>
