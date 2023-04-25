@@ -26,13 +26,11 @@ export default {
     },
     methods: {
         sendInputData() {
-            setTimeout(() => {
-                let field = {
-                    field: this.field,
-                    inputData: this.inputData
-                }
-                this.$emit('update', field)
-            }, 500)
+            let field = {
+                field: this.field,
+                inputData: this.inputData
+            }
+            this.$emit('update', field)
         },
         removeFocus() {
             this.sendInputData()

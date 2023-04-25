@@ -1,17 +1,29 @@
 <template>
-    <select class="select-box base-input">
-        <option v-for="(option, i) in options" :key="i">{{option.value}}</option>
+    <select class="select-box base-input" @change="choosingSelect(choosingOption)" v-model="choosingOption">
+        <option>{{placeholder}}</option>
+        <option v-for="(option, i) in options" :key="i" :value="option.title">{{option.title}}</option>
     </select>
 </template>
 
 <script>
 export default {
     name: "SelectBox",
-    props: {
-       options: {
-           type: Array
-       }
+    props: ['options','placeholder','field'],
+    data() {
+        return {
+            choosingOption: this.placeholder
+        }
     },
+    methods: {
+        choosingSelect(option){
+            let field = {
+                field: this.field,
+                inputData: option
+            }
+
+            this.$emit('choosing', field)
+        }
+    }
 }
 </script>
 

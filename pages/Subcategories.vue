@@ -6,9 +6,16 @@
                 <Header :page="'subcategories'" :cur-page="'Подкатегории'" :hide-page="'Скрытые подкатегории'"
                         :btn-text="'Новая подкатегория'" :dynamic-header-content="true" :add-title="'Новая подкатегория'"
                         @add="showAddBox = true" @turn-back="showAddBox = false" @change-page="changePage"/>
-                <Content class="view" :page="'subcategories'" v-if="!showAddBox && currentPage === 'default'"/>
+                <div class="box" v-if="!showAddBox">
+                    <template v-if="false">
+                        <div class="cards">
+
+                        </div>
+                    </template>
+                    <WarningMessage v-else :warning-message="'Начните добавлять подкатегории и они появятся здесь'"/>
+                </div>
                 <AddBox :avaliable-image-box="false" :page="'subcategory'" v-if="showAddBox" @add="addSubcategory" :btn-title="'Добавить подкатегорию'"/>
-                <HiddenBox class="view" v-if="currentPage === 'hide'"/>
+                <HiddenBox class="box" v-if="currentPage === 'hide'"/>
             </div>
         </div>
     </div>
@@ -19,9 +26,9 @@ export default {
     name: "Subcategories",
     components: {
         SideBar: () => import('@/components/SideBar'),
-        Content: () => import('@/components/Content'),
         AddBox: () => import('~/components/Forms/AddBox'),
-        HiddenBox: () => import('@/components/HiddenBox')
+        HiddenBox: () => import('@/components/HiddenBox'),
+        WarningMessage: () => import('@/components/WarningMessage')
     },
     data() {
         return {
@@ -31,6 +38,7 @@ export default {
     },
     methods: {
         addSubcategory(categoryData) {
+            this.showAddBox = false
             console.log('subcategoryData', categoryData)
         },
         changePage(page) {

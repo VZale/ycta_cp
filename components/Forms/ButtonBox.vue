@@ -1,7 +1,7 @@
 <template>
     <button :class="design.join(' ')" class="button red large" @click="$emit('update')">
         <span v-if="materialIcon" class="material-icons">{{ materialIcon }}</span>
-        {{ title }}
+        {{ total }} {{ title }}
     </button>
 </template>
 
@@ -21,6 +21,9 @@ export default {
             type: Array,
             default: []
         },
+        total: {
+            type: Number
+        }
     },
     name: "ButtonBox"
 }

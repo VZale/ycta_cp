@@ -1,6 +1,5 @@
 <template>
     <div
-        @click="goTo(`/categories/${category.replaceAll(' ','-').toLowerCase()}/${title.replaceAll(' ','-').toLowerCase()}`)"
         class="card">
         <h2 class="title" v-if="type === 'category'">{{title}}</h2>
         <div class="more-info">
@@ -20,7 +19,7 @@
             <span class="price">{{ price }}</span>
             <span class="sub-title">{{ title }}</span>
         </div>
-        <ButtonBox v-if="type !== 'product'" :design="design" :title="buttonText"/>
+        <ButtonBox v-if="type !== 'product'" :total="total" :design="design" :title="buttonText"/>
     </div>
 </template>
 
@@ -86,6 +85,9 @@ export default {
         },
         category: {
             type: String
+        },
+        total: {
+            type: Number
         }
     },
     components: {

@@ -12,7 +12,7 @@ export const state = {
                     label: 'Введите стоимость товара',
                     placeholder: 'Стоимость товара'
                 },
-                category: {
+                categories: {
                     label: 'Выберите категорию',
                     placeholder: 'Категория товара',
                     isSelect: true,
@@ -22,7 +22,6 @@ export const state = {
                 //     label: 'Выберите подкатегорию',
                 //     placeholder: 'Подкатегория товара',
                 //     isSelect: true,
-                //     select: []
                 // },
             },
             filterList: {
@@ -96,26 +95,17 @@ export const mutations = {
         }
         Vue.set(state.pageData[data.page], data.data.id, data.data)
 
-
-        switch (data.page){
-            case 'categories':
-                state.fields.productFields.baseFields.category.select.push({
-                    value: data.data.title
-                })
-                return
-            case 'subcategories':
-                state.fields.productFields.baseFields.subcategory.select.push({
-                    value: data.data.title
-                })
-                return
-            default:
-                return
-        }
+        // Vue.set(state.pageData['categories'],'products', [])
+        // state.pageData['categories'].products.push(data.data)
+        //
+        // Vue.set(state.pageData['categories'][data.data.id], 'total', ++state.pageData['categories'][data.data.id].total || 1)
     },
     removePageData(_, data) {
         Vue.delete(state.pageData[data.page], data.id)
     },
     hidePageData(_, data) {
+        console.log(data)
+        console.log(state.pageData)
         if (state.pageData[data.page][data.data.id].isHidden) {
             Vue.set(state.pageData[data.page][data.data.id], 'isHidden', false)
         } else {

@@ -154,11 +154,6 @@ label {
     gap: 12px;
 }
 
-.view {
-    border-radius: 12px;
-    background-color: var(--white);
-}
-
 .filters-not-added {
     display: flex;
     align-items: center;
@@ -166,25 +161,17 @@ label {
     height: 100%;
 }
 
-.box .item {
+.content .box {
+    border-radius: 12px;
+    padding: 24px;
+    background-color: var(--white);
+}
+
+.content .box .cards {
     display: grid;
-    margin-bottom: 24px;
-    grid-template-rows: repeat(3, max-content);
-    color: var(--black);
-    align-items: center;
-}
-
-.view-content .box .item {
-    grid-template-columns: repeat(3, 1fr);
-}
-
-.box .item.main-item {
-    color: var(--gray-4);
-    grid-template-columns: repeat(3, 1fr)
-}
-
-.box .item:last-child {
-    margin-bottom: 0;
+    grid-template-columns: repeat( auto-fill, minmax(280px, 1fr) );
+    grid-template-rows: max-content;
+    gap: 12px;
 }
 
 .base-input {

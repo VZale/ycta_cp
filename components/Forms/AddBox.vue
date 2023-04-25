@@ -4,9 +4,9 @@
             <div class="box-item">
                 <template v-for="(field, i) in fields[this.page + 'Fields'].baseFields">
                     <label>{{ field.label }}</label>
-                    <InputBox v-if="!field.select?.length" @update="setField" :title="field.placeholder" :field="i"/>
-                    <template v-if="field.select?.length">
-                        <SelectBox :options="field.select"/>
+                    <InputBox v-if="!field.isSelect" @update="setField" :title="field.placeholder" :field="i"/>
+                    <template v-if="field.isSelect">
+                        <SelectBox :placeholder="field.label" :field="i" :options="pageData[i]" @choosing="setField"/>
                     </template>
                 </template>
             </div>
@@ -76,6 +76,7 @@ export default {
     computed: {
         ...mapGetters([
             'fields',
+            'pageData'
         ])
     },
     methods: {
@@ -87,6 +88,8 @@ export default {
             this.$set(this.boxData, 'description', this.description)
             this.$set(this.boxData, 'id', Date.now())
             this.$set(this.boxData, 'isHidden', false)
+
+            console.log(this.boxData)
 
             this.$emit('add', this.boxData)
         },
