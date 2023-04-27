@@ -5,7 +5,7 @@
             <div class="content">
                 <Header :page="'products'" :cur-page="'Товары'" :hide-page="'Скрытые товары'"
                         :btn-text="'Новый товар'" :dynamic-header-content="true" :add-title="'Новый товар'"
-                        @add="showAddBox = true" @turn-back="showAddBox = false" @change-page="changePage"/>
+                />
                 <div class="box" v-if="!showAddBox && currentPage !== 'hide'">
                     <template v-if="Object.keys(pageData?.['products']).length">
                         <div class="cards">
@@ -46,25 +46,15 @@ export default {
         WarningMessage: () => import('@/components/WarningMessage'),
         Card: () => import('@/components/Card')
     },
-    data() {
-        return {
-            showAddBox: false,
-            currentPage: 'default'
-        }
-    },
     computed: {
-        ...mapGetters(['pageData'])
+        ...mapGetters(['pageData','showAddBox','currentPage'])
     },
     methods: {
         addProduct(productData) {
-            this.showAddBox = false
             this.$store.commit('setPageData', {
                 data: productData,
                 page: 'products'
             })
-        },
-        changePage(page) {
-            this.currentPage = page
         },
         remove(id) {
             this.$store.commit('removePageData', {

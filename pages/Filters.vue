@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
     name: "Filters",
     components: {
@@ -60,7 +62,10 @@ export default {
                 }
             }
         }
-    }
+    },
+    computed: {
+        ...mapGetters(['showAddBox','currentPage'])
+    },
 }
 </script>
 

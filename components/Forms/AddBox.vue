@@ -89,7 +89,8 @@ export default {
             this.$set(this.boxData, 'id', Date.now())
             this.$set(this.boxData, 'isHidden', false)
 
-            console.log(this.boxData)
+            this.$store.commit('setShowBox', false)
+            this.$store.commit('setPage', 'default')
 
             this.$emit('add', this.boxData)
         },

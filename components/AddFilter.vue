@@ -55,4 +55,11 @@ textarea {
     height: 60px;
     padding: 14px;
 }
+
+textarea::placeholder {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    vertical-align: center;
+}
 </style>

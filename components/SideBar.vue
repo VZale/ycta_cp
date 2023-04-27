@@ -26,7 +26,14 @@
 
 <script>
 export default {
-  name: "SideBar"
+  name: "SideBar",
+    watch:{
+        $route() {
+            console.log(2)
+            this.$nextTick(() => {
+            })
+        }
+    }
 }
 </script>
 

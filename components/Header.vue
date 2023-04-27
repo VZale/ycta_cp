@@ -1,14 +1,15 @@
 <template>
     <header class="header">
         <div class="left">
-            <span class="material-icons" v-if="!isDefaultMode" @click="turnBack()">west</span>
-            <span class="current-page" :class="{active: currentPage === 'default'}"
-                  @click="changePage('default')">{{ !isDefaultMode && addTitle ? addTitle : curPage }}</span>
-            <span class="hide-page" :class="{active: currentPage === 'hide'}" v-if="isDefaultMode" @click="changePage('hide')">{{
+            <span class="material-icons" v-if="showAddBox" @click="turnBack()">west</span>
+            <span class="current-page" :class="{active: currentPage === 'default' || showAddBox}"
+                  @click="changePage('default')">{{ !showAddBox && addTitle ? addTitle : curPage }}</span>
+            <span class="hide-page" :class="{active: currentPage === 'hide'}" v-if="!showAddBox"
+                  @click="changePage('hide')">{{
                     hidePage
                 }}</span>
         </div>
-        <ButtonBox v-if="isDefaultMode" :design="['button','black','small']" @update="add()"
+        <ButtonBox v-if="!showAddBox || page === 'filters'" :design="['button','black','small']" @update="add()"
                    :title="btnText"
                    :material-icon="'add_circle'"
         />
@@ -16,8 +17,13 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex"
+
 export default {
     props: {
+        page: {
+            type: String
+        },
         curPage: {
             type: String
         },
@@ -42,28 +48,23 @@ export default {
         ButtonBox: () => import('@/components/Forms/ButtonBox')
     },
     name: "Header",
-    data() {
-        return {
-            isDefaultMode: true,
-            currentPage: 'default'
-        }
+    computed: {
+        ...mapGetters(['showAddBox', 'currentPage'])
     },
     methods: {
         changePage(page) {
-            this.currentPage = page
-
-            this.$emit('change-page', this.currentPage)
+            this.$store.commit('setPage', page)
+            this.$emit('change-page', page)
         },
         add() {
-            if (this.dynamicHeaderContent) {
-                this.isDefaultMode = false
+            if (this.page !== 'filters') {
+                this.$store.commit('setShowBox', this.showAddBox)
             }
-
             this.$emit('add')
         },
 
         turnBack() {
-            this.isDefaultMode = true
+            this.$store.commit('setShowBox', this.showAddBox)
 
             this.$emit('turn-back')
         }

@@ -18,11 +18,11 @@ export const state = {
                     isSelect: true,
                     select: []
                 },
-                // subcategory: {
-                //     label: 'Выберите подкатегорию',
-                //     placeholder: 'Подкатегория товара',
-                //     isSelect: true,
-                // },
+                subcategories: {
+                    label: 'Выберите подкатегорию',
+                    placeholder: 'Подкатегория товара',
+                    isSelect: true,
+                },
             },
             filterList: {
                 color: 'Цвет',
@@ -63,18 +63,27 @@ export const state = {
                     label: 'Введите название подкатегории',
                     placeholder: 'Название подкатегории'
                 },
-                category: {
+                categories: {
                     label: 'Выберите в какой категории будет находиться эта подкатегория',
                     placeholder: 'Категория товара',
                     isSelect: true,
-                    select: []
                 },
             }
         }
     },
     pageData: {
-        categories: {},
-        subcategories: {},
+        categories: {
+            0: {
+                title: 'test',
+                total: 10
+            }
+        },
+        subcategories: {
+            0: {
+                title: 'test (sub)',
+                total: 10
+            }
+        },
         products: {}
     }
 }
@@ -90,6 +99,7 @@ export const getters = {
 
 export const mutations = {
     setPageData(_, data) {
+        console.log('data',data)
         if (!state.pageData[data.page][data.data.id]) {
             Vue.set(state.pageData[data.page], data.data.id, {})
         }
