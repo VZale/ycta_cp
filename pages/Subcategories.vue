@@ -6,13 +6,9 @@
                 <Header :page="'subcategories'" :cur-page="'Подкатегории'" :hide-page="'Скрытые подкатегории'"
                         :btn-text="'Новая подкатегория'" :dynamic-header-content="true" :add-title="'Новая подкатегория'"
                         />
-                <div class="box view" :class="{'filters-not-added': !Object.keys(pageData).length}">
-                    <div class="item main-item" v-if="Object.keys(pageData).length">
-                        <h2 class="subtitle">Название фильтра</h2>
-                        <h2 class="subtitle">Пункты фильтрации</h2>
-                    </div>
-                    <template v-if="Object.keys(pageData).length">
-                        <div class="item" v-for="(filterItem, i) in pageData" :key="i">
+                <div class="box" v-if="!showAddBox && currentPage === 'default'" :class="{'filters-not-added': !Object.keys(pageData['subcategories']).length}">
+                    <template v-if="Object.keys(pageData['subcategories']).length">
+                        <div class="item" v-for="(filterItem, i) in pageData['subcategories']" :key="i">
                             <h2 class="subtitle">{{ filterItem.title }}</h2>
 <!--                            <h2 class="subtitle">{{ filterItem.value.join(', ') }}</h2>-->
                             <Actions :item="i"/>
@@ -34,7 +30,7 @@ export default {
     name: "Subcategories",
     components: {
         SideBar: () => import('@/components/SideBar'),
-        AddBox: () => import('~/components/Forms/AddBox'),
+        AddBox: () => import('@/components/Forms/AddBox'),
         HiddenBox: () => import('@/components/HiddenBox'),
         WarningMessage: () => import('@/components/WarningMessage')
     },
@@ -50,5 +46,15 @@ export default {
 </script>
 
 <style scoped>
-
+    .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--gray-1);
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 </style>

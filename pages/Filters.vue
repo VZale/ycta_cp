@@ -7,7 +7,7 @@
                         :btn-text="'Новый фильтр'"
                         @add="modalBox = true"
                 />
-                <div class="box view" :class="{'filters-not-added': !Object.keys(filtersList).length}">
+                <div class="box" v-if="currentPage === 'default'" :class="{'filters-not-added': !Object.keys(filtersList).length}">
                     <div class="item main-item" v-if="Object.keys(filtersList).length">
                         <h2 class="subtitle">Название фильтра</h2>
                         <h2 class="subtitle">Пункты фильтрации</h2>
@@ -21,6 +21,7 @@
                     </template>
                     <WarningMessage v-else :warning-message="'Начните добавлять фильтры и они появятся здесь'"/>
                 </div>
+                <HiddenBox class="box" v-if="currentPage === 'hide'"/>
             </div>
         </div>
         <ModalBox v-if="modalBox" :title="'Новый фильтр'" @close="modalBox = false">
