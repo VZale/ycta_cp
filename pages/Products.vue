@@ -10,16 +10,16 @@
                     <template v-if="Object.keys(pageData?.['products']).length">
                         <div class="cards">
                             <template v-for="product in pageData?.['products']">
-                                <Card v-if="!product.isHidden"
+                                <Card v-if="!product.hidden"
                                       :type="'product'"
-                                      :title="product.title"
+                                      :title="product.name"
                                       :price="product.price"
                                       :description="product.description"
                                       :image="product.images ? product?.images[0] : ''"
                                       :discount="product.discount"
                                       :hot="product.hot"
-                                      :isHidden="product.isHidden"
-                                      @remove="remove(product.id)"
+                                      :isHidden="product.hidden"
+                                      @remove="remove(product._id)"
                                       @hide="hide(product)"
                                 />
                             </template>
@@ -39,6 +39,11 @@ import {mapGetters} from "vuex"
 
 export default {
     name: "Products",
+    mounted() {
+        if (!this.initPages['products']) {
+            // this.$store.dispatch('getProducts')
+        }
+    },
     components: {
         SideBar: () => import('@/components/SideBar'),
         AddBox: () => import('@/components/Forms/AddBox'),
@@ -47,7 +52,7 @@ export default {
         Card: () => import('@/components/Card')
     },
     computed: {
-        ...mapGetters(['pageData','showAddBox','currentPage'])
+        ...mapGetters(['pageData', 'showAddBox', 'currentPage','initPages'])
     },
     methods: {
         addProduct(productData) {

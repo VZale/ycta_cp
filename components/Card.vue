@@ -1,17 +1,16 @@
 <template>
-    <div
-        class="card">
+    <div class="card" @click="choose(id)">
         <h2 class="title" v-if="type === 'category'">{{title}}</h2>
         <div class="more-info">
             <div class="markets">
                 <span class="material-icons percent" v-if="discount">percent</span>
                 <span class="discount" v-if="hot">Хит продаж</span>
             </div>
-            <CheckBox v-if="checkbox" @update="chooseProduct"/>
+            <CheckBox :state="chosenProducts[id]?.state ? chosenProducts[id].state : false" :field="id.toString()" v-if="relatedProducts" @update="chooseProduct"/>
         </div>
         <div class="img-content" @click.stop v-if="options">
             <span class="material-icons" title="Редактировать" @click="$emit('edit')">edit</span>
-            <span class="material-icons" :title="isHidden ? 'отобразить' : 'скры    ть'" @click="$emit('hide')">{{isHidden ? 'visibility_off' : 'visibility'}} </span>
+            <span class="material-icons" :title="isHidden ? 'отобразить' : 'скрыть'" @click="$emit('hide')">{{isHidden ? 'visibility_off' : 'visibility'}} </span>
             <span class="material-icons" title="Удалить" @click="$emit('remove')">delete</span>
         </div>
         <img :src="image ? image : require(`@/assets/no-image.png`)" :alt="image">
@@ -24,9 +23,14 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex"
+
 export default {
     name: "Card",
     props: {
+        id: {
+            type: Number
+        },
         type: {
             type: String
         },
@@ -36,21 +40,9 @@ export default {
         price: {
             type: String
         },
-        checkbox: {
-            type: Boolean,
-            default: false
-        },
-        routing: {
-            type: Boolean,
-            default: true
-        },
         options: {
             type: Boolean,
             default: true
-        },
-        main: {
-            type: Boolean,
-            default: false
         },
         product: {
             type: Boolean,
@@ -88,13 +80,26 @@ export default {
         },
         total: {
             type: Number
+        },
+        relatedProducts: {
+            type: Boolean,
+            default: false
         }
     },
     components: {
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
         CheckBox: () => import('@/components/Forms/CheckBox')
     },
+    computed: {
+        ...mapGetters(['chosenProducts'])
+    },
     methods: {
+        choose(id){
+            this.$store.commit('chooseProduct', {
+                id: id,
+                state: this.chosenProducts[id] || false
+            })
+        },
         goTo(route) {
             if (!this.routing) {
                 return
@@ -103,7 +108,7 @@ export default {
             this.$router.push(`${route}`)
         },
         chooseProduct(state) {
-            console.log(state)
+            this.$store.commit('chooseProduct', state)
         }
     }
 }

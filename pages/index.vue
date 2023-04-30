@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <Login/>
-  </div>
+    <div>
+        <Login/>
+    </div>
 </template>
 
 <script>
 export default {
-  name: 'IndexPage'
+    name: 'IndexPage'
 }
 </script>

@@ -1,17 +1,17 @@
 <template>
     <div class="hidden-box">
         <template v-for="product in pageData?.[page]">
-            <Card v-if="product.isHidden"
-                :type="'product'"
-                :title="product.title"
-                :price="product.price"
-                :description="product.description"
-                :image="product.images ? product?.images[0] : ''"
-                :discount="product.discount"
-                :hot="product.hot"
-                :isHidden="product.isHidden"
-                @remove="remove(product.id)"
-                @hide="hide(product)"
+            <Card v-if="product.hidden"
+                  :type="'product'"
+                  :title="product.name"
+                  :price="product.price"
+                  :description="product.description"
+                  :image="product.images ? product?.images[0] : ''"
+                  :discount="product.discount"
+                  :hot="product.hot"
+                  :isHidden="product.hidden"
+                  @remove="remove(product._id)"
+                  @hide="hide(product)"
             />
         </template>
     </div>
@@ -35,13 +35,14 @@ export default {
     },
     methods: {
         remove(id) {
-            this.$store.commit('removePageData', {
+            this.$store.dispatch('removeCategory', {
                 page: this.page,
-                id: id
+                _id: id
             })
         },
         hide(product) {
-            this.$store.commit('hidePageData', {
+            product.hidden = !product.hidden
+            this.$store.dispatch('updateCategory', {
                 page: this.page,
                 data: product
             })

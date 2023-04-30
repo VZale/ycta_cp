@@ -83,16 +83,16 @@ export default {
     text-align: end;
 }
 
-.grid .modal-items {
-    display: grid;
-    grid-template-columns: repeat( auto-fill, minmax(330px, 1fr));
-    grid-template-rows: max-content;
-    overflow: auto;
-    margin-top: 28px;
-}
-
 .grid .modal-content {
     display: grid;
     grid-template-rows: 1fr max-content;
+    height: 100%;
+    overflow: auto;
+    gap: 40px;
+}
+
+.modal-items {
+    overflow: auto;
+    max-height: 100%;
 }
 </style>

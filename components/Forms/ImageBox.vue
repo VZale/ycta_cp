@@ -1,7 +1,7 @@
 <template>
     <div class="image-box">
         <div class="top">
-            <label>{{ label }}</label>
+            <label>{{ label }} <span class="require">*</span></label>
             <CheckBox :title="'Использовать заглушку'" v-if="checkbox"/>
         </div>
         <div class="images-container">
@@ -13,16 +13,17 @@
             <div class="item" @click="addProduct">
                 <span class="material-icons">add_circle</span>
                 <p>{{ btnText }}</p>
-                <input type="file" @change="addImage" v-if="field === 'images'">
+                <input type="file" @change="addImage" v-if="field === 'file'">
             </div>
         </div>
         <ModalBox v-if="showProductListModal" :grid="true" :title="'Выберите сопутствующие товары'"
                   @close="showProductListModal = false">
             <template #modalContent>
-
+                <ProductsList/>
             </template>
             <template #button>
-                <ButtonBox @update="showSelectedProducts()" :design="['button','red','large','right']" :title="'Добавить товары'" slot="button"/>
+                <ButtonBox @update="showSelectedProducts()" :design="['button','red','large','right']"
+                           :title="'Добавить товары'" slot="button"/>
             </template>
         </ModalBox>
     </div>
@@ -31,6 +32,7 @@
 <script>
 export default {
     components: {
+        ProductsList: () => import('@/components/ProductsList'),
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
         Card: () => import("@/components/Card"),
         ModalBox: () => import('@/components/Forms/ModalBox'),
@@ -81,7 +83,7 @@ export default {
             this[this.field].splice(index, 1)
         },
         addProduct() {
-            if (this.field === 'images') {
+            if (this.field === 'file') {
                 return
             }
 

@@ -185,3 +185,7 @@ label {
     font-size: 18px;
     font-weight: 400;
 }
+
+.require {
+    color: var(--red-1);
+}

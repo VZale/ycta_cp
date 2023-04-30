@@ -10,17 +10,14 @@
                     <template v-if="Object.keys(pageData?.['categories']).length">
                         <div class="cards">
                             <template v-for="product in pageData['categories']">
-                                <Card v-if="!product.isHidden"
+                                <Card v-if="!product.hidden"
                                       :type="'category'"
                                       :total="product.total || 0"
-                                      :title="product.title"
-                                      :price="product.price"
+                                      :title="product.name"
                                       :description="product.description"
                                       :image="product.images ? product?.images[0] : ''"
-                                      :discount="product.discount"
-                                      :hot="product.hot"
-                                      :isHidden="product.isHidden"
-                                      @remove="remove(product.id)"
+                                      :isHidden="product.hidden"
+                                      @remove="remove(product._id)"
                                       @hide="hide(product)"
                                       :design="['button','white','large']"
                                       :button-text="'моделей'"
@@ -42,31 +39,37 @@ import {mapGetters} from "vuex"
 
 export default {
     name: "Categories",
+    mounted() {
+        if (!this.initPages['categories']) {
+            this.$store.dispatch('getCategories')
+        }
+    },
     components: {
         SideBar: () => import('@/components/SideBar'),
-        AddBox: () => import('~/components/Forms/AddBox'),
+        AddBox: () => import('@/components/Forms/AddBox'),
         HiddenBox: () => import('@/components/HiddenBox'),
         WarningMessage: () => import('@/components/WarningMessage'),
         Card: () => import('@/components/Card')
     },
     computed: {
-        ...mapGetters(['pageData','showAddBox','currentPage'])
+        ...mapGetters(['pageData', 'showAddBox', 'currentPage','initPages'])
     },
     methods: {
         addCategory(categoryData) {
-            this.$store.commit('setPageData', {
+            this.$store.dispatch('addCategory', {
                 data: categoryData,
                 page: 'categories'
             })
         },
         remove(id) {
-            this.$store.commit('removePageData', {
+            this.$store.dispatch('removeCategory', {
                 page: 'categories',
-                id: id
+                _id: id
             })
         },
         hide(product) {
-            this.$store.commit('hidePageData', {
+            product.hidden = !product.hidden
+            this.$store.dispatch('updateCategory', {
                 page: 'categories',
                 data: product
             })

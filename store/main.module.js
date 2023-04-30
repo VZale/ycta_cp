@@ -24,11 +24,7 @@ export const state = {
                     isSelect: true,
                 },
             },
-            filterList: {
-                color: 'Цвет',
-                size: 'Размеры',
-                format: 'Формат',
-            },
+            filterList: {},
             labels: {
                 hot: {
                     title: 'Хит продаж',
@@ -47,7 +43,7 @@ export const state = {
         },
         categoryFields: {
             baseFields: {
-                title: {
+                name: {
                     label: 'Введите название категории',
                     placeholder: 'Название категории'
                 },
@@ -69,22 +65,27 @@ export const state = {
                     isSelect: true,
                 },
             }
-        }
+        },
+        relatedProducts: []
     },
     pageData: {
-        categories: {
+        categories: {},
+        subcategories: {},
+        products: {
             0: {
-                title: 'test',
-                total: 10
+                name: 'ew',
+                _id: 0
+            },
+            1: {
+                name: 'test',
+                _id: 1
             }
-        },
-        subcategories: {
-            0: {
-                title: 'test (sub)',
-                total: 10
-            }
-        },
-        products: {}
+        }
+    },
+    initPages: {
+        categories: false,
+        subcategories: false,
+        products: false,
     }
 }
 
@@ -94,16 +95,25 @@ export const getters = {
     },
     pageData() {
         return state.pageData
+    },
+    initPages() {
+        return state.initPages
     }
 }
 
 export const mutations = {
-    setPageData(_, data) {
-        console.log('data',data)
-        if (!state.pageData[data.page][data.data.id]) {
-            Vue.set(state.pageData[data.page], data.data.id, {})
+    initPage(context, page) {
+        Vue.set(state.initPages, page, true)
+    },
+    setPageData(context, data) {
+        for (const item in data.data) {
+            if (!state.pageData[data.page][data.data[item]._id]) {
+                Vue.set(state.pageData[data.page], data.data[item]._id, {})
+            }
+            Vue.set(state.pageData[data.page], data.data[item]._id, data.data[item])
         }
-        Vue.set(state.pageData[data.page], data.data.id, data.data)
+
+        // this.dispatch('sendCategory', data.data)
 
         // Vue.set(state.pageData['categories'],'products', [])
         // state.pageData['categories'].products.push(data.data)
@@ -111,16 +121,10 @@ export const mutations = {
         // Vue.set(state.pageData['categories'][data.data.id], 'total', ++state.pageData['categories'][data.data.id].total || 1)
     },
     removePageData(_, data) {
-        Vue.delete(state.pageData[data.page], data.id)
+        Vue.delete(state.pageData[data.page], data._id)
     },
     hidePageData(_, data) {
-        console.log(data)
-        console.log(state.pageData)
-        if (state.pageData[data.page][data.data.id].isHidden) {
-            Vue.set(state.pageData[data.page][data.data.id], 'isHidden', false)
-        } else {
-            Vue.set(state.pageData[data.page][data.data.id], 'isHidden', true)
-        }
+        Vue.set(state.pageData[data.page][data.data._id], 'hidden', data.data.hidden)
     }
 }
 

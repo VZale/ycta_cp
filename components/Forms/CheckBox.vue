@@ -14,11 +14,15 @@ export default {
         },
         field: {
             type: String
+        },
+        state: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
         return {
-            isChecked: false
+            isChecked: this.state
         }
     },
     methods: {

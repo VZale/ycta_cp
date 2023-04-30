@@ -24,10 +24,15 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters} from "vuex"
 
 export default {
     name: "Subcategories",
+    mounted() {
+        if (!this.initPages['subcategories']) {
+            this.$store.dispatch('getSubcategories')
+        }
+    },
     components: {
         SideBar: () => import('@/components/SideBar'),
         AddBox: () => import('@/components/Forms/AddBox'),
@@ -35,7 +40,7 @@ export default {
         WarningMessage: () => import('@/components/WarningMessage')
     },
     computed: {
-        ...mapGetters(['showAddBox','currentPage','pageData'])
+        ...mapGetters(['showAddBox','currentPage','pageData','initPages'])
     },
     methods: {
         addSubcategory(categoryData) {
