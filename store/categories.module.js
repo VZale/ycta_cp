@@ -19,7 +19,6 @@ const actions = {
     },
     addCategory(context, data) {
         const {file, ...dataWithoutFile} = data.data
-
         const formData = new FormData()
         formData.append('data',JSON.stringify(dataWithoutFile))
         formData.append('file', file)
