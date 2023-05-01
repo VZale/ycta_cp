@@ -61,7 +61,7 @@ export const RestService = {
 
             return axios.post(`${REST_ENDPOINT + resource}`, params, {
                 headers: {
-                    'content-type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'multipart/form-data'
                 },
             })
                 .then(ret => {

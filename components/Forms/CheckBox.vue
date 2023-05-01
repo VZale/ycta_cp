@@ -14,10 +14,6 @@ export default {
         },
         field: {
             type: String
-        },
-        state: {
-            type: Boolean,
-            default: false
         }
     },
     data() {

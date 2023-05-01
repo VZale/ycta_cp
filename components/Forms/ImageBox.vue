@@ -5,7 +5,7 @@
             <CheckBox :title="'Использовать заглушку'" v-if="checkbox"/>
         </div>
         <div class="images-container">
-            <div v-for="(image, index) in field === 'relatedProducts' ? relatedProducts : images" :key="index"
+            <div v-for="(image, index) in field === 'relatedProducts' ? reletedProducts : file" :key="index"
                  class="item">
                 <img :src="image" alt="">
                 <span class="material-icons close" @click="remove(index)">close</span>
@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
     components: {
         ProductsList: () => import('@/components/ProductsList'),
@@ -56,31 +58,33 @@ export default {
     name: "ImageBox",
     data() {
         return {
-            images: [],
-            relatedProducts: [],
+            file: [],
             showProductListModal: false
         }
+    },
+    computed: {
+        ...mapGetters(['reletedProducts', 'chosenProducts','pageData'])
     },
     methods: {
         sendImageArray() {
             let field = {
                 field: this.field,
-                inputData: this.images
+                inputData: this.file
             }
 
             this.$emit('updateImages', field)
         },
         addImage(event) {
-            const file = event.target.files[0]
+            const image = event.target.files[0]
             const reader = new FileReader()
-            reader.readAsDataURL(file)
+            reader.readAsDataURL(image)
             reader.onload = () => {
-                this.images.push(reader.result)
+                this.file.push(reader.result)
             }
             this.sendImageArray()
         },
         remove(index) {
-            this[this.field].splice(index, 1)
+            this.field === 'file' ? this[this.field].splice(index, 1) : this.$store.commit('removeReletedProducts', index)
         },
         addProduct() {
             if (this.field === 'file') {
@@ -89,8 +93,12 @@ export default {
 
             this.showProductListModal = true
         },
-        showSelectedProducts(state) {
-            console.log(state)
+        showSelectedProducts() {
+            let images = Object.values(this.pageData['products']).map(el => el.file[0]);
+            this.$store.commit('setReletedProducts', images)
+
+            this.$store.commit('clearChosenProducts')
+            this.showProductListModal = false
         }
     }
 }
