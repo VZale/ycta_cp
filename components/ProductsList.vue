@@ -3,10 +3,10 @@
         <template v-for="product in pageData['products']">
             <Card v-if="!product.hidden"
                   :type="'product'"
-                  :title="product.name"
+                  :title="product.title"
                   :price="product.price"
                   :description="product.description"
-                  :image="product.file ? product?.file[0] : ''"
+                  :image="product.images ? product?.images[0] : ''"
                   :discount="product.discount"
                   :hot="product.hot"
                   :id="product._id"

@@ -15,7 +15,7 @@
                                       :title="product.name"
                                       :price="product.price"
                                       :description="product.description"
-                                      :image="product.file ? product?.file[0] : ''"
+                                      :image="product.images ? product?.images[0] : ''"
                                       :discount="product.discount"
                                       :hot="product.hot"
                                       :isHidden="product.hidden"
@@ -57,7 +57,7 @@ export default {
     methods: {
         addProduct(productData) {
             this.$store.commit('setPageData', {
-                data: {productData},
+                data: productData,
                 page: 'products'
             })
         },

@@ -1,14 +1,12 @@
 <template>
-    <div class="card" @click="chooseProduct(id)">
+    <div class="card" @click="choose(id)">
         <h2 class="title" v-if="type === 'category'">{{title}}</h2>
         <div class="more-info">
             <div class="markets">
                 <span class="material-icons percent" v-if="discount">percent</span>
                 <span class="discount" v-if="hot">Хит продаж</span>
             </div>
-            <div class="checkbox" @click="chooseProduct(id)" v-if="relatedProducts">
-                <span :class="{checked:chosenProducts[id]}"></span>
-            </div>
+            <CheckBox :state="chosenProducts[id]?.state ? chosenProducts[id].state : false" :field="id.toString()" v-if="relatedProducts" @update="chooseProduct"/>
         </div>
         <div class="img-content" @click.stop v-if="options">
             <span class="material-icons" title="Редактировать" @click="$emit('edit')">edit</span>
@@ -90,18 +88,17 @@ export default {
     },
     components: {
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
+        CheckBox: () => import('@/components/Forms/CheckBox')
     },
     computed: {
-        ...mapGetters(['chosenProducts','pageData'])
+        ...mapGetters(['chosenProducts'])
     },
     methods: {
-        chooseProduct(id) {
+        choose(id){
             this.$store.commit('chooseProduct', {
                 id: id,
-                state: this.chosenProducts[id]
+                state: this.chosenProducts[id] || false
             })
-
-            console.log(this.chosenProducts)
         },
         goTo(route) {
             if (!this.routing) {
@@ -109,6 +106,9 @@ export default {
             }
 
             this.$router.push(`${route}`)
+        },
+        chooseProduct(state) {
+            this.$store.commit('chooseProduct', state)
         }
     }
 }
@@ -306,46 +306,6 @@ export default {
     grid-template-columns: repeat(2, max-content);
     place-items: center;
     place-content: inherit;
-}
-
-.checkbox {
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.checkbox p {
-    padding-left: 10px;
-    white-space: nowrap;
-}
-
-.checkbox span {
-    display: inline-block;
-    border: 2px solid var(--gray-2);
-    border-radius: 3px;
-    width: 16px;
-    height: 16px;
-    position: relative;
-}
-
-.checkbox span::after {
-    content: '';
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 2px;
-    background-color: var(--red-1);
-    opacity: 0;
-    visibility: hidden;
-    transition: all .3s ease-in-out;
-}
-
-.checkbox span.checked::after {
-    opacity: 1;
-    visibility: visible;
 }
 
 @media (max-width: 768px) {

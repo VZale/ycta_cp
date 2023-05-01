@@ -4,7 +4,7 @@ export const state = {
     fields: {
         productFields: {
             baseFields: {
-                name: {
+                title: {
                     label: 'Введите название товара',
                     placeholder: 'Название товара'
                 },
@@ -55,7 +55,7 @@ export const state = {
         },
         subcategoryFields: {
             baseFields: {
-                name: {
+                title: {
                     label: 'Введите название подкатегории',
                     placeholder: 'Название подкатегории'
                 },
@@ -69,13 +69,18 @@ export const state = {
         relatedProducts: []
     },
     pageData: {
-        categories: {
-            0: {
-                name: 'Test 2'
-            }
-        },
+        categories: {},
         subcategories: {},
-        products: {}
+        products: {
+            0: {
+                name: 'ew',
+                _id: 0
+            },
+            1: {
+                name: 'test',
+                _id: 1
+            }
+        }
     },
     initPages: {
         categories: false,

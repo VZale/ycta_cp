@@ -1,17 +1,17 @@
 <template>
     <select class="select-box base-input" @change="choosingSelect(choosingOption)" v-model="choosingOption">
         <option>{{placeholder}}</option>
-        <option v-for="(option, i) in options" :key="i" :value="i">{{option.name}}</option>
+        <option v-for="(option, i) in options" :key="i" :value="option.name">{{option.name}}</option>
     </select>
 </template>
 
 <script>
 export default {
     name: "SelectBox",
-    props: ['options','placeholder','field','id'],
+    props: ['options','placeholder','field'],
     data() {
         return {
-            choosingOption: this.placeholder,
+            choosingOption: this.placeholder
         }
     },
     methods: {

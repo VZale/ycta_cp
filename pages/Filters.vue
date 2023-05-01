@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex"
+import {mapGetters} from "vuex";
 
 export default {
     name: "Filters",
@@ -47,7 +47,21 @@ export default {
     data() {
         return {
             modalBox: false,
-            filtersList: {}
+            filtersList: {
+                color: {
+                    title: "Цвет",
+                    value: ['Коричневый', 'Серый', 'Белый', 'Бежевый', 'Красный']
+                },
+                format: {
+                    title: "Формат",
+                    value: ['1 NF', '2 NF', '12', '3 NF', '10', '8 NF', '11', '5 NF']
+                },
+                size: {
+                    title: "Размер",
+                    value: ['500*200*250', '500*250*250', '500*300*200', '500*300*250', '500*400*250', '625*100*250', '625*125*250',
+                        '625*150*250']
+                }
+            }
         }
     },
     computed: {

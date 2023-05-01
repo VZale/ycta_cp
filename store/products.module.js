@@ -2,36 +2,19 @@ import RestService from "@/common/rest.service"
 import Vue from "vue"
 
 export const state = {
-    chosenProducts: {},
-    reletedProducts: {}
+    chosenProducts: []
 }
 
 export const getters = {
     chosenProducts() {
         return state.chosenProducts
-    },
-
-    reletedProducts() {
-        return state.reletedProducts
     }
 }
 
 export const mutations = {
     chooseProduct(context, data) {
-        Vue.set(state.chosenProducts, data.id, data.state = !data.state || false)
-    },
-
-    setReletedProducts(context, data) {
         console.log(data)
-        Vue.set(state, 'reletedProducts', data)
-    },
-
-    removeReletedProducts(context, id) {
-        state.reletedProducts.splice(id, 1)
-    },
-
-    clearChosenProducts() {
-        Vue.set(state, 'chosenProducts', {})
+        // Vue.set(state.chosenProducts, data.id, data.state = !data.state || false)
     }
 }
 

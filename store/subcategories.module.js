@@ -17,19 +17,6 @@ const actions = {
                 this.commit('initPage', 'subcategories')
             })
     },
-
-    addSubcategory(context, data) {
-        const { name, categories, hidden, description } = data.data
-        const modifiedData = { name, category_id: categories, hidden, description }
-
-        RestService.post('/sub_categories', modifiedData)
-            .then(ans => {
-                this.commit('setPageData', {
-                    data: ans,
-                    page: 'subcategories'
-                })
-            })
-    }
 }
 
 export default {
