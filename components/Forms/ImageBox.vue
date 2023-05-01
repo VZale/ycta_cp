@@ -71,12 +71,13 @@ export default {
             this.$emit('updateImages', field)
         },
         addImage(event) {
-            const file = event.target.files[0]
-            const reader = new FileReader()
-            reader.readAsDataURL(file)
-            reader.onload = () => {
-                this.images.push(reader.result)
-            }
+            // const file = event.target.files[0]
+            this.images = event.target.files
+            // const reader = new FileReader()
+            // reader.readAsDataURL(file)
+            // reader.onload = () => {
+            //     this.images.push(reader.result)
+            // }
             this.sendImageArray()
         },
         remove(index) {
