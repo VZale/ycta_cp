@@ -19,9 +19,11 @@ const actions = {
     },
     addCategory(context, data) {
         const {file, ...dataWithoutFile} = data.data
+        dataWithoutFile._id
         const formData = new FormData()
-        formData.append('data',JSON.stringify(dataWithoutFile))
-        formData.append('file', file)
+        formData.append('data', JSON.stringify(dataWithoutFile))
+        // formData.append('file', file)
+        file.forEach(image => formData.append('file', image))
         RestService.post('/categories', formData)
             .then(() => {
                 this.commit('setPageData', data)
