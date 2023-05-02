@@ -1,7 +1,9 @@
 <template>
     <select class="select-box base-input" @change="choosingSelect(choosingOption)" v-model="choosingOption">
         <option>{{placeholder}}</option>
-        <option v-for="(option, i) in options" :key="i" :value="i">{{option.name}}</option>
+        <template v-for="(option, i) in options" v-if="option">
+            <option :value="i">{{option.name}}</option>
+        </template>
     </select>
 </template>
 

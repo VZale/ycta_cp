@@ -22,9 +22,12 @@ const actions = {
         dataWithoutFile._id
         const formData = new FormData()
         formData.append('data', JSON.stringify(dataWithoutFile))
-        // formData.append('file', file)
-        file.forEach(image => formData.append('file', image))
-        RestService.post('/categories', formData)
+        formData.append('file', file[0])
+        RestService.post('/categories', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+        })
             .then(() => {
                 this.commit('setPageData', data)
             })

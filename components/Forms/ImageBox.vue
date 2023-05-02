@@ -5,7 +5,7 @@
             <CheckBox :title="'Использовать заглушку'" v-if="checkbox"/>
         </div>
         <div class="images-container">
-            <div v-for="(image, index) in field === 'relatedProducts' ? relatedProducts : images" :key="index"
+            <div v-for="(image, index) in field === 'relatedProducts' ? relatedProducts : file" :key="index"
                  class="item">
                 <img :src="image" alt="">
                 <span class="material-icons close" @click="remove(index)">close</span>
@@ -76,11 +76,11 @@ export default {
         },
         addImage(event) {
             // const file = event.target.files[0]
-            this.images = event.target.files
+            this.file = event.target.files
             // const reader = new FileReader()
             // reader.readAsDataURL(file)
             // reader.onload = () => {
-            //     this.images.push(reader.result)
+            //     this.file.push(reader.result)
             // }
             this.sendImageArray()
         },

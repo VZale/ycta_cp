@@ -10,7 +10,7 @@
                     <template v-if="Object.keys(pageData?.['categories']).length">
                         <div class="cards">
                             <template v-for="product in pageData['categories']">
-                                <Card v-if="!product.hidden"
+                                <Card v-if="product && !product.hidden"
                                       :type="'category'"
                                       :total="product.total || 0"
                                       :title="product.name"

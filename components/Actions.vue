@@ -1,8 +1,8 @@
 <template>
   <div class="actions">
     <i class="material-icons" v-if="edit">edit</i>
-    <i class="material-icons" v-if="hide">visibility</i>
-    <i class="material-icons" v-if="remove">delete</i>
+    <i class="material-icons" v-if="hide" @click="$emit('hide')">visibility</i>
+    <i class="material-icons" v-if="remove" @click="$emit('remove')">delete</i>
   </div>
 </template>
 

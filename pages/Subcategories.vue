@@ -10,17 +10,31 @@
                 <div class="box" v-if="!showAddBox && currentPage === 'default'"
                      :class="{'filters-not-added': !Object.keys(pageData['subcategories']).length}">
                     <template v-if="Object.keys(pageData['subcategories']).length">
-                        <div class="item" v-for="(filterItem, i) in pageData['subcategories']" :key="i">
-                            <h2 class="subtitle">{{ filterItem.title }}</h2>
-                            <!--                            <h2 class="subtitle">{{ filterItem.value.join(', ') }}</h2>-->
-                            <Actions :item="i"/>
-                        </div>
+                        <template v-if="subcategory && subcategory.hidden"
+                                  v-for="(subcategory, i) in pageData['subcategories']">
+                            <div class="item">
+                                <h2 class="subtitle">{{ subcategory?.name }}</h2>
+                                <!--                            <h2 class="subtitle">{{ subcategory.value.join(', ') }}</h2>-->
+                                <Actions :item="i" @remove="remove(subcategory._id)" @hide="hide(subcategory)"/>
+                            </div>
+                        </template>
                     </template>
                     <WarningMessage v-else :warning-message="'Начните добавлять фильтры и они появятся здесь'"/>
                 </div>
                 <AddBox :avaliable-image-box="false" :page="'subcategory'" v-if="showAddBox" @add="addSubcategory"
                         :btn-title="'Добавить подкатегорию'"/>
-                <HiddenBox class="box" v-if="currentPage === 'hide'"/>
+                <div class="hidden-box box" v-if="currentPage === 'hide'">
+                    <template v-if="Object.keys(pageData['subcategories']).length">
+                        <template v-if="subcategory && !subcategory.hidden"
+                                  v-for="(subcategory, i) in pageData['subcategories']">
+                            <div class="item">
+                                <h2 class="subtitle">{{ subcategory?.name }}</h2>
+                                <!--                            <h2 class="subtitle">{{ subcategory.value.join(', ') }}</h2>-->
+                                <Actions :item="i" @remove="remove(subcategory._id)" @hide="hide(subcategory)"/>
+                            </div>
+                        </template>
+                    </template>
+                </div>
             </div>
         </div>
     </div>
@@ -46,12 +60,26 @@ export default {
         ...mapGetters(['showAddBox', 'currentPage', 'pageData', 'initPages'])
     },
     methods: {
-        addSubcategory(categoryData) {
+        addSubcategory(subcategoryData) {
             this.$store.dispatch('addSubcategory', {
-                data: categoryData,
+                data: subcategoryData,
                 page: 'subcategories'
             })
         },
+
+        remove(id) {
+            this.$store.dispatch('removeSubcategory', {
+                page: 'subcategories',
+                _id: id
+            })
+        },
+        hide(subcategori) {
+            subcategori.hidden = !subcategori.hidden
+            this.$store.dispatch('updateSubcategory', {
+                page: 'subcategories',
+                data: subcategori
+            })
+        }
     },
 }
 </script>

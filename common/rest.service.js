@@ -55,15 +55,11 @@ export const RestService = {
         })
     },
 
-    post(resource, params, onError = null) {
+    post(resource, params, config,onError = null) {
         return new Promise(resolve => {
             // console.log('POST: '+resource, params)
 
-            return axios.post(`${REST_ENDPOINT + resource}`, params, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-            })
+            return axios.post(`${REST_ENDPOINT + resource}`, params, config)
                 .then(ret => {
                     if (ret.data.error) {
                         if (errorCb !== null) {

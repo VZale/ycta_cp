@@ -2,7 +2,7 @@
     <div class="add-box">
         <div class="add-box-container">
             <div class="box-item">
-                <template v-for="(field, i) in fields[this.page + 'Fields'].baseFields">
+                <template v-if="field" v-for="(field, i) in fields[this.page + 'Fields'].baseFields">
                     <label>{{ field.label }} <span class="require">*</span></label>
                     <InputBox v-if="!field.isSelect" @update="setField" :title="field.placeholder" :field="i"/>
                     <template v-if="field.isSelect">
