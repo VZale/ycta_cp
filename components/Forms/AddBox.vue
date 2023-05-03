@@ -98,7 +98,6 @@ export default {
 
         sendBoxData() {
             this.$set(this.boxData, 'description', this.description)
-            this.$set(this.boxData, '_id', Date.now())
             this.$set(this.boxData, 'hidden', false)
 
             this.$store.commit('setShowBox', false)

@@ -19,7 +19,6 @@ const actions = {
     },
     addCategory(context, data) {
         const {file, ...dataWithoutFile} = data.data
-        dataWithoutFile._id
         const formData = new FormData()
         formData.append('data', JSON.stringify(dataWithoutFile))
         formData.append('file', file[0])
@@ -29,6 +28,7 @@ const actions = {
             },
         })
             .then(() => {
+                console.log('ans', data)
                 this.commit('setPageData', data)
             })
     },

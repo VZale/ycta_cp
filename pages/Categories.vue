@@ -15,10 +15,8 @@
                                       :total="product.total || 0"
                                       :title="product.name"
                                       :description="product.description"
-                                      :image="product.images ? product?.images[0] : ''"
+                                      :image="product.image"
                                       :isHidden="product.hidden"
-                                      @remove="remove(product._id)"
-                                      @hide="hide(product)"
                                       :design="['button','white','large']"
                                       :button-text="'моделей'"
                                 />

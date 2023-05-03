@@ -15,7 +15,7 @@
             <span class="material-icons" :title="isHidden ? 'отобразить' : 'скрыть'" @click="$emit('hide')">{{isHidden ? 'visibility_off' : 'visibility'}} </span>
             <span class="material-icons" title="Удалить" @click="$emit('remove')">delete</span>
         </div>
-        <img :src="image ? image : require(`@/assets/no-image.png`)" :alt="image">
+        <img :src="image ? 'https://api.enternaloptimist.com/file/download/'+ image : require(`@/assets/no-image.png`)" :alt="image">
         <div class="product-info" v-if="type === 'product'">
             <span class="price">{{ price }}</span>
             <span class="sub-title">{{ title }}</span>

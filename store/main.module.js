@@ -97,16 +97,12 @@ export const mutations = {
         Vue.set(state.initPages, page, true)
     },
     setPageData(context, data) {
-
         for (const item in data.data) {
-            console.log(data.data[item]._id)
             if (!state.pageData[data.page][data.data[item]._id]) {
                 Vue.set(state.pageData[data.page], data.data[item]._id, {})
             }
             Vue.set(state.pageData[data.page], data.data[item]._id, data.data[item])
         }
-
-        console.log(state.pageData[data.page])
 
         // this.dispatch('sendCategory', data.data)
 
