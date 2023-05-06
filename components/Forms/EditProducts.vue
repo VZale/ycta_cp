@@ -8,7 +8,7 @@
                 </template>
                 <template>
                     <label> Введите стоимость товара <span class="require">*</span></label>
-                    <InputBox :value="data.price.toString()" @update="setField" :title="'Стоимость товара'"
+                    <InputBox :value="data.price?.toString()" @update="setField" :title="'Стоимость товара'"
                               :field="'price'"/>
                 </template>
                 <template>
@@ -35,7 +35,7 @@
             </div>
             <div class="box-item" v-if="filtersAll.length">
                 <template v-for="filter in filtersAll" v-if="filtersAll.length">
-                    <InputBox :value="data?.characteristics[filter]?.join(' ')" @update="setFilters" :title="filter"
+                    <InputBox :value="data?.characteristics?.[filter]?.join(' ')" @update="setFilters" :title="filter"
                               :field="filter.name"/>
                 </template>
             </div>
