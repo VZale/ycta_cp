@@ -2,37 +2,33 @@
     <div class="add-box">
         <div class="add-box-container">
             <div class="box-item">
-                <template v-if="field" v-for="(field, i) in fields[this.page + 'Fields'].baseFields">
+                <template v-if="field" v-for="(field, i) in fields[type + 'Fields'].baseFields">
                     <label>{{ field.label }} <span class="require">*</span></label>
-                    <InputBox v-if="!field.isSelect" @update="setField" :title="field.placeholder" :field="i"/>
-                    {{pageData[i]}}
+                    <InputBox :value="data[i]" v-if="!field.isSelect" @update="setField" :title="field.placeholder"
+                              :field="i"/>
                     <template v-if="field.isSelect">
                         <SelectBox :placeholder="field.label" :field="i" :options="pageData[i]" @choosing="setField"/>
                     </template>
                 </template>
             </div>
-            <div class="box-item" v-if="avaliableImageBox">
+            <div class="box-item" v-if="type !== 'subcategory'">
                 <ImageBox
                     @updateImages="setField"
+                    :image="data['image']"
                     :field="'file'"
                     :label="'Загрузите фотографии, которые будут отображаться в карточке товара'"
                     :btn-text="'Добавить фото(jpeg, png)'"/>
-            </div>
-            <div class="box-item" v-if="Object.keys(filtersAll).length">
-                <template v-for="(filter, i) in filtersAll">
-                    <InputBox @update="setField('filter')" :title="filter.name" :field="filter.name"/>
-                </template>
             </div>
             <div class="box-item">
                 <label>Описание <span class="require">*</span></label>
                 <textarea :placeholder="'Заголовок'" v-model="description"></textarea>
             </div>
-            <div class="box-item" v-if="fields[this.page + 'Fields'].labels">
-                <template v-for="(label, i) in fields[this.page + 'Fields']?.labels">
+            <div class="box-item" v-if="fields[type + 'Fields'].labels">
+                <template v-for="(label, i) in fields[type + 'Fields']?.labels">
                     <CheckBox :field="i" :title="label.title" @update="setField"/>
                 </template>
             </div>
-            <div class="box-item" v-if="fields[this.page + 'Fields'].relatedProducts">
+            <div class="box-item" v-if="fields[type + 'Fields'].relatedProducts">
                 <ImageBox
                     @updateImages="setField"
                     :label="'Выберите сопутствующие товары'"
@@ -40,38 +36,28 @@
             </div>
         </div>
         <div class="box-item button-content">
-            <ButtonBox :design="['button','red','large','right']" @update="sendBoxData()" :title="btnTitle"/>
+            <ButtonBox @click="sendBoxData" :design="['button','red','large','right']" @update="sendBoxData()"
+                       :title="btnText"/>
         </div>
     </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters} from "vuex"
 
 export default {
-    name: "AddBox",
+    name: "EditBox",
     mounted() {
-        if (this.page === 'product') {
-            this.$store.dispatch('getAllFilter')
-        }
-
-        if (!this.initPages['categories']) {
-            this.$store.dispatch('getCategories')
-        }
-
-        if (!this.initPages['subcategories']) {
-            this.$store.dispatch('getSubcategories')
-        }
+        this.description += this.data['description']
     },
     props: {
-        avaliableImageBox: {
-            type: Boolean,
-            default: true
+        data: {
+            type: Object
         },
-        btnTitle: {
+        type: {
             type: String
         },
-        page: {
+        btnText: {
             type: String
         }
     },
@@ -100,15 +86,16 @@ export default {
     methods: {
         setField(inputData) {
             this.$set(this.boxData, inputData.field, inputData.inputData)
+            this.$set(this.boxData, 'newData', true)
         },
 
         sendBoxData() {
             this.$set(this.boxData, 'description', this.description)
+            this.$set(this.boxData, '_id', this.data._id)
             this.$set(this.boxData, 'hidden', false)
 
-            this.$store.commit('setShowBox', false)
             this.$store.commit('setPage', 'default')
-            this.$emit('add', this.boxData)
+            this.$emit('save-changes', this.boxData)
         },
     },
 }

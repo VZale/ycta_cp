@@ -1,26 +1,31 @@
 <template>
     <div class="card" @click="chooseProduct(id)">
-        <h2 class="title" v-if="type === 'category'">{{title}}</h2>
+        <h2 class="title" v-if="type === 'Category'">{{ title }}</h2>
         <div class="more-info">
-            <div class="markets">
-                <span class="material-icons percent" v-if="discount">percent</span>
-                <span class="discount" v-if="hot">Хит продаж</span>
+            <div class="markets" v-if="labels">
+                <span class="material-icons percent"
+                      v-if="labels[0] === 'discount' || labels[1] === 'discount'">percent</span>
+                <span class="discount" v-if="labels[0] === 'hot' || labels[1] === 'hot'">Хит продаж</span>
             </div>
             <div class="checkbox" @click="chooseProduct(id)" v-if="relatedProducts">
-                <span :class="{checked:chosenProducts[id]}"></span>
+                <span @click="chooseProduct(id)" :class="{checked:chosenProducts[id._id]?.state}"></span>
             </div>
         </div>
         <div class="img-content" @click.stop v-if="options">
             <span class="material-icons" title="Редактировать" @click="$emit('edit')">edit</span>
-            <span class="material-icons" :title="isHidden ? 'отобразить' : 'скрыть'" @click="$emit('hide')">{{isHidden ? 'visibility_off' : 'visibility'}} </span>
+            <span class="material-icons" :title="isHidden ? 'отобразить' : 'скрыть'"
+                  @click="$emit('hide')">{{ isHidden ? 'visibility_off' : 'visibility' }} </span>
             <span class="material-icons" title="Удалить" @click="$emit('remove')">delete</span>
         </div>
-        <img :src="image ? 'https://api.enternaloptimist.com/file/download/'+ image : require(`@/assets/no-image.png`)" :alt="image">
+        <img
+            :src="image !== 'no-image' ? 'https://api.enternaloptimist.com/file/download/'+ image : require(`@/assets/no-image.png`)"
+            :alt="image">
         <div class="product-info" v-if="type === 'product'">
             <span class="price">{{ price }}</span>
             <span class="sub-title">{{ title }}</span>
         </div>
-        <ButtonBox v-if="type !== 'product'" :total="total" :design="design" :title="buttonText"/>
+        <ButtonBox v-if="type !== 'Category' && type !== 'product'" :total="total" :design="design"
+                   :title="buttonText"/>
     </div>
 </template>
 
@@ -31,7 +36,7 @@ export default {
     name: "Card",
     props: {
         id: {
-            type: Number
+            type: Object
         },
         type: {
             type: String
@@ -40,7 +45,7 @@ export default {
             type: Boolean
         },
         price: {
-            type: String
+            type: Number
         },
         options: {
             type: Boolean,
@@ -54,12 +59,8 @@ export default {
             type: Boolean,
             default: false
         },
-        hot: {
-            type: Boolean
-        },
-        discount: {
-            type: Boolean,
-            default: false,
+        labels: {
+            type: Array
         },
         title: {
             type: String,
@@ -72,7 +73,7 @@ export default {
             default: 'no-image'
         },
         design: {
-          type: Array
+            type: Array
         },
         buttonText: {
             type: String
@@ -92,16 +93,19 @@ export default {
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
     },
     computed: {
-        ...mapGetters(['chosenProducts','pageData'])
+        ...mapGetters(['chosenProducts', 'pageData'])
     },
     methods: {
-        chooseProduct(id) {
-            this.$store.commit('chooseProduct', {
-                id: id,
-                state: this.chosenProducts[id]
-            })
+        chooseProduct(product) {
+            if (!this.relatedProducts) {
+                return
+            }
 
-            console.log(this.chosenProducts)
+            this.$store.commit('chooseProduct', {
+                id: product._id,
+                state: this.chosenProducts[product._id]?.state,
+                data: product
+            })
         },
         goTo(route) {
             if (!this.routing) {

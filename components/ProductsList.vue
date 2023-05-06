@@ -1,18 +1,17 @@
 <template>
-    <div class="products-list" v-if="Object.keys(pageData['products']).length">
-        <template v-for="product in pageData['products']">
+    <div class="products-list" v-if="Object.keys(products).length">
+        <template v-for="(product, i) in products">
             <Card v-if="!product.hidden"
+                  :id="product"
                   :type="'product'"
                   :title="product.name"
                   :price="product.price"
                   :description="product.description"
-                  :image="product.file ? product?.file[0] : ''"
-                  :discount="product.discount"
-                  :hot="product.hot"
-                  :id="product._id"
-                  :isHidden="product.hidden"
+                  :image="product.images ? product.images[0] : ''"
+                  :labels="product.labels"
                   :related-products="true"
-                  @remove="remove(product.id)"
+                  :isHidden="product.hidden"
+                  @remove="remove(product._id, i)"
                   @hide="hide(product)"
             />
         </template>
@@ -28,7 +27,7 @@ export default {
         Card: () => import("@/components/Card")
     },
     computed: {
-        ...mapGetters(['pageData'])
+        ...mapGetters(['products'])
     },
     methods: {
         remove(id) {

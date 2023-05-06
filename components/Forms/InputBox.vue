@@ -1,5 +1,5 @@
 <template>
-    <div class="form-item base-input" :class="{'is-focus': inputIsActive}">
+    <div class="form-item base-input" :class="{'is-focus': inputIsActive || value}">
         <p>{{ title }}</p>
         <input v-model="inputData" type="text"
                @focus="inputIsActive = true"
@@ -15,7 +15,14 @@ export default {
         },
         field: {
             type: String
+        },
+        value: {
+            type: String,
+            default: null
         }
+    },
+    mounted() {
+        this.inputData += this.value || ''
     },
     name: "InputBox",
     data() {

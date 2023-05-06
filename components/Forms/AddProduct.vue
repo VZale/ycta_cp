@@ -2,16 +2,27 @@
     <div class="add-box">
         <div class="add-box-container">
             <div class="box-item">
-                <template v-if="field" v-for="(field, i) in fields[this.page + 'Fields'].baseFields">
-                    <label>{{ field.label }} <span class="require">*</span></label>
-                    <InputBox v-if="!field.isSelect" @update="setField" :title="field.placeholder" :field="i"/>
-                    {{pageData[i]}}
-                    <template v-if="field.isSelect">
-                        <SelectBox :placeholder="field.label" :field="i" :options="pageData[i]" @choosing="setField"/>
-                    </template>
+                <template>
+                    <label> Введите название товара <span class="require">*</span></label>
+                    <InputBox @update="setField" :title="'Название товара'" :field="'name'"/>
+                </template>
+                <template>
+                    <label> Введите стоимость товара <span class="require">*</span></label>
+                    <InputBox @update="setField" :title="'Стоимость товара'" :field="'price'"/>
+                </template>
+                <template>
+                    <label> Выберите категорию <span class="require">*</span></label>
+                    <SelectBox :placeholder="'Выберите категорию'" :field="'category_id'" :options="categories"
+                               @choosing="setCategory"/>
+                </template>
+                <template>
+                    <label> Подкатегория товара <span class="require">*</span></label>
+                    <SelectBox :placeholder="'Выберите подкатегорию'" :field="'sub_category_id'"
+                               :options="subcategories"
+                               @choosing="setSubcategory"/>
                 </template>
             </div>
-            <div class="box-item" v-if="avaliableImageBox">
+            <div class="box-item">
                 <ImageBox
                     @updateImages="setField"
                     :field="'file'"
@@ -20,19 +31,19 @@
             </div>
             <div class="box-item" v-if="Object.keys(filtersAll).length">
                 <template v-for="(filter, i) in filtersAll">
-                    <InputBox @update="setField('filter')" :title="filter.name" :field="filter.name"/>
+                    <InputBox @update="setFilters" :title="filter.name" :field="filter.name"/>
                 </template>
             </div>
             <div class="box-item">
                 <label>Описание <span class="require">*</span></label>
                 <textarea :placeholder="'Заголовок'" v-model="description"></textarea>
             </div>
-            <div class="box-item" v-if="fields[this.page + 'Fields'].labels">
-                <template v-for="(label, i) in fields[this.page + 'Fields']?.labels">
-                    <CheckBox :field="i" :title="label.title" @update="setField"/>
+            <div class="box-item">
+                <template v-for="(label, i) in fields.productFields.labels">
+                    <CheckBox :field="i" :title="label.title" @update="setLabels"/>
                 </template>
             </div>
-            <div class="box-item" v-if="fields[this.page + 'Fields'].relatedProducts">
+            <div class="box-item">
                 <ImageBox
                     @updateImages="setField"
                     :label="'Выберите сопутствующие товары'"
@@ -49,31 +60,17 @@
 import {mapGetters} from 'vuex'
 
 export default {
-    name: "AddBox",
-    mounted() {
-        if (this.page === 'product') {
-            this.$store.dispatch('getAllFilter')
-        }
-
-        if (!this.initPages['categories']) {
-            this.$store.dispatch('getCategories')
-        }
-
-        if (!this.initPages['subcategories']) {
-            this.$store.dispatch('getSubcategories')
-        }
-    },
+    name: "AddProduct",
     props: {
-        avaliableImageBox: {
-            type: Boolean,
-            default: true
-        },
         btnTitle: {
             type: String
         },
-        page: {
-            type: String
-        }
+    },
+    mounted() {
+        this.$store.dispatch('getAllFilter')
+        this.$store.dispatch('getCategories')
+        this.$store.dispatch('getSubcategories')
+        this.$store.commit('clearReletedProducts')
     },
     components: {
         InputBox: () => import('~/components/Forms/InputBox'),
@@ -92,8 +89,8 @@ export default {
     computed: {
         ...mapGetters([
             'fields',
-            'pageData',
-            'initPages',
+            'categories',
+            'subcategories',
             'filtersAll'
         ])
     },
@@ -101,7 +98,25 @@ export default {
         setField(inputData) {
             this.$set(this.boxData, inputData.field, inputData.inputData)
         },
+        setCategory(inputData) {
+            this.$set(this.boxData, inputData.field, inputData.inputData)
+        },
+        setSubcategory(inputData) {
+            this.$set(this.boxData, inputData.field, inputData.inputData)
+        },
+        setFilters(inputData) {
+            if (!this.boxData.characteristics) {
+                this.$set(this.boxData, 'characteristics', {})
+            }
 
+            this.$set(this.boxData.characteristics, inputData.field, inputData.inputData)
+        },
+        setLabels(inputData) {
+            if (!this.boxData.labels) {
+                this.$set(this.boxData, 'labels', [])
+            }
+            this.boxData.labels.push(inputData.field)
+        },
         sendBoxData() {
             this.$set(this.boxData, 'description', this.description)
             this.$set(this.boxData, 'hidden', false)
@@ -142,6 +157,10 @@ export default {
 
 .box-item.button-content {
     text-align: right;
+}
+
+.box-item {
+    overflow-y: auto;
 }
 
 label {

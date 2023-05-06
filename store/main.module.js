@@ -15,13 +15,10 @@ export const state = {
                 categories: {
                     label: 'Выберите категорию',
                     placeholder: 'Категория товара',
-                    isSelect: true,
-                    select: []
                 },
                 subcategories: {
                     label: 'Выберите подкатегорию',
                     placeholder: 'Подкатегория товара',
-                    isSelect: true,
                 },
             },
             filterList: {},
@@ -103,13 +100,6 @@ export const mutations = {
             }
             Vue.set(state.pageData[data.page], data.data[item]._id, data.data[item])
         }
-
-        // this.dispatch('sendCategory', data.data)
-
-        // Vue.set(state.pageData['categories'],'products', [])
-        // state.pageData['categories'].products.push(data.data)
-        //
-        // Vue.set(state.pageData['categories'][data.data.id], 'total', ++state.pageData['categories'][data.data.id].total || 1)
     },
     removePageData(_, data) {
         Vue.delete(state.pageData[data.page], data._id)

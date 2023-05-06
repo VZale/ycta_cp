@@ -7,34 +7,35 @@
                         :btn-text="'Новая подкатегория'" :dynamic-header-content="true"
                         :add-title="'Новая подкатегория'"
                 />
-                <div class="box" v-if="!showAddBox && currentPage === 'default'"
-                     :class="{'filters-not-added': !Object.keys(pageData['subcategories']).length}">
-                    <template v-if="Object.keys(pageData['subcategories']).length">
-                        <template v-if="subcategory && subcategory.hidden"
-                                  v-for="(subcategory, i) in pageData['subcategories']">
+                <div class="box" v-if="!showAddBox && !showEditBox && currentPage === 'default'"
+                     :class="{'filters-not-added': !Object.keys(subcategories).length}">
+                    <template v-if="Object.keys(subcategories).length">
+                        <template v-if="subcategory && !subcategory.hidden"
+                                  v-for="(subcategory, i) in subcategories">
                             <div class="item">
-                                <h2 class="subtitle">{{ subcategory?.name }}</h2>
-                                <!--                            <h2 class="subtitle">{{ subcategory.value.join(', ') }}</h2>-->
-                                <Actions :item="i" @remove="remove(subcategory._id)" @hide="hide(subcategory)"/>
+                                <h2 class="subtitle">{{ subcategory.name }}</h2>
+                                <Actions :item="i" @remove="remove(subcategory, i)" @hide="hide(subcategory)"
+                                         @edit="edit(subcategory)"/>
                             </div>
                         </template>
                     </template>
                     <WarningMessage v-else :warning-message="'Начните добавлять фильтры и они появятся здесь'"/>
                 </div>
-                <AddBox :avaliable-image-box="false" :page="'subcategory'" v-if="showAddBox" @add="addSubcategory"
-                        :btn-title="'Добавить подкатегорию'"/>
-                <div class="hidden-box box" v-if="currentPage === 'hide'">
-                    <template v-if="Object.keys(pageData['subcategories']).length">
-                        <template v-if="subcategory && !subcategory.hidden"
-                                  v-for="(subcategory, i) in pageData['subcategories']">
+                <div class="hidden-box box" v-if="currentPage === 'hide' && !showEditBox">
+                    <template v-if="Object.keys(subcategories).length">
+                        <template v-if="subcategory && subcategory.hidden"
+                                  v-for="(subcategory, i) in subcategories">
                             <div class="item">
-                                <h2 class="subtitle">{{ subcategory?.name }}</h2>
-                                <!--                            <h2 class="subtitle">{{ subcategory.value.join(', ') }}</h2>-->
-                                <Actions :item="i" @remove="remove(subcategory._id)" @hide="hide(subcategory)"/>
+                                <h2 class="subtitle">{{ subcategory.name }}</h2>
+                                <Actions :item="i" @remove="remove(subcategory._id)" @hide="hide(subcategory)"
+                                         @edit="edit(subcategory)"/>
                             </div>
                         </template>
                     </template>
                 </div>
+                <AddSubcategories v-if="showAddBox" @add="addSubcategory" :btn-title="'Добавить подкатегорию'"/>
+                <EditSubcategory @save-changes="saveSubcategory" :data="currentSubcategories" v-if="showEditBox"
+                                 :type="'subcategory'" :btnText="'Сохранить'"/>
             </div>
         </div>
     </div>
@@ -51,26 +52,38 @@ export default {
         }
     },
     components: {
+        EditSubcategory: () => import('@/components/Forms/EditSubcategory'),
         SideBar: () => import('@/components/SideBar'),
-        AddBox: () => import('@/components/Forms/AddBox'),
+        AddSubcategories: () => import('@/components/Forms/AddSubcategories'),
         HiddenBox: () => import('@/components/HiddenBox'),
         WarningMessage: () => import('@/components/WarningMessage')
     },
+    data() {
+        return {
+            currentSubcategories: []
+        }
+    },
     computed: {
-        ...mapGetters(['showAddBox', 'currentPage', 'pageData', 'initPages'])
+        ...mapGetters(['showAddBox', 'showEditBox', 'currentPage', 'subcategories', 'initPages'])
     },
     methods: {
+        saveSubcategory(data) {
+            this.$store.dispatch('updateSubcategory', data)
+            this.$store.commit('setEditBox', false)
+        },
+        edit(subcategory) {
+            this.currentSubcategories = subcategory
+            this.$store.commit('setEditBox', true)
+        },
         addSubcategory(subcategoryData) {
-            this.$store.dispatch('addSubcategory', {
-                data: subcategoryData,
-                page: 'subcategories'
-            })
+            this.$store.commit('setEditBox', false)
+            this.$store.dispatch('addSubcategory', subcategoryData)
         },
 
-        remove(id) {
+        remove(subcategory, i) {
             this.$store.dispatch('removeSubcategory', {
-                page: 'subcategories',
-                _id: id
+                _id: subcategory._id,
+                item: i
             })
         },
         hide(subcategori) {

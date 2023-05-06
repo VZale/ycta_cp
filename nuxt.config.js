@@ -29,8 +29,19 @@ export default {
         'css/general'
     ],
 
+    // ssr: false,
+
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-    plugins: [],
+    plugins: [
+        { src: '~/plugins/primevue.js' ,}
+    ],
+
+    primevue: {
+        theme: 'md-light-indigo',
+        ripple: true,
+        components: ['InputText', 'Button', 'DataTable', 'Chips'],
+        directives: ['Tooltip', 'Badge']
+    },
 
     router: {
         extendRoutes(routes, resolve) {
@@ -84,6 +95,8 @@ export default {
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
     ],
+
+
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {

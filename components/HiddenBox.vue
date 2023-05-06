@@ -1,17 +1,17 @@
 <template>
     <div class="hidden-box">
-        <template v-for="product in pageData?.[page]">
-            <Card v-if="product.hidden"
-                  :type="'product'"
-                  :title="product.name"
-                  :price="product.price"
-                  :description="product.description"
-                  :image="product.images ? product?.images[0] : ''"
-                  :discount="product.discount"
-                  :hot="product.hot"
-                  :isHidden="product.hidden"
-                  @remove="remove(product._id)"
-                  @hide="hide(product)"
+        <template v-for="(item, i) in data">
+            <Card v-if="item.hidden"
+                  :type="page"
+                  :title="item.name"
+                  :price="item.price"
+                  :description="item.description"
+                  :image="item.image"
+                  :discount="item.discount"
+                  :hot="item.hot"
+                  :isHidden="item.hidden"
+                  @remove="remove(item._id, i)"
+                  @hide="hide(item)"
             />
         </template>
     </div>
@@ -25,6 +25,9 @@ export default {
     props: {
         page: {
             type: String
+        },
+        data: {
+            type: Object
         }
     },
     components: {
@@ -34,17 +37,17 @@ export default {
         ...mapGetters(['pageData'])
     },
     methods: {
-        remove(id) {
-            this.$store.dispatch('removeCategory', {
-                page: this.page,
+        remove(id, item) {
+            this.$store.dispatch(`remove${this.page}`, {
+                item: item,
                 _id: id
             })
         },
         hide(product) {
             product.hidden = !product.hidden
-            this.$store.dispatch('updateCategory', {
-                page: this.page,
-                data: product
+            this.$store.dispatch(`update${this.page}`, {
+                _id: product._id,
+                hidden: product.hidden
             })
         }
     }

@@ -6,29 +6,32 @@
                 <Header :page="'products'" :cur-page="'Товары'" :hide-page="'Скрытые товары'"
                         :btn-text="'Новый товар'" :dynamic-header-content="true" :add-title="'Новый товар'"
                 />
-                <div class="box" v-if="!showAddBox && currentPage !== 'hide'">
-                    <template v-if="Object.keys(pageData?.['products']).length">
+                <div class="box" v-if="!showAddBox && !showEditBox && currentPage !== 'hide'">
+                    <template v-if="Object.keys(products).length">
                         <div class="cards">
-                            <template v-for="product in pageData?.['products']">
+                            <template v-for="(product, i) in products">
                                 <Card v-if="!product.hidden"
                                       :type="'product'"
                                       :title="product.name"
                                       :price="product.price"
                                       :description="product.description"
-                                      :image="product.file ? product?.file[0] : ''"
-                                      :discount="product.discount"
-                                      :hot="product.hot"
+                                      :image="product.images ? product.images[0] : ''"
+                                      :labels="product.labels"
                                       :isHidden="product.hidden"
-                                      @remove="remove(product._id)"
+                                      @remove="remove(product._id, i)"
                                       @hide="hide(product)"
+                                      @edit="edit(product)"
+
                                 />
                             </template>
                         </div>
                     </template>
                     <WarningMessage v-else :warning-message="'Начните добавлять товары и они появятся здесь'"/>
                 </div>
-                <AddBox :page="'product'" v-if="showAddBox" @add="addProduct" :btn-title="'Добавить товар'"/>
+                <AddProduct v-if="showAddBox" @add="addProduct" :btn-title="'Добавить товар'"/>
                 <HiddenBox class="box" :page="'products'" v-if="currentPage === 'hide'"/>
+                <EditProducts v-if="showEditBox" @save-changes="saveProduct" :data="currentProduct" :type="'product'"
+                              :btnText="'Сохранить'"/>
             </div>
         </div>
     </div>
@@ -41,30 +44,44 @@ export default {
     name: "Products",
     mounted() {
         if (!this.initPages['products']) {
-            // this.$store.dispatch('getProducts')
+            this.$store.dispatch('getProducts')
         }
     },
     components: {
+        EditProducts: () => import('@/components/Forms/EditProducts'),
         SideBar: () => import('@/components/SideBar'),
-        AddBox: () => import('@/components/Forms/AddBox'),
+        AddProduct: () => import('@/components/Forms/AddProduct'),
         HiddenBox: () => import('@/components/HiddenBox'),
         WarningMessage: () => import('@/components/WarningMessage'),
         Card: () => import('@/components/Card')
     },
+    data() {
+        return {
+            currentProduct: [],
+        }
+    },
     computed: {
-        ...mapGetters(['pageData', 'showAddBox', 'currentPage','initPages'])
+        ...mapGetters(['products', 'showAddBox', 'currentPage', 'initPages', 'showEditBox'])
     },
     methods: {
         addProduct(productData) {
-            this.$store.commit('setPageData', {
-                data: {productData},
-                page: 'products'
-            })
+            if (productData.same_products_id?.length) {
+                const {same_products_id, ...data} = productData;
+                this.$store.dispatch('addSameproducts', {
+                    sameproduct: {
+                        products: same_products_id,
+                        hidden: false
+                    },
+                    data: data
+                })
+                return
+            }
+            this.$store.dispatch('addProduct', productData)
         },
-        remove(id) {
-            this.$store.commit('removePageData', {
-                page: 'products',
-                id: id
+        remove(id, item) {
+            this.$store.dispatch('removeProduct', {
+                _id: id,
+                item: item
             })
         },
         hide(product) {
@@ -72,6 +89,15 @@ export default {
                 page: 'products',
                 data: product
             })
+        },
+        saveProduct(data) {
+            this.$store.dispatch('editProduct', data)
+            this.$store.commit('setEditBox', false)
+        },
+        edit(product) {
+            this.$store.commit('clearReletedProducts')
+            this.currentProduct = product
+            this.$store.commit('setEditBox', true)
         }
     }
 }

@@ -1,8 +1,8 @@
 <template>
-    <div class="add-filter">
-        <InputBox @update="setField" :title="'Название фильтра'" :field="'name'"/>
+    <div class="edit-filter">
+        <InputBox :value="editingFilter.name" @update="setField" :title="'Название фильтра'" :field="'name'"/>
         <label>Введите один или более пунктов фильтрации</label>
-        <Chips v-model="options" separator="," placeholder="Пункты фильтрации"/>
+        <textarea v-model="options" :placeholder="'Пункты фильтрации'"></textarea>
         <div class="add-button">
             <ButtonBox @update="sendBoxData()" :design="['button','red','large','right']" :title="'Добавить фильтр'"/>
         </div>
@@ -10,23 +10,25 @@
 </template>
 
 <script>
-import Chips from 'primevue/chips'
+import {mapGetters} from "vuex"
 
-import('primevue/resources/themes/saga-blue/theme.css')
-import('primevue/resources/primevue.min.css')
-import('primeicons/primeicons.css')
 export default {
-    name: "AddFilter",
+    name: "EditFilter",
     components: {
-        Chips,
         InputBox: () => import('~/components/Forms/InputBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox')
+    },
+    mounted() {
+        this.options += this.editingFilter.options.join(' ')
     },
     data() {
         return {
             filterData: {},
-            options: [],
+            options: '',
         }
+    },
+    computed: {
+        ...mapGetters(['editingFilter'])
     },
     methods: {
         setField(inputData) {
@@ -35,11 +37,13 @@ export default {
         sendBoxData() {
             let field = {
                 field: 'options',
-                inputData: this.options
+                inputData: this.options.split(' ')
             }
 
             this.$set(this.filterData, field.field, field.inputData)
             this.$set(this.filterData, 'hidden', false)
+            this.$set(this.filterData, '_id', this.editingFilter._id)
+
             this.$emit('add', this.filterData)
         }
     }
@@ -47,7 +51,7 @@ export default {
 </script>
 
 <style scoped>
-.add-filter {
+.edit-filter {
     margin-top: 28px;
 }
 
@@ -78,23 +82,5 @@ textarea::placeholder {
     font-size: 18px;
     font-weight: 400;
     vertical-align: center;
-}
-
-.p-chips{
-    display: grid;
-    width: 100%;
-    height: 60px;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    color: var(--black);
-    position: relative;
-    z-index: 3;
-    font-size: 18px;
-    font-weight: 400;
-}
-
-.p-chips-input-token {
-    background: var(--gray-1);
 }
 </style>

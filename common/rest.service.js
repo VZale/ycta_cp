@@ -83,15 +83,11 @@ export const RestService = {
         })
     },
 
-    put(resource, params, onError = null) {
+    put(resource, params, config,onError = null) {
         return new Promise(resolve => {
             // console.log('PUT: '+resource, params)
 
-            return axios.put(`${REST_ENDPOINT + resource}`, params, {
-                headers: {
-                    Authorization: token
-                }
-            })
+            return axios.put(`${REST_ENDPOINT + resource}`, params, config)
                 .then(ret => {
                     if (ret.data.error) {
                         if (errorCb !== null) {

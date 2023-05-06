@@ -1,49 +1,89 @@
 import RestService from "@/common/rest.service"
+import Vue from "vue"
 
-export const state = {}
+export const state = {
+    categories: {}
+}
 
-export const getters = {}
+export const getters = {
+    categories() {
+        return state.categories
+    }
+}
 
-export const mutations = {}
+export const mutations = {
+    setCategories(context, data) {
+        for (const item in data) {
+            Vue.set(state.categories, item, data[item])
+        }
+    },
+    addCategory(context, data) {
+        Object.values(state.categories).push(data)
+    },
+    removeCategory(context, data) {
+        Vue.delete(state.categories, data)
+    },
+    editCategory(context, data) {
+        const categoryToUpdate = Object.values(state.categories).find(category => category._id === data._id)
+        if (categoryToUpdate) {
+            Object.assign(categoryToUpdate, data)
+        }
+    }
+}
 
 const actions = {
     getCategories() {
         RestService.get('/categories')
             .then(ans => {
-                this.commit('setPageData', {
-                    data: ans,
-                    page: 'categories'
-                })
+                this.commit('setCategories', ans)
                 this.commit('initPage', 'categories')
             })
     },
     addCategory(context, data) {
-        const {file, ...dataWithoutFile} = data.data
+        const {file, ...dataWithoutFile} = data
         const formData = new FormData()
         formData.append('data', JSON.stringify(dataWithoutFile))
-        formData.append('file', file[0])
+        if (file) {
+            formData.append('file', file[0])
+        }
         RestService.post('/categories', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             },
         })
-            .then(() => {
-                console.log('ans', data)
-                this.commit('setPageData', data)
+            .then(ans => {
+                this.commit('addCategory', ans)
             })
     },
     removeCategory(context, data) {
+        const item = data.item
         RestService.delete(`/category/${data._id}`)
             .then(() => {
-                this.commit('removePageData', data)
+                this.commit('removeCategory', item)
+            })
+    },
+    editCategory(context, data) {
+        const {file, ...dataWithoutFile} = data
+        const formData = new FormData()
+        formData.append('data', JSON.stringify(dataWithoutFile))
+        if (file) {
+            formData.append('file', file[0])
+        }
+        RestService.put(`/category/${data._id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+        })
+            .then(() => {
+                this.commit('editCategory', data)
             })
     },
     updateCategory(context, data) {
-        RestService.put(`/category/${data.data._id}`, {
-            hidden: data.data.hidden
+        RestService.put(`/category/${data._id}`, {
+            hidden: data.hidden
         })
             .then(() => {
-                this.commit('hidePageData', data)
+                this.commit('editCategory', data)
             })
     }
 }

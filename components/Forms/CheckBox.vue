@@ -14,7 +14,13 @@ export default {
         },
         field: {
             type: String
+        },
+        state: {
+            type: Boolean
         }
+    },
+    mounted() {
+        this.isChecked = this.state
     },
     data() {
         return {

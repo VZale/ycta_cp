@@ -5,11 +5,12 @@
             <CheckBox :title="'Использовать заглушку'" v-if="checkbox"/>
         </div>
         <div class="images-container">
-            <div v-for="(image, index) in field === 'relatedProducts' ? relatedProducts : images" :key="index"
-                 class="item">
-                <img :src="image" alt="">
-                <span class="material-icons close" @click="remove(index)">close</span>
-            </div>
+            <template v-for="(item, index) in field === 'relatedProducts' ? reletedProducts : images">
+                <div class="item">
+                    <img :src="getPath(item)" alt="">
+                    <span class="material-icons close" @click="remove(index)">close</span>
+                </div>
+            </template>
             <div class="item" @click="addProduct">
                 <span class="material-icons">add_circle</span>
                 <p>{{ btnText }}</p>
@@ -30,16 +31,9 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters} from "vuex"
 
 export default {
-    components: {
-        ProductsList: () => import('@/components/ProductsList'),
-        ButtonBox: () => import('@/components/Forms/ButtonBox'),
-        Card: () => import("@/components/Card"),
-        ModalBox: () => import('@/components/Forms/ModalBox'),
-        CheckBox: () => import('@/components/Forms/CheckBox')
-    },
     props: {
         label: {
             type: String
@@ -53,20 +47,53 @@ export default {
         },
         btnText: {
             type: String
+        },
+        image: {
+            type: Array
+        }
+    },
+    mounted() {
+        if (this.image) {
+            this.images.push(this.image)
+            this.file.push(this.file)
+        }
+
+        if (!this.images[0]?.length) {
+            this.images = []
+            this.file = []
         }
     },
     name: "ImageBox",
+    components: {
+        ProductsList: () => import('@/components/ProductsList'),
+        ButtonBox: () => import('@/components/Forms/ButtonBox'),
+        Card: () => import("@/components/Card"),
+        ModalBox: () => import('@/components/Forms/ModalBox'),
+        CheckBox: () => import('@/components/Forms/CheckBox')
+    },
     data() {
         return {
             file: [],
             images: [],
-            showProductListModal: false
+            showProductListModal: false,
         }
     },
     computed: {
-        ...mapGetters(['reletedProducts', 'chosenProducts','pageData'])
+        ...mapGetters(['reletedProducts', 'chosenProducts', 'pageData', 'products']),
     },
     methods: {
+        getPath(item) {
+            const regex = /\.(png|jpe?g)$/i;
+            if (regex.test(item)) {
+                return 'https://api.enternaloptimist.com/file/download/' + item
+            }
+
+            if (this.field === 'file') {
+                return item
+            }
+
+            return 'https://api.enternaloptimist.com/file/download/' + item
+        },
         sendImageArray() {
             let field = {
                 field: this.field,
@@ -86,7 +113,12 @@ export default {
             this.sendImageArray()
         },
         remove(index) {
-            this.field === 'file' ? this[this.field].splice(index, 1) : this.$store.commit('removeReletedProducts', index)
+            if (this.field === 'file') {
+                this['file'].splice(index, 1)
+                this['images'].splice(index, 1)
+            } else {
+                this.$store.commit('removeReletedProducts', index)
+            }
         },
         addProduct() {
             if (this.field === 'file') {
@@ -96,11 +128,19 @@ export default {
             this.showProductListModal = true
         },
         showSelectedProducts() {
-            let images = Object.values(this.pageData['products']).map(el => el.file[0]);
+            let images = Object.values(this.chosenProducts).map(el => el.data.images[0]);
+            let ids = Object.values(this.chosenProducts).map(el => el.data._id);
             this.$store.commit('setReletedProducts', images)
-
             this.$store.commit('clearChosenProducts')
+
             this.showProductListModal = false
+
+            let field = {
+                field: 'same_products_id',
+                inputData: ids
+            }
+
+            this.$emit('updateImages', field)
         }
     }
 }

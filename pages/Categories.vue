@@ -6,27 +6,31 @@
                 <Header :page="'categories'" :cur-page="'Категории'" :hide-page="'Скрытые категории'"
                         :btn-text="'Новые категории'" :dynamic-header-content="true" :add-title="'Новая категория'"
                 />
-                <div class="box" v-if="!showAddBox && currentPage === 'default'">
-                    <template v-if="Object.keys(pageData?.['categories']).length">
+                <div class="box" v-if="!showAddBox && !showEditBox && currentPage === 'default'">
+                    <template v-if="Object.keys(categories).length">
                         <div class="cards">
-                            <template v-for="product in pageData['categories']">
-                                <Card v-if="product && !product.hidden"
-                                      :type="'category'"
-                                      :total="product.total || 0"
-                                      :title="product.name"
-                                      :description="product.description"
-                                      :image="product.image"
-                                      :isHidden="product.hidden"
+                            <template v-for="(category, i) in categories">
+                                <Card v-if="category && !category.hidden"
+                                      :type="'Category'"
+                                      :total="category.total || 0"
+                                      :title="category.name"
+                                      :description="category.description"
+                                      :image="category.image"
+                                      :isHidden="category.hidden"
                                       :design="['button','white','large']"
                                       :button-text="'моделей'"
+                                      @remove="remove(category._id,i)"
+                                      @hide="hide(category)"
+                                      @edit="edit(category)"
                                 />
                             </template>
                         </div>
                     </template>
                     <WarningMessage v-else :warning-message="'Начните добавлять категории и они появятся здесь'"/>
                 </div>
-                <AddBox :page="'category'" v-if="showAddBox" @add="addCategory" :btn-title="'Добавить категорию'"/>
-                <HiddenBox class="box" :page="'categories'" v-if="currentPage === 'hide'"/>
+                <AddCategory v-if="showAddBox" @add="addCategory" :btn-title="'Добавить категорию'"/>
+                <HiddenBox class="box" :page="'Category'" v-if="currentPage === 'hide'" :data="categories"/>
+                <EditBox @save-changes="saveCategory" :data="currentCategory" v-if="showEditBox" :type="'category'" :btnText="'Сохранить'"/>
             </div>
         </div>
     </div>
@@ -43,34 +47,48 @@ export default {
         }
     },
     components: {
+        EditBox: () => import('@/components/Forms/EditBox'),
         SideBar: () => import('@/components/SideBar'),
-        AddBox: () => import('@/components/Forms/AddBox'),
+        AddCategory: () => import('@/components/Forms/AddCategory'),
         HiddenBox: () => import('@/components/HiddenBox'),
         WarningMessage: () => import('@/components/WarningMessage'),
         Card: () => import('@/components/Card')
     },
+    data() {
+        return {
+            showEditBox: false,
+            currentCategory: []
+        }
+    },
     computed: {
-        ...mapGetters(['pageData', 'showAddBox', 'currentPage','initPages'])
+        ...mapGetters(['categories', 'showAddBox', 'currentPage', 'initPages'])
     },
     methods: {
         addCategory(categoryData) {
-            this.$store.dispatch('addCategory', {
-                data: categoryData,
-                page: 'categories'
-            })
+            this.$store.dispatch('addCategory', categoryData)
         },
-        remove(id) {
+        remove(id, item) {
             this.$store.dispatch('removeCategory', {
-                page: 'categories',
+                item: item,
                 _id: id
             })
         },
-        hide(product) {
-            product.hidden = !product.hidden
+        saveCategory(data) {
+            if (data.newData) {
+                this.$store.dispatch('editCategory', data)
+            }
+            this.showEditBox = false
+        },
+        hide(category) {
+            category.hidden = !category.hidden
             this.$store.dispatch('updateCategory', {
-                page: 'categories',
-                data: product
+                _id: category._id,
+                hidden: category.hidden
             })
+        },
+        edit(category) {
+            this.currentCategory = category
+            this.showEditBox = true
         }
     }
 }

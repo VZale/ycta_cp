@@ -1,15 +1,16 @@
 <template>
     <header class="header">
         <div class="left">
-            <span class="material-icons" v-if="showAddBox" @click="turnBack()">west</span>
-            <span class="current-page" :class="{active: currentPage === 'default' || showAddBox}"
+            <span class="material-icons" v-if="showAddBox || showEditBox" @click="turnBack()">west</span>
+            <span class="current-page" :class="{active: currentPage === 'default' || showAddBox || showEditBox}"
                   @click="changePage('default')">{{ !showAddBox && addTitle ? addTitle : curPage }}</span>
-            <span class="hide-page" :class="{active: currentPage === 'hide'}" v-if="!showAddBox"
+            <span class="hide-page" :class="{active: currentPage === 'hide'}" v-if="!showAddBox && !showEditBox"
                   @click="changePage('hide')">{{
                     hidePage
                 }}</span>
         </div>
-        <ButtonBox v-if="!showAddBox || page === 'filters'" :design="['button','black','small']" @update="add()"
+        <ButtonBox v-if="!showAddBox && !showEditBox || page === 'filters'" :design="['button','black','small']"
+                   @update="add()"
                    :title="btnText"
                    :material-icon="'add_circle'"
         />
@@ -49,7 +50,7 @@ export default {
     },
     name: "Header",
     computed: {
-        ...mapGetters(['showAddBox', 'currentPage'])
+        ...mapGetters(['showAddBox', 'currentPage', 'showEditBox'])
     },
     methods: {
         changePage(page) {
@@ -64,7 +65,11 @@ export default {
         },
 
         turnBack() {
-            this.$store.commit('setShowBox', this.showAddBox)
+            if (this.showEditBox) {
+                this.$store.commit('setEditBox', false)
+            } else {
+                this.$store.commit('setShowBox', this.showAddBox)
+            }
 
             this.$emit('turn-back')
         }
