@@ -109,7 +109,7 @@ export default {
                 this.$set(this.boxData, 'characteristics', {})
             }
 
-            this.boxData.characteristics[inputData.field] = inputData.inputData.trim().split(' ')
+            this.boxData.characteristics[inputData.field] = inputData.inputData.toLowerCase().trim().split(' ')
         },
         setLabels(inputData) {
             if (!this.boxData.labels) {

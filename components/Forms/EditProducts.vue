@@ -33,9 +33,9 @@
                     :label="'Загрузите фотографии, которые будут отображаться в карточке товара'"
                     :btn-text="'Добавить фото(jpeg, png)'"/>
             </div>
-            <div class="box-item" v-if="Object.keys(filtersAll).length">
-                <template v-for="(filter, i) in filtersAll">
-                    <InputBox :value="data?.characteristics[0]?.[filter.name]" @update="setFilters" :title="filter.name"
+            <div class="box-item" v-if="filtersAll.length">
+                <template v-for="filter in filtersAll" v-if="filtersAll.length">
+                    <InputBox :value="data?.characteristics[filter]?.join(' ')" @update="setFilters" :title="filter"
                               :field="filter.name"/>
                 </template>
             </div>
