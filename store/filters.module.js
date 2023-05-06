@@ -75,7 +75,7 @@ const actions = {
             })
     },
     getAllFilter() {
-        RestService.get('/filters')
+        RestService.get('/filters/list')
             .then((ans) => {
                 this.commit('setAllFilters', ans)
             })

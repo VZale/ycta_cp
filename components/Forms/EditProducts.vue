@@ -25,7 +25,6 @@
                                @choosing="setSubcategory"/>
                 </template>
             </div>
-            {{data['images']}}
             <div class="box-item">
                 <ImageBox
                     @updateImages="setField"
