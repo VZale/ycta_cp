@@ -37,7 +37,6 @@ export default {
                 field: 'options',
                 inputData: this.options
             }
-
             this.$set(this.filterData, field.field, field.inputData)
             this.$set(this.filterData, 'hidden', false)
             this.$emit('add', this.filterData)
@@ -80,7 +79,7 @@ textarea::placeholder {
     vertical-align: center;
 }
 
-.p-chips{
+.p-chips {
     display: grid;
     width: 100%;
     height: 60px;
