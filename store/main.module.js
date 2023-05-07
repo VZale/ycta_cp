@@ -130,6 +130,7 @@ export const mutations = {
     clearToken() {
         state.user.token = ''
         RestService.token('')
+        localStorage.removeItem('token')
     },
 
     init(){
