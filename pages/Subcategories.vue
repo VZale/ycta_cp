@@ -9,17 +9,20 @@
                 />
                 <div class="box" v-if="!showAddBox && !showEditBox && currentPage === 'default'"
                      :class="{'filters-not-added': !Object.keys(subcategories).length}">
-                    <template v-if="Object.keys(subcategories).length">
-                        <template v-if="subcategory && !subcategory.hidden"
-                                  v-for="(subcategory, i) in subcategories">
-                            <div class="item">
-                                <h2 class="subtitle">{{ subcategory.name }}</h2>
-                                <Actions :item="i" @remove="remove(subcategory, i)" @hide="hide(subcategory)"
-                                         @edit="edit(subcategory)"/>
-                            </div>
+                    <ScrollPanel style="width: 100%; height: 700px">
+
+                        <template v-if="Object.keys(subcategories).length">
+                            <template v-if="subcategory && !subcategory.hidden"
+                                      v-for="(subcategory, i) in subcategories">
+                                <div class="item">
+                                    <h2 class="subtitle">{{ subcategory.name }}</h2>
+                                    <Actions :item="i" @remove="remove(subcategory, i)" @hide="hide(subcategory)"
+                                             @edit="edit(subcategory)"/>
+                                </div>
+                            </template>
                         </template>
-                    </template>
-                    <WarningMessage v-else :warning-message="'Начните добавлять фильтры и они появятся здесь'"/>
+                        <WarningMessage v-else :warning-message="'Начните добавлять фильтры и они появятся здесь'"/>
+                    </ScrollPanel>
                 </div>
                 <div class="hidden-box box" v-if="currentPage === 'hide' && !showEditBox">
                     <template v-if="Object.keys(subcategories).length">
@@ -32,6 +35,7 @@
                             </div>
                         </template>
                     </template>
+
                 </div>
                 <AddSubcategories v-if="showAddBox" @add="addSubcategory" :btn-title="'Добавить подкатегорию'"/>
                 <EditSubcategory @save-changes="saveSubcategory" :data="currentSubcategories" v-if="showEditBox"
@@ -43,15 +47,12 @@
 
 <script>
 import {mapGetters} from "vuex"
+import ScrollPanel from "primevue/scrollpanel";
 
 export default {
     name: "Subcategories",
-    mounted() {
-        if (!this.initPages['subcategories']) {
-            this.$store.dispatch('getSubcategories')
-        }
-    },
     components: {
+        ScrollPanel,
         EditSubcategory: () => import('@/components/Forms/EditSubcategory'),
         SideBar: () => import('@/components/SideBar'),
         AddSubcategories: () => import('@/components/Forms/AddSubcategories'),

@@ -76,7 +76,8 @@ export const state = {
         subcategories: false,
         products: false,
     },
-    user: {}
+    user: {},
+    init: false
 }
 
 export const getters = {
@@ -92,29 +93,12 @@ export const getters = {
     user() {
         return state.user
     },
+    init() {
+        return state.init
+    }
 }
 
 export const mutations = {
-    appInit() {
-        let cToken = localStorage.get('token')
-        if (cToken !== null && cToken !== 'undefined' && cToken !== undefined) {
-            RestService.token(cToken)
-            RestService.get('/user/self', {}, () => {
-                // no, token invalid
-                this.commit('clearToken')
-                this.commit('setAccess', 'denied')
-            })
-                .then(ans => {
-                    // yes, token valid
-                    this.commit('user', ans)
-                    this.commit('setAccess', 'granted')
-                    this.commit('setTidioUserData', ans)
-                    this.dispatch('fetchAllUserData')
-                })
-        } else {
-            this.commit('clearToken')
-        }
-    },
     initPage(context, page) {
         Vue.set(state.initPages, page, true)
     },
@@ -147,9 +131,32 @@ export const mutations = {
         state.user.token = ''
         RestService.token('')
     },
+
+    init(){
+        state.init = true
+    }
 }
 
 const actions = {
+    appInit() {
+        let cToken = localStorage.getItem('token')
+        if (cToken !== null && cToken !== 'undefined' && cToken !== undefined) {
+            RestService.get('/manager/self', cToken)
+                .then(ans => {
+                    RestService.token(cToken)
+                    this.commit('user', ans)
+                    this.dispatch('getProducts')
+                    this.dispatch('getFilters')
+                    this.dispatch('getCategories')
+                    this.dispatch('getSubcategories')
+                    if (this.$router.currentRoute.name !== 'filters') {
+                        this.$router.push('/filters')
+                    }
+                })
+        } else {
+            this.commit('clearToken')
+        }
+    },
     auth(_, data) {
         RestService.post('/manager/auth', data)
             .then((ans) => {
@@ -157,7 +164,6 @@ const actions = {
                     RestService.token(ans.jwt_token)
                     localStorage.setItem('token', ans.jwt_token)
                     this.commit('user', ans)
-                    this.dispatch('fetchAllUserData')
                     if (this.$router.currentRoute.name !== 'filters') {
                         this.$router.push('/filters')
                     }

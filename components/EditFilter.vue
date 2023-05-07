@@ -2,7 +2,7 @@
     <div class="edit-filter">
         <InputBox :value="editingFilter.name" @update="setField" :title="'Название фильтра'" :field="'name'"/>
         <label>Введите один или более пунктов фильтрации</label>
-        <textarea v-model="options" :placeholder="'Пункты фильтрации'"></textarea>
+        <Chips v-model="options.split(' ')" separator="," placeholder="Пункты фильтрации"/>
         <div class="add-button">
             <ButtonBox @update="sendBoxData()" :design="['button','red','large','right']" :title="'Добавить фильтр'"/>
         </div>
@@ -11,10 +11,15 @@
 
 <script>
 import {mapGetters} from "vuex"
+import Chips from "primevue/chips"
 
+import('primevue/resources/themes/saga-blue/theme.css')
+import('primevue/resources/primevue.min.css')
+import('primeicons/primeicons.css')
 export default {
     name: "EditFilter",
     components: {
+        Chips,
         InputBox: () => import('~/components/Forms/InputBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox')
     },
@@ -82,5 +87,23 @@ textarea::placeholder {
     font-size: 18px;
     font-weight: 400;
     vertical-align: center;
+}
+
+.p-chips {
+    display: grid;
+    width: 100%;
+    height: 60px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: var(--black);
+    position: relative;
+    z-index: 3;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.p-chips-input-token {
+    background: var(--gray-1);
 }
 </style>

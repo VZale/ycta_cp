@@ -25,7 +25,7 @@
             </div>
             <div class="box-item">
                 <label>Описание <span class="require">*</span></label>
-                <textarea :placeholder="'Заголовок'" v-model="description"></textarea>
+                <Editor v-model="description" editorStyle="height: 320px"/>
             </div>
             <div class="box-item" v-if="fields[this.page + 'Fields'].labels">
                 <template v-for="(label, i) in fields[this.page + 'Fields']?.labels">
@@ -47,22 +47,10 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import Editor from "primevue/editor";
 
 export default {
     name: "AddBox",
-    mounted() {
-        if (this.page === 'product') {
-            this.$store.dispatch('getAllFilter')
-        }
-
-        if (!this.initPages['categories']) {
-            this.$store.dispatch('getCategories')
-        }
-
-        if (!this.initPages['subcategories']) {
-            this.$store.dispatch('getSubcategories')
-        }
-    },
     props: {
         avaliableImageBox: {
             type: Boolean,
@@ -76,6 +64,7 @@ export default {
         }
     },
     components: {
+        Editor,
         InputBox: () => import('~/components/Forms/InputBox'),
         ImageBox: () => import('@/components/Forms/ImageBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox'),

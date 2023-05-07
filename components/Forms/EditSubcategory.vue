@@ -1,6 +1,8 @@
 <template>
     <div class="add-box">
         <div class="add-box-container">
+            <ScrollPanel style="width: 100%; height: 650px">
+
             <div class="box-item">
                 <template>
                     <label> Введите название категории <span class="require">*</span></label>
@@ -16,8 +18,9 @@
             </div>
             <div class="box-item">
                 <label>Описание <span class="require">*</span></label>
-                <textarea :placeholder="'Заголовок'" v-model="description"></textarea>
+                <Editor v-model="description" editorStyle="height: 320px"/>
             </div>
+            </ScrollPanel>
         </div>
         <div class="box-item button-content">
             <ButtonBox @click="sendBoxData" :design="['button','red','large','right']" @update="sendBoxData()"
@@ -28,6 +31,8 @@
 
 <script>
 import {mapGetters} from "vuex"
+import Editor from 'primevue/editor';
+import ScrollPanel from "primevue/scrollpanel";
 
 export default {
     name: "EditSubcategory",
@@ -49,6 +54,8 @@ export default {
         }
     },
     components: {
+        Editor,
+        ScrollPanel,
         InputBox: () => import('~/components/Forms/InputBox'),
         ImageBox: () => import('@/components/Forms/ImageBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
@@ -93,8 +100,6 @@ export default {
 }
 
 .add-box-container {
-    overflow: auto;
-    height: 645px;
     margin-bottom: 12px;
     border: 12px;
 }

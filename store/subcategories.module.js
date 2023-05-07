@@ -27,8 +27,7 @@ export const mutations = {
         }
     },
     addSubcategory(context, data) {
-        let count = state.subcategories.length
-        ++count
+        let count = Object.keys(state.subcategories).length
         Vue.set(state.subcategories, count, {})
         for (const item in data) {
             state.subcategories[count][item] = data[item]
@@ -41,7 +40,6 @@ const actions = {
         RestService.get('/sub_categories')
             .then(ans => {
                 this.commit('setSubcategories', ans)
-                this.commit('initPage', 'subcategories')
             })
     },
 

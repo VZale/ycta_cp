@@ -17,7 +17,7 @@
                 <div class="box">
                     <h2>Авторизация</h2>
                     <div class="item form">
-                        <InputBox @update="setField" :title="'Логин'" :field="'login'"/>
+                        <InputBox @update="setField" :title="'Логин'" :field="'email'"/>
                         <InputBox @update="setField" :title="'Пароль'" :field="'password'"/>
                         <ButtonBox :design="['button','red','large']" :title="'Войти'" @update="send()"/>
                         <CheckBox @update="updateCheckboxState" :title="'Запомнить меня на этом устройстве'"/>
@@ -37,6 +37,9 @@ export default {
         InputBox: () => import('~/components/Forms/InputBox'),
         CheckBox: () => import('@/components/Forms/CheckBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox')
+    },
+    mounted() {
+        this.$store.dispatch('appInit')
     },
     data() {
         return {

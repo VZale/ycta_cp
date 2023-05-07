@@ -152,6 +152,7 @@ label {
     display: grid;
     grid-template-rows: max-content 1fr;
     gap: 12px;
+    overflow: hidden;
 }
 
 .filters-not-added {
@@ -165,6 +166,7 @@ label {
     border-radius: 12px;
     padding: 24px;
     background-color: var(--white);
+    overflow: auto;
 }
 
 .content .box .cards {

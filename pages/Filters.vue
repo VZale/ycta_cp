@@ -45,9 +45,6 @@ import {mapGetters} from "vuex"
 
 export default {
     name: "Filters",
-    mounted() {
-        this.$store.dispatch('getFilters')
-    },
     components: {
         AddFilter: () => import('@/components/AddFilter'),
         ModalBox: () => import('@/components/Forms/ModalBox'),

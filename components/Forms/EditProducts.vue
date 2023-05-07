@@ -1,60 +1,65 @@
 <template>
     <div class="add-box">
         <div class="add-box-container">
-            <div class="box-item">
-                <template>
-                    <label> Введите название товара <span class="require">*</span></label>
-                    <InputBox :value="data.name" @update="setField" :title="'Название товара'" :field="'name'"/>
-                </template>
-                <template>
-                    <label> Введите стоимость товара <span class="require">*</span></label>
-                    <InputBox :value="data.price?.toString()" @update="setField" :title="'Стоимость товара'"
-                              :field="'price'"/>
-                </template>
-                <template>
-                    <label> Выберите категорию <span class="require">*</span></label>
-                    <SelectBox :choosingId="data.category_id" :placeholder="'Выберите категорию'" :field="'category_id'"
-                               :options="categories"
-                               @choosing="setCategory"/>
-                </template>
-                <template>
-                    <label> Подкатегория товара <span class="require">*</span></label>
-                    <SelectBox :choosingId="data.sub_category_id" :placeholder="'Выберите подкатегорию'"
-                               :field="'sub_category_id'"
-                               :options="subcategories"
-                               @choosing="setSubcategory"/>
-                </template>
-            </div>
-            <div class="box-item">
-                <ImageBox
-                    @updateImages="setField"
-                    :image="data['images']"
-                    :field="'file'"
-                    :label="'Загрузите фотографии, которые будут отображаться в карточке товара'"
-                    :btn-text="'Добавить фото(jpeg, png)'"/>
-            </div>
-            <div class="box-item" v-if="filtersAll.length">
-                <template v-for="filter in filtersAll" v-if="filtersAll.length">
-                    <InputBox :value="data?.characteristics?.[filter]?.join(' ')" @update="setFilters" :title="filter"
-                              :field="filter.name"/>
-                </template>
-            </div>
-            <div class="box-item">
-                <label>Описание <span class="require">*</span></label>
-                <textarea :placeholder="'Заголовок'" v-model="description"></textarea>
-            </div>
-            <div class="box-item">
-                <CheckBox :state="data.labels.indexOf('hot') >= 0" :field="'hot'" :title="'Хит продажи'"
-                          @update="setLabels"/>
-                <CheckBox :state="data.labels.indexOf('discount') >= 0" :field="'discount'" :title="'Скидка на товар'"
-                          @update="setLabels"/>
-            </div>
-            <div class="box-item">
-                <ImageBox
-                    @updateImages="setField"
-                    :label="'Выберите сопутствующие товары'"
-                    :field="'relatedProducts'" :btn-text="'Добавить товары'" :checkbox="false"/>
-            </div>
+            <ScrollPanel style="width: 100%; height: 650px">
+                <div class="box-item">
+                    <template>
+                        <label> Введите название товара <span class="require">*</span></label>
+                        <InputBox :value="data.name" @update="setField" :title="'Название товара'" :field="'name'"/>
+                    </template>
+                    <template>
+                        <label> Введите стоимость товара <span class="require">*</span></label>
+                        <InputBox :value="data.price?.toString()" @update="setField" :title="'Стоимость товара'"
+                                  :field="'price'"/>
+                    </template>
+                    <template>
+                        <label> Выберите категорию <span class="require">*</span></label>
+                        <SelectBox :choosingId="data.category_id" :placeholder="'Выберите категорию'"
+                                   :field="'category_id'"
+                                   :options="categories"
+                                   @choosing="setCategory"/>
+                    </template>
+                    <template>
+                        <label> Подкатегория товара <span class="require">*</span></label>
+                        <SelectBox :choosingId="data.sub_category_id" :placeholder="'Выберите подкатегорию'"
+                                   :field="'sub_category_id'"
+                                   :options="subcategories"
+                                   @choosing="setSubcategory"/>
+                    </template>
+                </div>
+                <div class="box-item">
+                    <ImageBox
+                        @updateImages="setField"
+                        :image="data['images']"
+                        :field="'file'"
+                        :label="'Загрузите фотографии, которые будут отображаться в карточке товара'"
+                        :btn-text="'Добавить фото(jpeg, png)'"/>
+                </div>
+                <div class="box-item" v-if="filtersAll.length">
+                    <template v-for="filter in filtersAll" v-if="filtersAll.length">
+                        <InputBox :value="data?.characteristics?.[filter]?.join(' ')" @update="setFilters"
+                                  :title="filter"
+                                  :field="filter.name"/>
+                    </template>
+                </div>
+                <div class="box-item">
+                    <label>Описание <span class="require">*</span></label>
+                    <Editor v-model="description" editorStyle="height: 320px"/>
+                </div>
+                <div class="box-item">
+                    <CheckBox :state="data.labels.indexOf('hot') >= 0" :field="'hot'" :title="'Хит продажи'"
+                              @update="setLabels"/>
+                    <CheckBox :state="data.labels.indexOf('discount') >= 0" :field="'discount'"
+                              :title="'Скидка на товар'"
+                              @update="setLabels"/>
+                </div>
+                <div class="box-item">
+                    <ImageBox
+                        @updateImages="setField"
+                        :label="'Выберите сопутствующие товары'"
+                        :field="'relatedProducts'" :btn-text="'Добавить товары'" :checkbox="false"/>
+                </div>
+            </ScrollPanel>
         </div>
         <div class="box-item button-content">
             <ButtonBox :design="['button','red','large','right']" @update="sendBoxData()" :title="btnText"/>
@@ -64,6 +69,8 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import Editor from "primevue/editor";
+import ScrollPanel from "primevue/scrollpanel";
 
 export default {
     name: "EditProducts",
@@ -79,9 +86,6 @@ export default {
         },
     },
     mounted() {
-        this.$store.dispatch('getAllFilter')
-        this.$store.dispatch('getCategories')
-        this.$store.dispatch('getSubcategories')
         if (this.data.same_products_id) {
             this.$store.dispatch('getSameproducts', this.data.same_products_id)
         }
@@ -90,6 +94,8 @@ export default {
         this.labels = this.data.labels
     },
     components: {
+        Editor,
+        ScrollPanel,
         InputBox: () => import('~/components/Forms/InputBox'),
         ImageBox: () => import('@/components/Forms/ImageBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
@@ -171,8 +177,6 @@ export default {
 }
 
 .add-box-container {
-    overflow: auto;
-    height: 645px;
     margin-bottom: 12px;
     border: 12px;
 }
@@ -192,10 +196,6 @@ export default {
 
 .box-item.button-content {
     text-align: right;
-}
-
-.box-item {
-    overflow-y: auto;
 }
 
 label {

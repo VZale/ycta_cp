@@ -1,23 +1,26 @@
 <template>
     <div class="add-box">
         <div class="add-box-container">
-            <div class="box-item">
-                <template v-if="field" v-for="(field, i) in fields.categoryFields.baseFields">
-                    <label>{{ field.label }} <span class="require">*</span></label>
-                    <InputBox v-if="!field.isSelect" @update="setField" :title="field.placeholder" :field="i"/>
-                </template>
-            </div>
-            <div class="box-item">
-                <ImageBox
-                    @updateImages="setField"
-                    :field="'file'"
-                    :label="'Загрузите фотографии, которые будут отображаться в карточке товара'"
-                    :btn-text="'Добавить фото(jpeg, png)'"/>
-            </div>
-            <div class="box-item">
-                <label>Описание <span class="require">*</span></label>
-                <textarea :placeholder="'Заголовок'" v-model="description"></textarea>
-            </div>
+            <ScrollPanel style="width: 100%; height: 650px">
+
+                <div class="box-item">
+                    <template v-if="field" v-for="(field, i) in fields.categoryFields.baseFields">
+                        <label>{{ field.label }} <span class="require">*</span></label>
+                        <InputBox v-if="!field.isSelect" @update="setField" :title="field.placeholder" :field="i"/>
+                    </template>
+                </div>
+                <div class="box-item">
+                    <ImageBox
+                        @updateImages="setField"
+                        :field="'file'"
+                        :label="'Загрузите фотографии, которые будут отображаться в карточке товара'"
+                        :btn-text="'Добавить фото(jpeg, png)'"/>
+                </div>
+                <div class="box-item">
+                    <label>Описание <span class="require">*</span></label>
+                    <Editor v-model="description" editorStyle="height: 320px"/>
+                </div>
+            </ScrollPanel>
         </div>
         <div class="box-item button-content">
             <ButtonBox :design="['button','red','large','right']" @update="sendBoxData()" :title="btnTitle"/>
@@ -27,28 +30,19 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import Editor from 'primevue/editor';
+import ScrollPanel from "primevue/scrollpanel";
 
 export default {
     name: "AddCategory",
-    mounted() {
-        if (this.page === 'product') {
-            this.$store.dispatch('getAllFilter')
-        }
-
-        if (!this.initPages['categories']) {
-            this.$store.dispatch('getCategories')
-        }
-
-        if (!this.initPages['subcategories']) {
-            this.$store.dispatch('getSubcategories')
-        }
-    },
     props: {
         btnTitle: {
             type: String
         }
     },
     components: {
+        Editor,
+        ScrollPanel,
         InputBox: () => import('~/components/Forms/InputBox'),
         ImageBox: () => import('@/components/Forms/ImageBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
@@ -92,8 +86,6 @@ export default {
 }
 
 .add-box-container {
-    overflow: auto;
-    height: 645px;
     margin-bottom: 12px;
     border: 12px;
 }

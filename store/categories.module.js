@@ -36,7 +36,6 @@ const actions = {
         RestService.get('/categories')
             .then(ans => {
                 this.commit('setCategories', ans)
-                this.commit('initPage', 'categories')
             })
     },
     addCategory(context, data) {

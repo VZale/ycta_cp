@@ -28,9 +28,6 @@ export const RestService = {
 
             axios.get(`${REST_ENDPOINT + resource}`, {
                 params,
-                headers: {
-                    Authorization: token
-                }
             })
                 .then(ret => {
                     if (ret.data.error) {

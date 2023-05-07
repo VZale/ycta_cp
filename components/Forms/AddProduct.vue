@@ -1,54 +1,58 @@
 <template>
     <div class="add-box">
         <div class="add-box-container">
-            <div class="box-item">
-                <template>
-                    <label> Введите название товара <span class="require">*</span></label>
-                    <InputBox @update="setField" :title="'Название товара'" :field="'name'"/>
-                </template>
-                <template>
-                    <label> Введите стоимость товара <span class="require">*</span></label>
-                    <InputBox @update="setField" :title="'Стоимость товара'" :field="'price'"/>
-                </template>
-                <template>
-                    <label> Выберите категорию <span class="require">*</span></label>
-                    <SelectBox :placeholder="'Выберите категорию'" :field="'category_id'" :options="categories"
-                               @choosing="setCategory"/>
-                </template>
-                <template>
-                    <label> Подкатегория товара <span class="require">*</span></label>
-                    <SelectBox :placeholder="'Выберите подкатегорию'" :field="'sub_category_id'"
-                               :options="subcategories"
-                               @choosing="setSubcategory"/>
-                </template>
-            </div>
-            <div class="box-item">
-                <ImageBox
-                    @updateImages="setField"
-                    :field="'file'"
-                    :label="'Загрузите фотографии, которые будут отображаться в карточке товара'"
-                    :btn-text="'Добавить фото(jpeg, png)'"/>
-            </div>
-            <div class="box-item" v-if="filtersAll.length">
-                <template v-for="filter in filtersAll">
-                    <InputBox @update="setFilters" :title="filter" :field="filter"/>
-                </template>
-            </div>
-            <div class="box-item">
-                <label>Описание <span class="require">*</span></label>
-                <textarea :placeholder="'Заголовок'" v-model="description"></textarea>
-            </div>
-            <div class="box-item">
-                <template v-for="(label, i) in fields.productFields.labels">
-                    <CheckBox :field="i" :title="label.title" @update="setLabels"/>
-                </template>
-            </div>
-            <div class="box-item">
-                <ImageBox
-                    @updateImages="setField"
-                    :label="'Выберите сопутствующие товары'"
-                    :field="'relatedProducts'" :btn-text="'Добавить товары'" :checkbox="false"/>
-            </div>
+            <ScrollPanel style="width: 100%; height: 650px">
+
+                <div class="box-item">
+                    <template>
+                        <label> Введите название товара <span class="require">*</span></label>
+                        <InputBox @update="setField" :title="'Название товара'" :field="'name'"/>
+                    </template>
+                    <template>
+                        <label> Введите стоимость товара <span class="require">*</span></label>
+                        <InputBox @update="setField" :title="'Стоимость товара'" :field="'price'"/>
+                    </template>
+                    <template>
+                        <label> Выберите категорию <span class="require">*</span></label>
+                        <SelectBox :placeholder="'Выберите категорию'" :field="'category_id'" :options="categories"
+                                   @choosing="setCategory"/>
+                    </template>
+                    <template>
+                        <label> Подкатегория товара <span class="require">*</span></label>
+                        <SelectBox :placeholder="'Выберите подкатегорию'" :field="'sub_category_id'"
+                                   :options="subcategories"
+                                   @choosing="setSubcategory"/>
+                    </template>
+                </div>
+                <div class="box-item">
+                    <ImageBox
+                        @updateImages="setField"
+                        :field="'file'"
+                        :label="'Загрузите фотографии, которые будут отображаться в карточке товара'"
+                        :btn-text="'Добавить фото(jpeg, png)'"/>
+                </div>
+                <div content="bpx-item" v-if="filtersAll.length">
+                    <template v-for="(filter, i) in filtersAll">
+                        <Chips @focus="setFocus(filter)" v-model="filterData[filter]" separator=","
+                               :placeholder="filter"/>
+                    </template>
+                </div>
+                <div class="box-item">
+                    <label>Описание <span class="require">*</span></label>
+                    <Editor v-model="description" editorStyle="height: 320px"/>
+                </div>
+                <div class="box-item">
+                    <template v-for="(label, i) in fields.productFields.labels">
+                        <CheckBox :field="i" :title="label.title" @update="setLabels"/>
+                    </template>
+                </div>
+                <div class="box-item">
+                    <ImageBox
+                        @updateImages="setField"
+                        :label="'Выберите сопутствующие товары'"
+                        :field="'relatedProducts'" :btn-text="'Добавить товары'" :checkbox="false"/>
+                </div>
+            </ScrollPanel>
         </div>
         <div class="box-item button-content">
             <ButtonBox :design="['button','red','large','right']" @update="sendBoxData()" :title="btnTitle"/>
@@ -58,6 +62,14 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import Chips from "primevue/chips"
+import Editor from 'primevue/editor'
+import ScrollPanel from "primevue/scrollpanel"
+import AutoComplete from 'primevue/autocomplete';
+
+import('primevue/resources/themes/saga-blue/theme.css')
+import('primevue/resources/primevue.min.css')
+import('primeicons/primeicons.css')
 
 export default {
     name: "AddProduct",
@@ -68,11 +80,13 @@ export default {
     },
     mounted() {
         this.$store.dispatch('getAllFilter')
-        this.$store.dispatch('getCategories')
-        this.$store.dispatch('getSubcategories')
         this.$store.commit('clearReletedProducts')
     },
     components: {
+        Chips,
+        Editor,
+        ScrollPanel,
+        AutoComplete,
         InputBox: () => import('~/components/Forms/InputBox'),
         ImageBox: () => import('@/components/Forms/ImageBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
@@ -84,6 +98,7 @@ export default {
         return {
             boxData: {},
             description: '',
+            filterData: [],
         }
     },
     computed: {
@@ -91,10 +106,14 @@ export default {
             'fields',
             'categories',
             'subcategories',
-            'filtersAll'
+            'filtersAll',
+            'filtersList'
         ])
     },
     methods: {
+        setFocus(focused) {
+            this.focused = focused
+        },
         setField(inputData) {
             this.$set(this.boxData, inputData.field, inputData.inputData)
         },
@@ -120,10 +139,19 @@ export default {
         sendBoxData() {
             this.$set(this.boxData, 'description', this.description)
             this.$set(this.boxData, 'hidden', false)
+            if (!this.boxData.characteristics) {
+                this.$set(this.boxData, 'characteristics', {})
+            }
 
-            this.$store.commit('setShowBox', false)
-            this.$store.commit('setPage', 'default')
-            this.$emit('add', this.boxData)
+            console.log(this.filterData)
+
+            this.boxData.characteristics = this.filterData
+
+            console.log(this.boxData)
+
+            // this.$store.commit('setShowBox', false)
+            // this.$store.commit('setPage', 'default')
+            // this.$emit('add', this.boxData)
         },
     },
 }
@@ -136,8 +164,6 @@ export default {
 }
 
 .add-box-container {
-    overflow: auto;
-    height: 645px;
     margin-bottom: 12px;
     border: 12px;
 }
@@ -159,10 +185,6 @@ export default {
     text-align: right;
 }
 
-.box-item {
-    overflow-y: auto;
-}
-
 label {
     margin-bottom: 12px;
 }
@@ -181,5 +203,24 @@ textarea::placeholder {
     font-size: 40px;
     line-height: 110%;
     color: var(--gray-2);
+}
+
+.p-chips {
+    display: grid;
+    width: 100%;
+    height: 60px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: var(--black);
+    position: relative;
+    z-index: 3;
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.p-chips-input-token {
+    background: var(--gray-1);
 }
 </style>
