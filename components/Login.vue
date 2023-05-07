@@ -22,7 +22,6 @@
                         <ButtonBox :design="['button','red','large']" :title="'Войти'" @update="send()"/>
                         <CheckBox @update="updateCheckboxState" :title="'Запомнить меня на этом устройстве'"/>
                     </div>
-                    <NuxtLink to="/categories">Перейти в категории (временно)</NuxtLink>
                 </div>
             </div>
         </div>
@@ -47,7 +46,7 @@ export default {
     },
     methods: {
         send() {
-            Vue.set(this, 'applicationModal', true)
+            this.$store.dispatch('auth', this.userInfo)
         },
         setField(inputData) {
             this.$set(this.userInfo, inputData.field, inputData.inputData)

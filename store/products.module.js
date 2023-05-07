@@ -89,7 +89,7 @@ const actions = {
     getProducts() {
         RestService.get('/products',{
             limit: 18,
-            offset: 0
+            offset: 1
         })
             .then(ans => {
                 this.commit('setProducts', ans)

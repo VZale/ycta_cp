@@ -59,7 +59,12 @@ export const RestService = {
         return new Promise(resolve => {
             // console.log('POST: '+resource, params)
 
-            return axios.post(`${REST_ENDPOINT + resource}`, params, config)
+            return axios.post(`${REST_ENDPOINT + resource}`, params, {
+                ...config,
+                headers: {
+                    Authorization: token
+                }
+            })
                 .then(ret => {
                     if (ret.data.error) {
                         if (errorCb !== null) {
@@ -87,7 +92,12 @@ export const RestService = {
         return new Promise(resolve => {
             // console.log('PUT: '+resource, params)
 
-            return axios.put(`${REST_ENDPOINT + resource}`, params, config)
+            return axios.put(`${REST_ENDPOINT + resource}`, params, {
+                ...config,
+                headers: {
+                    Authorization: token
+                }
+            })
                 .then(ret => {
                     if (ret.data.error) {
                         if (errorCb !== null) {
@@ -111,11 +121,12 @@ export const RestService = {
         })
     },
 
-    delete(resource, onError = null) {
+    delete(resource, onError = null, config) {
         return new Promise(resolve => {
             // console.log('DELETE: '+resource)
 
             return axios.delete(`${REST_ENDPOINT + resource}`, {
+                ...config,
                 headers: {
                     Authorization: token
                 }
