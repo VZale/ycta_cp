@@ -85,14 +85,14 @@ export default {
         getPath(item) {
             const regex = /\.(png|jpe?g)$/i;
             if (regex.test(item)) {
-                return 'https://api.enternaloptimist.com/file/download/' + item
+                return 'https://api.kirpichkrasnodar.ru/file/download/' + item
             }
 
             if (this.field === 'file') {
                 return item
             }
 
-            return 'https://api.enternaloptimist.com/file/download/' + item
+            return 'https://api.kirpichkrasnodar.ru/file/download/' + item
         },
         sendImageArray() {
             let field = {

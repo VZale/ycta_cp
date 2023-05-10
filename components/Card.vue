@@ -18,7 +18,7 @@
             <span class="material-icons" title="Удалить" @click="$emit('remove')">delete</span>
         </div>
         <img
-            :src="image !== 'no-image' ? 'https://api.enternaloptimist.com/file/download/'+ image : require(`@/assets/no-image.png`)"
+            :src="image !== 'no-image' ? 'https://api.kirpichkrasnodar.ru/file/download/'+ image : require(`@/assets/no-image.png`)"
             :alt="image">
         <div class="product-info" v-if="type === 'product'">
             <span class="price">{{ price }}</span>
