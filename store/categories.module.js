@@ -65,8 +65,10 @@ const actions = {
         const {file, ...dataWithoutFile} = data
         const formData = new FormData()
         formData.append('data', JSON.stringify(dataWithoutFile))
-        if (file) {
+        if (file){
             formData.append('file', file[0])
+        }else {
+            formData.append('file', '')
         }
         RestService.put(`/category/${data._id}`, formData, {
             headers: {
@@ -78,9 +80,13 @@ const actions = {
             })
     },
     updateCategory(context, data) {
-        RestService.put(`/category/${data._id}`, {
-            hidden: data.hidden
-        })
+        const {_id, ...dataWithoutId} = data
+
+        const formData = new FormData()
+        formData.append('data', JSON.stringify(dataWithoutId))
+        formData.append('file', '')
+
+        RestService.put(`/category/${data._id}`, formData)
             .then((ans) => {
                 this.commit('editCategory', ans)
             })

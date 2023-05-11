@@ -87,7 +87,7 @@ export const mutations = {
 
 const actions = {
     getProducts() {
-        RestService.get('/products',{
+        RestService.get('/products', {
             limit: 18,
             offset: 0
         })
@@ -143,11 +143,13 @@ const actions = {
     },
 
     editProduct(context, data) {
-        const {file, _id, hidden,...dataWithoutFile} = data
+        const {file, _id, hidden, ...dataWithoutFile} = data
         const formData = new FormData()
         formData.append('data', JSON.stringify(dataWithoutFile))
         if (file) {
             formData.append('file', file[0])
+        } else {
+            formData.append('file', '')
         }
         RestService.put(`/product/${_id}`, formData, {
             headers: {
