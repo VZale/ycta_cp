@@ -1,5 +1,5 @@
 <template>
-    <div class="subcategories">
+    <div class="subcategories" v-if="userAuth">
         <div class="main container">
             <SideBar/>
             <div class="content">
@@ -43,16 +43,20 @@
             </div>
         </div>
     </div>
+    <PageNotFound v-else/>
 </template>
 
 <script>
 import {mapGetters} from "vuex"
 import ScrollPanel from "primevue/scrollpanel";
+import PageNotFound from "@/pages/pageNotFound";
+
 
 export default {
     name: "Subcategories",
     components: {
         ScrollPanel,
+        PageNotFound,
         EditSubcategory: () => import('@/components/Forms/EditSubcategory'),
         SideBar: () => import('@/components/SideBar'),
         AddSubcategories: () => import('@/components/Forms/AddSubcategories'),
@@ -65,7 +69,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['showAddBox', 'showEditBox', 'currentPage', 'subcategories', 'initPages'])
+        ...mapGetters(['userAuth','showAddBox', 'showEditBox', 'currentPage', 'subcategories', 'initPages'])
     },
     methods: {
         saveSubcategory(data) {

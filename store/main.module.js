@@ -78,7 +78,8 @@ export const state = {
         products: false,
     },
     user: {},
-    init: false
+    init: false,
+    userAuth: false
 }
 
 export const getters = {
@@ -99,6 +100,9 @@ export const getters = {
     },
     incorectData() {
         return state.incorectData
+    },
+    userAuth() {
+        return state.userAuth
     }
 }
 
@@ -142,7 +146,7 @@ export const mutations = {
     },
     disableErrorClass() {
         state.incorectData = false
-    }
+    },
 }
 
 const actions = {
@@ -151,6 +155,7 @@ const actions = {
         if (cToken !== null && cToken !== 'undefined' && cToken !== undefined) {
             RestService.get('/manager/self', cToken)
                 .then(ans => {
+                    state.userAuth = true
                     RestService.token(cToken)
                     this.commit('user', ans)
                     this.dispatch('getProducts')
@@ -170,8 +175,8 @@ const actions = {
             Vue.set(state, 'incorectData', true)
         })
             .then((ans) => {
-                console.log(ans)
                 if (ans) {
+                    state.userAuth = true
                     Vue.set(state,'incorectData', false)
                     RestService.token(ans.jwt_token)
                     localStorage.setItem('token', ans.jwt_token)

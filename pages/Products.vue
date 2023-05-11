@@ -1,5 +1,5 @@
 <template>
-    <div class="products">
+    <div class="products" v-if="userAuth">
         <div class="main container">
             <SideBar/>
             <div class="content">
@@ -38,15 +38,18 @@
             </div>
         </div>
     </div>
+    <PageNotFound v-else/>
 </template>
 
 <script>
 import {mapGetters} from "vuex"
 import ScrollPanel from 'primevue/scrollpanel';
+import PageNotFound from "@/pages/pageNotFound";
 
 export default {
     name: "Products",
     components: {
+        PageNotFound,
         ScrollPanel,
         EditProducts: () => import('@/components/Forms/EditProducts'),
         SideBar: () => import('@/components/SideBar'),
@@ -61,7 +64,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['products', 'showAddBox', 'currentPage', 'initPages', 'showEditBox'])
+        ...mapGetters(['userAuth','products', 'showAddBox', 'currentPage', 'initPages', 'showEditBox'])
     },
     methods: {
         addProduct(productData) {

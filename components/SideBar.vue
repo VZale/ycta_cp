@@ -29,12 +29,6 @@ import {mapGetters} from "vuex";
 
 export default {
     name: "SideBar",
-    mounted() {
-        if (!this.init) {
-            this.$store.dispatch('appInit')
-        }
-        this.$store.commit('init')
-    },
     methods: {
         logout() {
             this.$store.dispatch('logout')

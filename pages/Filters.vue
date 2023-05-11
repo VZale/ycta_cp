@@ -1,5 +1,5 @@
 <template>
-    <div class="filters">
+    <div class="filters" v-if="userAuth">
         <div class="main container">
             <SideBar/>
             <div class="content">
@@ -38,14 +38,17 @@
             </template>
         </ModalBox>
     </div>
+    <PageNotFound v-else/>
 </template>
 
 <script>
 import {mapGetters} from "vuex"
+import PageNotFound from "@/pages/pageNotFound"
 
 export default {
     name: "Filters",
     components: {
+        PageNotFound,
         AddFilter: () => import('@/components/AddFilter'),
         ModalBox: () => import('@/components/Forms/ModalBox'),
         SideBar: () => import('@/components/SideBar'),
@@ -59,7 +62,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['showAddBox', 'currentPage', 'filtersList'])
+        ...mapGetters(['init','userAuth','showAddBox', 'currentPage', 'filtersList'])
     },
     methods: {
         addFilter(data) {

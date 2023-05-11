@@ -1,5 +1,5 @@
 <template>
-    <div class="categories">
+    <div class="categories" v-if="userAuth">
         <div class="main container">
             <SideBar/>
             <div class="content">
@@ -38,18 +38,21 @@
             </div>
         </div>
     </div>
+    <PageNotFound v-else/>
 </template>
 
 <script>
 import {mapGetters} from "vuex"
 import Editor from 'primevue/editor';
 import ScrollPanel from "primevue/scrollpanel";
+import PageNotFound from "@/pages/pageNotFound";
 
 export default {
     name: "Categories",
     components: {
         Editor,
         ScrollPanel,
+        PageNotFound,
         EditBox: () => import('@/components/Forms/EditBox'),
         SideBar: () => import('@/components/SideBar'),
         AddCategory: () => import('@/components/Forms/AddCategory'),
@@ -63,7 +66,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['categories', 'showAddBox', 'currentPage', 'initPages', 'showEditBox'])
+        ...mapGetters(['userAuth','categories', 'showAddBox', 'currentPage', 'initPages', 'showEditBox'])
     },
     methods: {
         addCategory(categoryData) {

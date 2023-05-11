@@ -57,7 +57,6 @@ const actions = {
     addFilter(context, data) {
         RestService.post('/filters', data)
             .then((ans) => {
-                console.log(ans)
                 this.commit('setFiltersList', ans)
             })
     },

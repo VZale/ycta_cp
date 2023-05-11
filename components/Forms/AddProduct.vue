@@ -143,15 +143,11 @@ export default {
                 this.$set(this.boxData, 'characteristics', {})
             }
 
-            console.log(this.filterData)
-
             this.boxData.characteristics = this.filterData
 
-            console.log(this.boxData)
-
-            // this.$store.commit('setShowBox', false)
-            // this.$store.commit('setPage', 'default')
-            // this.$emit('add', this.boxData)
+            this.$store.commit('setShowBox', false)
+            this.$store.commit('setPage', 'default')
+            this.$emit('add', this.boxData)
         },
     },
 }
