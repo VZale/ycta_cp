@@ -155,15 +155,17 @@ const actions = {
         if (cToken !== null && cToken !== 'undefined' && cToken !== undefined) {
             RestService.get('/manager/self', cToken)
                 .then(ans => {
-                    state.userAuth = true
-                    RestService.token(cToken)
-                    this.commit('user', ans)
-                    this.dispatch('getProducts')
-                    this.dispatch('getFilters')
-                    this.dispatch('getCategories')
-                    this.dispatch('getSubcategories')
-                    if (this.$router.currentRoute.name !== 'filters') {
-                        this.$router.push('/filters')
+                    if (ans) {
+                        state.userAuth = true
+                        RestService.token(cToken)
+                        this.commit('user', ans)
+                        this.dispatch('getProducts')
+                        this.dispatch('getFilters')
+                        this.dispatch('getCategories')
+                        this.dispatch('getSubcategories')
+                        if (this.$router.currentRoute.name !== 'filters') {
+                            this.$router.push('/filters')
+                        }
                     }
                 })
         } else {

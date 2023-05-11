@@ -37,9 +37,6 @@ import ScrollPanel from "primevue/scrollpanel";
 export default {
     name: "EditSubcategory",
     mounted() {
-        this.$store.dispatch('getAllFilter')
-        this.$store.dispatch('getCategories')
-        this.$store.dispatch('getSubcategories')
         this.description += this.data['description']
     },
     props: {
