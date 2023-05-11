@@ -1,1 +1,1 @@
-export const REST_ENDPOINT = 'https://api.enternaloptimist.com'
+export const REST_ENDPOINT = 'https://api.kirpichkrasnodar.ru'
