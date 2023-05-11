@@ -44,6 +44,7 @@ export const mutations = {
         for (const item in data) {
             Vue.set(state.editingFilter, item, data[item])
         }
+        console.log(state.editingFilter)
     }
 }
 

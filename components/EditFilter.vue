@@ -2,7 +2,7 @@
     <div class="edit-filter">
         <InputBox :value="editingFilter.name" @update="setField" :title="'Название фильтра'" :field="'name'"/>
         <label>Введите один или более пунктов фильтрации</label>
-        <Chips v-model="options.split(' ')" separator="," placeholder="Пункты фильтрации"/>
+        <Chips v-model="options" separator="," placeholder="Пункты фильтрации"/>
         <div class="add-button">
             <ButtonBox @update="sendBoxData()" :design="['button','red','large','right']" :title="'Добавить фильтр'"/>
         </div>
@@ -24,12 +24,12 @@ export default {
         ButtonBox: () => import('@/components/Forms/ButtonBox')
     },
     mounted() {
-        this.options += this.editingFilter.options.join(' ')
+        this.options = this.editingFilter.options
     },
     data() {
         return {
             filterData: {},
-            options: '',
+            options: [],
         }
     },
     computed: {
@@ -42,7 +42,7 @@ export default {
         sendBoxData() {
             let field = {
                 field: 'options',
-                inputData: this.options.split(' ')
+                inputData: this.options
             }
 
             this.$set(this.filterData, field.field, field.inputData)
