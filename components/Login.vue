@@ -17,8 +17,8 @@
                 <div class="box">
                     <h2>Авторизация</h2>
                     <div class="item form">
-                        <InputBox @update="setField" :title="'Логин'" :field="'email'"/>
-                        <InputBox @update="setField" :title="'Пароль'" :field="'password'"/>
+                        <InputBox :class="{red: incorectData}" @update="setField" :title="'Логин'" :field="'email'"/>
+                        <InputBox :class="{red: incorectData}" @update="setField" :title="'Пароль'" :field="'password'"/>
                         <ButtonBox :design="['button','red','large']" :title="'Войти'" @update="send()"/>
                         <CheckBox @update="updateCheckboxState" :title="'Запомнить меня на этом устройстве'"/>
                     </div>
@@ -30,6 +30,7 @@
 
 <script>
 import Vue from "vue"
+import {mapGetters} from "vuex";
 
 export default {
     name: "Login",
@@ -46,6 +47,9 @@ export default {
             userInfo: {},
             checked: false,
         }
+    },
+    computed: {
+        ...mapGetters(['incorectData'])
     },
     methods: {
         send() {
@@ -133,5 +137,9 @@ button {
     text-align: center;
     font-weight: 500;
     margin: 24px 0;
+}
+
+.form-item.red {
+    border: 2px solid var(--red-1);
 }
 </style>

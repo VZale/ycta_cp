@@ -88,10 +88,10 @@ export default {
             })
         },
         hide(subcategori) {
-            subcategori.hidden = !subcategori.hidden
+            let subState = subcategori.hidden
             this.$store.dispatch('updateSubcategory', {
-                page: 'subcategories',
-                data: subcategori
+                hidden: !subState,
+                _id: subcategori._id
             })
         }
     },

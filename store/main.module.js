@@ -2,6 +2,7 @@ import Vue from "vue"
 import RestService from "~/common/rest.service";
 
 export const state = {
+    incorectData: false,
     fields: {
         productFields: {
             baseFields: {
@@ -95,6 +96,9 @@ export const getters = {
     },
     init() {
         return state.init
+    },
+    incorectData() {
+        return state.incorectData
     }
 }
 
@@ -135,6 +139,9 @@ export const mutations = {
 
     init(){
         state.init = true
+    },
+    disableErrorClass() {
+        state.incorectData = false
     }
 }
 
@@ -159,9 +166,13 @@ const actions = {
         }
     },
     auth(_, data) {
-        RestService.post('/manager/auth', data)
+        RestService.post('/manager/auth', data,{}, () => {
+            Vue.set(state, 'incorectData', true)
+        })
             .then((ans) => {
+                console.log(ans)
                 if (ans) {
+                    Vue.set(state,'incorectData', false)
                     RestService.token(ans.jwt_token)
                     localStorage.setItem('token', ans.jwt_token)
                     this.commit('user', ans)

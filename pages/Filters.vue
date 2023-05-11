@@ -71,8 +71,9 @@ export default {
             this.editBox = false
         },
         hideFilter(filter) {
+            const hiddenState = filter.hidden
             this.$store.dispatch('changeState', {
-                hidden: !filter.hidden,
+                hidden: !hiddenState,
                 _id: filter._id
             })
         },

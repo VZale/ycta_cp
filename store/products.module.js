@@ -89,7 +89,7 @@ const actions = {
     getProducts() {
         RestService.get('/products',{
             limit: 18,
-            offset: 1
+            offset: 0
         })
             .then(ans => {
                 this.commit('setProducts', ans)
@@ -143,7 +143,7 @@ const actions = {
     },
 
     editProduct(context, data) {
-        const {file, _id, ...dataWithoutFile} = data
+        const {file, _id, hidden,...dataWithoutFile} = data
         const formData = new FormData()
         formData.append('data', JSON.stringify(dataWithoutFile))
         if (file) {

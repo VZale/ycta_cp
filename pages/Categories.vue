@@ -63,7 +63,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['categories', 'showAddBox', 'currentPage', 'initPages','showEditBox'])
+        ...mapGetters(['categories', 'showAddBox', 'currentPage', 'initPages', 'showEditBox'])
     },
     methods: {
         addCategory(categoryData) {
@@ -82,10 +82,10 @@ export default {
             this.$store.commit('setEditBox', false)
         },
         hide(category) {
-            category.hidden = !category.hidden
+            const hiddenStatus = category.hidden
             this.$store.dispatch('updateCategory', {
                 _id: category._id,
-                hidden: category.hidden
+                hidden: !hiddenStatus
             })
         },
         edit(category) {

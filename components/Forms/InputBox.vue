@@ -2,7 +2,7 @@
     <div class="form-item base-input" :class="{'is-focus': inputIsActive || value}">
         <p>{{ title }}</p>
         <input v-model="inputData" type="text"
-               @focus="inputIsActive = true"
+               @focus="inputIsActive = true, $store.commit('disableErrorClass')"
                @blur="removeFocus()">
     </div>
 </template>

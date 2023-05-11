@@ -85,9 +85,10 @@ export default {
             })
         },
         hide(product) {
-            this.$store.commit('hidePageData', {
-                page: 'products',
-                data: product
+            let productState = product.hidden
+            this.$store.dispatch('editProduct', {
+                hidden: !productState,
+                _id: product._id
             })
         },
         saveProduct(data) {

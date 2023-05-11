@@ -51,7 +51,7 @@ const actions = {
             },
         })
             .then(ans => {
-                this.commit('addCategory', ans)
+                this.commit('setCategories', {ans})
             })
     },
     removeCategory(context, data) {
@@ -81,8 +81,8 @@ const actions = {
         RestService.put(`/category/${data._id}`, {
             hidden: data.hidden
         })
-            .then(() => {
-                this.commit('editCategory', data)
+            .then((ans) => {
+                this.commit('editCategory', ans)
             })
     }
 }

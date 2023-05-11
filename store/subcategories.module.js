@@ -64,7 +64,7 @@ const actions = {
 
         RestService.put(`/sub_category/${_id}`, updatedData)
             .then((ans) => {
-                this.commit('editSubcategory', data)
+                this.commit('editSubcategory', ans)
             })
     }
 }
