@@ -18,7 +18,8 @@
                             <div class="item" v-if="!filterItem.hidden">
                                 <h2 class="subtitle">{{ filterItem.name }}</h2>
                                 <h2 class="subtitle">{{ filterItem.options?.join(' ') }}</h2>
-                                <Actions :item="i" @edit="editFilter(filterItem)" @hide="hideFilter(filterItem)" @remove="removeFilter(filterItem, i)"/>
+                                <Actions :item="i" @edit="editFilter(filterItem)" @hide="hideFilter(filterItem)"
+                                         @remove="removeFilter(filterItem, i)"/>
                             </div>
                         </template>
                     </template>
@@ -62,7 +63,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['init','userAuth','showAddBox', 'currentPage', 'filtersList'])
+        ...mapGetters(['init', 'userAuth', 'showAddBox', 'currentPage', 'filtersList'])
     },
     methods: {
         addFilter(data) {

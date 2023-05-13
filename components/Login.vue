@@ -18,7 +18,8 @@
                     <h2>Авторизация</h2>
                     <div class="item form">
                         <InputBox :class="{red: incorectData}" @update="setField" :title="'Логин'" :field="'email'"/>
-                        <InputBox :class="{red: incorectData}" @update="setField" :title="'Пароль'" :field="'password'"/>
+                        <InputBox :class="{red: incorectData}" @update="setField" :title="'Пароль'"
+                                  :field="'password'"/>
                         <ButtonBox :design="['button','red','large']" :title="'Войти'" @update="send()"/>
                         <CheckBox @update="updateCheckboxState" :title="'Запомнить меня на этом устройстве'"/>
                     </div>
@@ -29,8 +30,7 @@
 </template>
 
 <script>
-import Vue from "vue"
-import {mapGetters} from "vuex";
+import {mapGetters} from "vuex"
 
 export default {
     name: "Login",
@@ -60,6 +60,7 @@ export default {
         },
         updateCheckboxState(checkboxState) {
             this.checked = checkboxState
+            this.$set(this.userInfo, 'save', this.checked.inputData)
         }
     }
 }

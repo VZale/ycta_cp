@@ -173,7 +173,8 @@ const actions = {
         }
     },
     auth(_, data) {
-        RestService.post('/manager/auth', data,{}, () => {
+        const {save, ...updateData} = data
+        RestService.post('/manager/auth', updateData,{}, () => {
             Vue.set(state, 'incorectData', true)
         })
             .then((ans) => {
@@ -181,7 +182,9 @@ const actions = {
                     state.userAuth = true
                     Vue.set(state,'incorectData', false)
                     RestService.token(ans.jwt_token)
-                    localStorage.setItem('token', ans.jwt_token)
+                    if (save) {
+                        localStorage.setItem('token', ans.jwt_token)
+                    }
                     this.commit('user', ans)
                     if (this.$router.currentRoute.name !== 'filters') {
                         this.$router.push('/filters')
