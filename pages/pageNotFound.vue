@@ -5,6 +5,7 @@
                 4 <img :src="require('~/assets/ycta-decor/circle.png')" alt=""> 4
             </div>
             <h2 class="title">Увы, страница не найдена</h2>
+            <NuxtLink to="/" class="button red small">Вернуться на главную</NuxtLink>
         </div>
     </div>
 </template>
@@ -44,8 +45,18 @@ export default {
     line-height: 1;
     font-size: 38px;
 }
+
+.button.red {
+    background: var(--red-1);
+    color: var(--white);
+}
+.button.small {
+    padding: 8px 16px;
+}
+
 .button {
     margin-top: 40px;
+    border-radius: 12px;
 }
 @media (max-width: 469px) {
     .content {

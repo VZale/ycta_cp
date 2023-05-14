@@ -14,7 +14,7 @@
         <div class="img-content" @click.stop v-if="options">
             <span class="material-icons" title="Редактировать" @click="$emit('edit')">edit</span>
             <span class="material-icons" :title="isHidden ? 'отобразить' : 'скрыть'"
-                  @click="$emit('hide')">{{ isHidden ? 'visibility_off' : 'visibility' }} </span>
+                  @click="$emit('hide')">visibility</span>
             <span class="material-icons" title="Удалить" @click="$emit('remove')">delete</span>
         </div>
         <img

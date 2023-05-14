@@ -30,7 +30,6 @@
                             </div>
                         </template>
                         <WarningMessage v-else :warning-message="'Начните добавлять товары и они появятся здесь'"/>
-                        <div class="end" ref="end"></div>
                     </ScrollPanel>
                 </div>
                 <AddProduct v-if="showAddBox" @add="addProduct" :btn-title="'Добавить товар'"/>
