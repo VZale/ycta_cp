@@ -1,7 +1,7 @@
 <template>
     <div class="add-filter">
         <InputBox @update="setField" :title="'Название фильтра'" :field="'name'"/>
-        <label>Введите один или более пунктов фильтрации</label>
+        <label>Введите один или более пунктов фильтрации, через "," / "Enter"</label>
         <Chips v-model="options" separator="," placeholder="Пункты фильтрации"/>
         <div class="add-button">
             <ButtonBox @update="sendBoxData()" :design="['button','red','large','right']" :title="'Добавить фильтр'"/>
@@ -12,7 +12,7 @@
 <script>
 import Chips from 'primevue/chips'
 
-import('primevue/resources/themes/saga-blue/theme.css')
+import('primevue/resources/themes/lara-light-blue/theme.css')
 import('primevue/resources/primevue.min.css')
 import('primeicons/primeicons.css')
 export default {

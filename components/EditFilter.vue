@@ -1,7 +1,7 @@
 <template>
     <div class="edit-filter">
         <InputBox :value="editingFilter.name" @update="setField" :title="'Название фильтра'" :field="'name'"/>
-        <label>Введите один или более пунктов фильтрации</label>
+        <label>Введите один или более пунктов фильтрации, через "," / "Enter"</label>
         <Chips v-model="options" separator="," placeholder="Пункты фильтрации"/>
         <div class="add-button">
             <ButtonBox @update="sendBoxData()" :design="['button','red','large','right']" :title="'Добавить фильтр'"/>

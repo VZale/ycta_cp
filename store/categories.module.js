@@ -42,8 +42,10 @@ const actions = {
         const {file, ...dataWithoutFile} = data
         const formData = new FormData()
         formData.append('data', JSON.stringify(dataWithoutFile))
-        if (file) {
+        if (file){
             formData.append('file', file[0])
+        }else {
+            formData.append('file', '')
         }
         RestService.post('/categories', formData, {
             headers: {

@@ -191,3 +191,13 @@ label {
 .require {
     color: var(--red-1);
 }
+
+label {
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.p-inputtext {
+    background-color: var(--gray-1) !important;
+    border-radius: 12px !important;
+    }

@@ -122,6 +122,8 @@ const actions = {
             for (const item in file) {
                 formData.append('file', file[item])
             }
+        }else {
+            formData.append('file', '')
         }
         RestService.post('/products', formData, {
             headers: {
