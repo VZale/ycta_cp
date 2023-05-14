@@ -26,9 +26,11 @@
 
                                     />
                                 </template>
+                                <div class="end" ref="end"></div>
                             </div>
                         </template>
                         <WarningMessage v-else :warning-message="'Начните добавлять товары и они появятся здесь'"/>
+                        <div class="end" ref="end"></div>
                     </ScrollPanel>
                 </div>
                 <AddProduct v-if="showAddBox" @add="addProduct" :btn-title="'Добавить товар'"/>
@@ -48,6 +50,21 @@ import PageNotFound from "@/pages/pageNotFound";
 
 export default {
     name: "Products",
+    mounted() {
+        this.txPagesShown = 0
+        this.loadMore()
+
+        const intersectionObserver = new IntersectionObserver(entries => {
+            if (entries[0]?.isIntersecting && !this.isLoading) {
+                this.loadMore()
+            }
+        }, {
+            threshold: 1.0
+        })
+        if (this.$refs.end) {
+            intersectionObserver.observe(this.$refs.end)
+        }
+    },
     components: {
         PageNotFound,
         ScrollPanel,
@@ -60,13 +77,23 @@ export default {
     },
     data() {
         return {
-            currentProduct: [],
+            isLoading: false,
+            pagesShown: 0,
+            offset: 0,
+            limit: 18
         }
     },
     computed: {
-        ...mapGetters(['userAuth','products', 'showAddBox', 'currentPage', 'initPages', 'showEditBox'])
+        ...mapGetters(['userAuth', 'products', 'showAddBox', 'currentPage', 'initPages', 'showEditBox'])
     },
     methods: {
+        loadMore() {
+            this.isLoading = false
+            ++this.pagesShown
+            this.$store.dispatch(`getProducts`, {
+                offset: this.pagesShown,
+            })
+        },
         addProduct(productData) {
             if (productData.same_products_id?.length) {
                 const {same_products_id, ...data} = productData;

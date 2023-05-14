@@ -24,7 +24,7 @@
             </template>
             <template #button>
                 <ButtonBox @update="showSelectedProducts()" :design="['button','red','large','right']"
-                           :title="'Добавить товары'" slot="button"/>
+                           :title="'Добавить товары'"/>
             </template>
         </ModalBox>
     </div>

@@ -22,11 +22,12 @@ export const RestService = {
         })
     },
 
-    get(resource, config, onError = null) {
+    get(resource, params,config, onError = null) {
         return new Promise(resolve => {
             // console.log('GET: '+resource)
 
             axios.get(`${REST_ENDPOINT + resource}`, {
+                ...params,
                 headers: {
                     Authorization: token
                 }

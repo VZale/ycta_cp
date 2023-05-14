@@ -15,6 +15,7 @@
                   @hide="hide(product)"
             />
         </template>
+        <div class="end" ref="end"></div>
     </div>
 </template>
 
@@ -23,13 +24,42 @@ import {mapGetters} from "vuex"
 
 export default {
     name: "ProductsList",
+    mounted() {
+        this.loadMore()
+
+        const intersectionObserver = new IntersectionObserver(entries => {
+            if (entries[0]?.isIntersecting && !this.isLoading) {
+                this.loadMore()
+            }
+        }, {
+            threshold: 1.0
+        })
+        if (this.$refs.end) {
+            intersectionObserver.observe(this.$refs.end)
+        }
+    },
     components: {
         Card: () => import("@/components/Card")
+    },
+    data() {
+        return {
+            isLoading: false,
+            pagesShown: 0,
+            offset: 0,
+            limit: 18
+        }
     },
     computed: {
         ...mapGetters(['products'])
     },
     methods: {
+        loadMore() {
+            this.isLoading = false
+            ++this.pagesShown
+            this.$store.dispatch(`getProducts`, {
+                offset: this.pagesShown,
+            })
+        },
         remove(id) {
             this.$store.commit('removePageData', {
                 page: 'products',
