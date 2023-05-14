@@ -47,7 +47,14 @@ const actions = {
         const {name, categories, hidden, description} = data
         const modifiedData = {name, category_id: categories, hidden, description}
 
-        RestService.post('/sub_categories', modifiedData)
+        RestService.post('/sub_categories', modifiedData,{},  error => {
+            const pattern = /EXISTS/
+            let errorMessage = pattern.test(error)
+            this.commit('setErrorMessage', errorMessage ? 'Данная подкатегория уже добавлена' : 'Что-то пошло не там попробуйте позже')
+            setTimeout(() => {
+                this.commit('setErrorMessage', '')
+            }, 100)
+        })
             .then(ans => {
                 this.commit('addSubcategory', ans)
             })

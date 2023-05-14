@@ -55,7 +55,14 @@ const actions = {
             })
     },
     addFilter(context, data) {
-        RestService.post('/filters', data)
+        RestService.post('/filters', data, {}, error => {
+            const pattern = /EXISTS/
+            let errorMessage = pattern.test(error)
+            this.commit('setErrorMessage', errorMessage ? 'Данный фильтр уже добавлен' : 'Что-то пошло не там попробуйте позже')
+            setTimeout(() => {
+                this.commit('setErrorMessage', '')
+            }, 100)
+        })
             .then((ans) => {
                 this.commit('setFiltersList', {ans})
             })

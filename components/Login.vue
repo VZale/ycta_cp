@@ -26,15 +26,18 @@
                 </div>
             </div>
         </div>
+        <Toast/>
     </div>
 </template>
 
 <script>
 import {mapGetters} from "vuex"
+import Toast from 'primevue/toast';
 
 export default {
     name: "Login",
     components: {
+        Toast,
         InputBox: () => import('~/components/Forms/InputBox'),
         CheckBox: () => import('@/components/Forms/CheckBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox')
@@ -49,7 +52,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['incorectData'])
+        ...mapGetters(['incorectData','errorMessage'])
     },
     methods: {
         send() {
@@ -61,6 +64,14 @@ export default {
         updateCheckboxState(checkboxState) {
             this.checked = checkboxState
             this.$set(this.userInfo, 'save', this.checked.inputData)
+        }
+    },
+    watch: {
+        deep: true,
+        errorMessage(val) {
+            if (val) {
+                this.$toast.add({severity: 'error', summary: 'Error Message', detail: `${val}`, life: 3000})
+            }
         }
     }
 }

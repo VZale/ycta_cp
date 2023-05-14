@@ -51,6 +51,18 @@ const actions = {
             headers: {
                 'Content-Type': 'multipart/form-data'
             },
+        },error => {
+            switch (error){
+                case 'INVALID_FILE':
+                    this.commit('setErrorMessage', 'Указан неверный файл изображения')
+                    break
+                default :
+                    this.commit('setErrorMessage', 'Данная категория уже добавлена')
+                    break
+            }
+            setTimeout(() => {
+                this.commit('setErrorMessage', '')
+            }, 100)
         })
             .then(ans => {
                 this.commit('setCategories', {ans})

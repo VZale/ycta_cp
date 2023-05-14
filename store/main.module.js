@@ -79,7 +79,8 @@ export const state = {
     },
     user: {},
     init: false,
-    userAuth: false
+    userAuth: false,
+    errorMessage: ''
 }
 
 export const getters = {
@@ -103,6 +104,9 @@ export const getters = {
     },
     userAuth() {
         return state.userAuth
+    },
+    errorMessage() {
+        return state.errorMessage
     }
 }
 
@@ -147,6 +151,9 @@ export const mutations = {
     disableErrorClass() {
         state.incorectData = false
     },
+    setErrorMessage(_, error) {
+        Vue.set(state, 'errorMessage', error)
+    }
 }
 
 const actions = {
@@ -178,6 +185,10 @@ const actions = {
         const {save, ...updateData} = data
         RestService.post('/manager/auth', updateData,{}, () => {
             Vue.set(state, 'incorectData', true)
+            this.commit('setErrorMessage', 'Неправильный логин или пароль')
+            setTimeout(() => {
+                this.commit('setErrorMessage', '')
+            }, 100)
         })
             .then((ans) => {
                 if (ans) {

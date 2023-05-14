@@ -38,6 +38,7 @@
                               :btnText="'Сохранить'"/>
             </div>
         </div>
+        <Toast/>
     </div>
     <PageNotFound v-else/>
 </template>
@@ -46,6 +47,8 @@
 import {mapGetters} from "vuex"
 import ScrollPanel from 'primevue/scrollpanel';
 import PageNotFound from "@/pages/pageNotFound";
+import Toast from 'primevue/toast';
+
 
 export default {
     name: "Products",
@@ -67,6 +70,7 @@ export default {
     components: {
         PageNotFound,
         ScrollPanel,
+        Toast,
         EditProducts: () => import('@/components/Forms/EditProducts'),
         SideBar: () => import('@/components/SideBar'),
         AddProduct: () => import('@/components/Forms/AddProduct'),
@@ -83,7 +87,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['userAuth', 'products', 'showAddBox', 'currentPage', 'initPages', 'showEditBox'])
+        ...mapGetters(['errorMessage','userAuth', 'products', 'showAddBox', 'currentPage', 'initPages', 'showEditBox'])
     },
     methods: {
         loadMore() {
@@ -128,6 +132,14 @@ export default {
             this.$store.commit('clearReletedProducts')
             this.currentProduct = product
             this.$store.commit('setEditBox', true)
+        }
+    },
+    watch: {
+        deep: true,
+        errorMessage(val) {
+            if (val) {
+                this.$toast.add({severity: 'error', summary: 'Error Message', detail: `${val}`, life: 3000})
+            }
         }
     }
 }

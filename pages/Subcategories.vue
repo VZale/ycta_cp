@@ -42,6 +42,7 @@
                                  :type="'subcategory'" :btnText="'Сохранить'"/>
             </div>
         </div>
+        <Toast/>
     </div>
     <PageNotFound v-else/>
 </template>
@@ -50,12 +51,14 @@
 import {mapGetters} from "vuex"
 import ScrollPanel from "primevue/scrollpanel";
 import PageNotFound from "@/pages/pageNotFound";
+import Toast from 'primevue/toast';
 
 
 export default {
     name: "Subcategories",
     components: {
         ScrollPanel,
+        Toast,
         PageNotFound,
         EditSubcategory: () => import('@/components/Forms/EditSubcategory'),
         SideBar: () => import('@/components/SideBar'),
@@ -69,7 +72,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['userAuth','showAddBox', 'showEditBox', 'currentPage', 'subcategories', 'initPages'])
+        ...mapGetters(['errorMessage', 'userAuth', 'showAddBox', 'showEditBox', 'currentPage', 'subcategories', 'initPages'])
     },
     methods: {
         saveSubcategory(data) {
@@ -99,6 +102,14 @@ export default {
             })
         }
     },
+    watch: {
+        deep: true,
+        errorMessage(val) {
+            if (val) {
+                this.$toast.add({severity: 'error', summary: 'Error Message', detail: `${val}`, life: 3000})
+            }
+        }
+    }
 }
 </script>
 

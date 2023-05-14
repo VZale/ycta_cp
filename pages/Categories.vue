@@ -37,6 +37,7 @@
                          :btnText="'Сохранить'"/>
             </div>
         </div>
+        <Toast/>
     </div>
     <PageNotFound v-else/>
 </template>
@@ -46,11 +47,14 @@ import {mapGetters} from "vuex"
 import Editor from 'primevue/editor';
 import ScrollPanel from "primevue/scrollpanel";
 import PageNotFound from "@/pages/pageNotFound";
+import Toast from 'primevue/toast';
+
 
 export default {
     name: "Categories",
     components: {
         Editor,
+        Toast,
         ScrollPanel,
         PageNotFound,
         EditBox: () => import('@/components/Forms/EditBox'),
@@ -66,7 +70,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['userAuth','categories', 'showAddBox', 'currentPage', 'initPages', 'showEditBox'])
+        ...mapGetters(['errorMessage','userAuth','categories', 'showAddBox', 'currentPage', 'initPages', 'showEditBox'])
     },
     methods: {
         addCategory(categoryData) {
@@ -94,6 +98,14 @@ export default {
         edit(category) {
             this.currentCategory = category
             this.$store.commit('setEditBox', true)
+        }
+    },
+    watch: {
+        deep: true,
+        errorMessage(val) {
+            if (val) {
+                this.$toast.add({severity: 'error', summary: 'Error Message', detail: `${val}`, life: 3000})
+            }
         }
     }
 }

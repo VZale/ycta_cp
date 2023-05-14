@@ -38,6 +38,7 @@
                 <EditFilter @add="saveFilter"/>
             </template>
         </ModalBox>
+        <Toast/>
     </div>
     <PageNotFound v-else/>
 </template>
@@ -45,11 +46,14 @@
 <script>
 import {mapGetters} from "vuex"
 import PageNotFound from "@/pages/pageNotFound"
+import Toast from 'primevue/toast';
+
 
 export default {
     name: "Filters",
     components: {
         PageNotFound,
+        Toast,
         AddFilter: () => import('@/components/AddFilter'),
         ModalBox: () => import('@/components/Forms/ModalBox'),
         SideBar: () => import('@/components/SideBar'),
@@ -63,7 +67,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['init', 'userAuth', 'showAddBox', 'currentPage', 'filtersList'])
+        ...mapGetters(['init', 'userAuth', 'showAddBox', 'currentPage', 'filtersList', 'errorMessage'])
     },
     methods: {
         addFilter(data) {
@@ -90,6 +94,14 @@ export default {
         editFilter(filter) {
             this.$store.commit('setEditedFilter', filter)
             this.editBox = true
+        }
+    },
+    watch: {
+        deep: true,
+        errorMessage(val) {
+            if (val) {
+                this.$toast.add({severity: 'error', summary: 'Error Message', detail: `${val}`, life: 3000})
+            }
         }
     }
 }
