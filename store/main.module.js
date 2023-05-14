@@ -153,11 +153,13 @@ const actions = {
     appInit() {
         let cToken = localStorage.getItem('token')
         if (cToken !== null && cToken !== 'undefined' && cToken !== undefined) {
-            RestService.get('/manager/self', cToken)
+            RestService.token(cToken)
+        }
+        if (cToken !== null && cToken !== 'undefined' && cToken !== undefined) {
+            RestService.get(`/manager/self`)
                 .then(ans => {
                     if (ans) {
                         state.userAuth = true
-                        RestService.token(cToken)
                         this.commit('user', ans)
                         this.dispatch('getProducts')
                         this.dispatch('getFilters')

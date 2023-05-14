@@ -22,12 +22,14 @@ export const RestService = {
         })
     },
 
-    get(resource, params, onError = null) {
+    get(resource, config, onError = null) {
         return new Promise(resolve => {
             // console.log('GET: '+resource)
 
             axios.get(`${REST_ENDPOINT + resource}`, {
-                params,
+                headers: {
+                    Authorization: token
+                }
             })
                 .then(ret => {
                     if (ret.data.error) {
@@ -39,7 +41,7 @@ export const RestService = {
                         }
 
                         if (ret.data.error === 'SERVER_ERROR') {
-                            throw new Error(`Server error on request GET `+resource)
+                            throw new Error(`Server error on request GET ` + resource)
                         }
                         return
                     }
@@ -52,7 +54,7 @@ export const RestService = {
         })
     },
 
-    post(resource, params, config,onError = null) {
+    post(resource, params, config, onError = null) {
         return new Promise(resolve => {
             // console.log('POST: '+resource, params)
 
@@ -72,7 +74,7 @@ export const RestService = {
                         }
 
                         if (ret.data.error === 'SERVER_ERROR') {
-                            throw new Error(`Server error on request POST `+resource)
+                            throw new Error(`Server error on request POST ` + resource)
                         }
                         return
                     }
@@ -85,7 +87,7 @@ export const RestService = {
         })
     },
 
-    put(resource, params, config,onError = null) {
+    put(resource, params, config, onError = null) {
         return new Promise(resolve => {
             // console.log('PUT: '+resource, params)
 
@@ -105,7 +107,7 @@ export const RestService = {
                         }
 
                         if (ret.data.error === 'SERVER_ERROR') {
-                            throw new Error(`Server error on request PUT `+resource)
+                            throw new Error(`Server error on request PUT ` + resource)
                         }
                         return
                     }
@@ -138,7 +140,7 @@ export const RestService = {
                         }
 
                         if (ret.data.error === 'SERVER_ERROR') {
-                            throw new Error(`Server error on request DELETE `+resource)
+                            throw new Error(`Server error on request DELETE ` + resource)
                         }
                         return
                     }
