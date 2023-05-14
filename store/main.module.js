@@ -188,6 +188,10 @@ const actions = {
                         localStorage.setItem('token', ans.jwt_token)
                     }
                     this.commit('user', ans)
+                    this.dispatch('getProducts')
+                    this.dispatch('getFilters')
+                    this.dispatch('getCategories')
+                    this.dispatch('getSubcategories')
                     if (this.$router.currentRoute.name !== 'filters') {
                         this.$router.push('/filters')
                     }
