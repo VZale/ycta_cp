@@ -91,6 +91,7 @@ textarea::placeholder {
     z-index: 3;
     font-size: 18px;
     font-weight: 400;
+    margin-bottom: 0;
 }
 
 .p-chips-input-token {

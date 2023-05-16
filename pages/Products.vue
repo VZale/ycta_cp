@@ -146,5 +146,21 @@ export default {
 </script>
 
 <style scoped>
+.p-chips {
+    display: grid;
+    width: 100%;
+    height: 60px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: var(--black);
+    position: relative;
+    z-index: 3;
+    font-size: 18px;
+    font-weight: 400;
+}
 
+.p-chips-input-token {
+    background: var(--gray-1);
+}
 </style>

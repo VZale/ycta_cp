@@ -160,6 +160,7 @@ export default {
 
 .images-container {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     object-fit: contain;
 }

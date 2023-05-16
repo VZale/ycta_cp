@@ -31,7 +31,7 @@
                         :label="'Загрузите фотографии, которые будут отображаться в карточке товара'"
                         :btn-text="'Добавить фото(jpeg, png)'"/>
                 </div>
-                <div content="bpx-item" v-if="filtersAll.length">
+                <div class="box-item" v-if="filtersAll.length">
                     <template v-for="(filter, i) in filtersAll">
                         <Chips @focus="setFocus(filter)" v-model="filterData[filter]" separator=","
                                :placeholder="filter"/>
