@@ -143,7 +143,9 @@ export default {
                 this.$set(this.boxData, 'characteristics', {})
             }
 
-            this.boxData.characteristics = this.filterData
+            this.boxData.characteristics = {
+                ...this.filterData
+            }
 
             this.$store.commit('setShowBox', false)
             this.$store.commit('setPage', 'default')
