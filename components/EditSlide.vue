@@ -1,5 +1,6 @@
 <template>
     <div class="edit-slide">
+        <InputBox @update="setField" :value="data.position" :title="'Позиция Слайдера'" :field="'position'"/>
         <InputBox @update="setField" :value="data.title" :title="'Заголовок Слайда'" :field="'title'"/>
         <InputBox @update="setField" :value="data.description" :title="'Короткое Описание'" :field="'description'"/>
         <ImageBox
