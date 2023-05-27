@@ -15,6 +15,9 @@
                 <li>
                     <NuxtLink to="/products">Товары</NuxtLink>
                 </li>
+                <li>
+                    <NuxtLink to="/web-home">Главная старница</NuxtLink>
+                </li>
             </ul>
         </div>
         <span class="log-out" @click="logout()">

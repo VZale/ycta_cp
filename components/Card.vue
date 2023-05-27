@@ -1,6 +1,10 @@
 <template>
-    <div class="card" @click="chooseProduct(id)">
+    <div class="card" @click="chooseProduct(id)" :class="type === 'slide' ? 'slide' : ''">
         <h2 class="title" v-if="type === 'Category'">{{ title }}</h2>
+        <div class="slide-box" v-if="type === 'slide'">
+            <h2 class="title">{{title}}</h2>
+            <p class="desk">{{description}}</p>
+        </div>
         <div class="more-info">
             <div class="markets" v-if="labels">
                 <span class="material-icons percent"
@@ -13,7 +17,7 @@
         </div>
         <div class="img-content" @click.stop v-if="options">
             <span class="material-icons" title="Редактировать" @click="$emit('edit')">edit</span>
-            <span class="material-icons" :title="isHidden ? 'отобразить' : 'скрыть'"
+            <span class="material-icons" v-if="hide" :title="isHidden ? 'отобразить' : 'скрыть'"
                   @click="$emit('hide')">visibility</span>
             <span class="material-icons" title="Удалить" @click="$emit('remove')">delete</span>
         </div>
@@ -24,7 +28,7 @@
             <span class="price">{{ price }}</span>
             <span class="sub-title">{{ title }}</span>
         </div>
-        <ButtonBox v-if="type !== 'Category' && type !== 'product'" :total="total" :design="design"
+        <ButtonBox v-if="design && type !== 'Category' && type !== 'product'" :total="total" :design="design"
                    :title="buttonText"/>
     </div>
 </template>
@@ -37,6 +41,10 @@ export default {
     props: {
         id: {
             type: Object
+        },
+        hide: {
+            type: Boolean,
+            default: true
         },
         type: {
             type: String
@@ -160,7 +168,6 @@ export default {
 }
 
 .card img {
-    height: 150px;
     object-fit: cover;
 }
 
@@ -279,6 +286,16 @@ export default {
     background-position: bottom right;
 }
 
+.card.slide::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0, 0.3);
+}
+
 .card .button {
     border: 2px solid #EDEFF4;
     font-size: 18px;
@@ -354,6 +371,15 @@ export default {
 .checkbox span.checked::after {
     opacity: 1;
     visibility: visible;
+}
+
+.slide-box {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    color: var(--white);
 }
 
 @media (max-width: 768px) {

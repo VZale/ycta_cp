@@ -81,6 +81,12 @@ export default {
                 component: resolve(__dirname, 'pages/Products.vue'),
                 title: 'Товары'
             })
+            routes.push({
+                name: 'Главная странца сайта',
+                path: '/web-home',
+                component: resolve(__dirname, 'pages/Home.vue'),
+                title: 'Главная страница сайта'
+            })
         }
     },
 

@@ -9,7 +9,7 @@
                     hidePage
                 }}</span>
         </div>
-        <ButtonBox v-if="!showAddBox && !showEditBox || page === 'filters'" :design="['button','black','small']"
+        <ButtonBox v-if="btnText && !showAddBox && !showEditBox || page === 'filters'" :design="['button','black','small']"
                    @update="add()"
                    :title="btnText"
                    :material-icon="'add_circle'"

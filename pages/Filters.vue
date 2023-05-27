@@ -51,6 +51,9 @@ import Toast from 'primevue/toast';
 
 export default {
     name: "Filters",
+    mounted() {
+      this.$store.dispatch('getAllFilter')
+    },
     components: {
         PageNotFound,
         Toast,
@@ -67,7 +70,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['init', 'userAuth', 'showAddBox', 'currentPage', 'filtersList', 'errorMessage'])
+        ...mapGetters(['filtersList','init', 'userAuth', 'showAddBox', 'currentPage', 'filtersList', 'errorMessage'])
     },
     methods: {
         addFilter(data) {

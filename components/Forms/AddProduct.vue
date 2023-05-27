@@ -33,8 +33,8 @@
                 </div>
                 <div class="box-item" v-if="filtersAll.length">
                     <template v-for="(filter, i) in filtersAll">
-                        <Chips @focus="setFocus(filter)" v-model="filterData[filter]" separator=","
-                               :placeholder="filter"/>
+                        <Chips @focus="setFocus(filter)" v-model="filterData[filter.slug]" separator=","
+                               :placeholder="filter.name"/>
                     </template>
                 </div>
                 <div class="box-item">

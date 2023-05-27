@@ -37,9 +37,9 @@
                 </div>
                 <div class="box-item" v-if="filtersAll.length">
                     <template v-for="filter in filtersAll" v-if="filtersAll.length">
-                        <InputBox :value="data?.characteristics?.[filter]?.join(' ')" @update="setFilters"
-                                  :title="filter"
-                                  :field="filter.name"/>
+                        <InputBox :value="data?.characteristics?.[filter?.slug]?.join(' ')" @update="setFilters"
+                                  :title="filter.name"
+                                  :field="data?.characteristics?.[filter?.slug]"/>
                     </template>
                 </div>
                 <div class="box-item">
@@ -86,12 +86,12 @@ export default {
         },
     },
     mounted() {
-        if (this.data.same_products_id) {
+        if (this.data?.same_products_id) {
             this.$store.dispatch('getSameproducts', this.data.same_products_id)
         }
 
-        this.description += this.data.description
-        this.labels = this.data.labels
+        this.description += this.data?.description
+        this.labels = this.data?.labels
     },
     components: {
         Editor,

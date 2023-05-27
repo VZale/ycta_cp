@@ -1,8 +1,8 @@
 <template>
     <div class="image-box">
-        <div class="top">
+        <div class="top" v-if="label">
             <label>{{ label }} <span class="require">*</span></label>
-            <CheckBox :title="'Использовать заглушку'" v-if="checkbox"/>
+            <CheckBox :title="'Использовать заглушку'" v-if="checkbox && field !== 'slide'"/>
         </div>
         <div class="images-container">
             <template v-for="(item, index) in field === 'relatedProducts' ? reletedProducts : images">
@@ -11,22 +11,24 @@
                     <span class="material-icons close" @click="remove(index)">close</span>
                 </div>
             </template>
-            <div class="item" @click="addProduct">
+            <div class="item" @click="add">
                 <span class="material-icons">add_circle</span>
                 <p>{{ btnText }}</p>
                 <input type="file" @change="addImage" v-if="field === 'file'">
             </div>
         </div>
-        <ModalBox v-if="showProductListModal" :grid="true" :title="'Выберите сопутствующие товары'"
-                  @close="showProductListModal = false">
-            <template #modalContent>
-                <ProductsList/>
-            </template>
-            <template #button>
-                <ButtonBox @update="showSelectedProducts()" :design="['button','red','large','right']"
-                           :title="'Добавить товары'"/>
-            </template>
-        </ModalBox>
+        <template v-if="field !== 'slide'">
+            <ModalBox v-if="showProductListModal" :grid="true" :title="'Выберите сопутствующие товары'"
+                      @close="showProductListModal = false">
+                <template #modalContent>
+                    <ProductsList/>
+                </template>
+                <template #button>
+                    <ButtonBox @update="showSelectedProducts()" :design="['button','red','large','right']"
+                               :title="'Добавить товары'"/>
+                </template>
+            </ModalBox>
+        </template>
     </div>
 </template>
 
@@ -49,7 +51,7 @@ export default {
             type: String
         },
         image: {
-            type: Array
+            type: [Array, String]
         }
     },
     mounted() {
@@ -120,8 +122,13 @@ export default {
                 this.$store.commit('removeReletedProducts', index)
             }
         },
-        addProduct() {
+        add() {
             if (this.field === 'file') {
+                return
+            }
+
+            if (this.field === 'slide') {
+                this.$emit('add-slide', this.field)
                 return
             }
 

@@ -1,6 +1,9 @@
 <template>
     <div class="add-filter">
-        <InputBox @update="setField" :title="'Название фильтра'" :field="'name'"/>
+        <select class="select-box base-input" v-model="curFilter">
+            <option>Выберите фильтр</option>
+            <option   v-for="(filter, i) in filtersAll" :value="filter">{{ filter.name }}</option>
+        </select>
         <label>Введите один или более пунктов фильтрации, через "," / "Enter"</label>
         <Chips v-model="options" separator="," placeholder="Пункты фильтрации"/>
         <div class="add-button">
@@ -11,6 +14,7 @@
 
 <script>
 import Chips from 'primevue/chips'
+import {mapGetters} from "vuex";
 
 import('primevue/resources/themes/lara-light-blue/theme.css')
 import('primevue/resources/primevue.min.css')
@@ -26,7 +30,11 @@ export default {
         return {
             filterData: {},
             options: [],
+            curFilter: 'Выберите фильтр'
         }
+    },
+    computed: {
+        ...mapGetters(['filtersAll'])
     },
     methods: {
         setField(inputData) {
@@ -37,6 +45,8 @@ export default {
                 field: 'options',
                 inputData: this.options
             }
+            this.$set(this.filterData, 'name', this.curFilter.name)
+            this.$set(this.filterData, 'slug', this.curFilter.slug)
             this.$set(this.filterData, field.field, field.inputData)
             this.$set(this.filterData, 'hidden', false)
             this.$emit('add', this.filterData)
@@ -96,5 +106,9 @@ textarea::placeholder {
 
 .p-chips-input-token {
     background: var(--gray-1);
+}
+
+.select-box {
+    width: 100%;
 }
 </style>
