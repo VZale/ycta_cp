@@ -167,8 +167,8 @@ const actions = {
                 'Content-Type': 'multipart/form-data'
             },
         })
-            .then(() => {
-                this.commit('editProduct', data)
+            .then((ans) => {
+                this.commit('editProduct', ans)
             })
     }
 }

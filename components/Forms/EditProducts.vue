@@ -37,9 +37,10 @@
                 </div>
                 <div class="box-item" v-if="filtersAll.length">
                     <template v-for="filter in filtersAll" v-if="filtersAll.length">
-                        <InputBox :value="data?.characteristics?.[filter?.slug]?.join(' ')" @update="setFilters"
-                                  :title="filter.name"
-                                  :field="data?.characteristics?.[filter?.slug]"/>
+                        <Chips v-model="options[filter?.slug]" separator=","/>
+                        <!--                        <InputBox :value="data?.characteristics?.[filter?.slug]?.join(' ')" @update="setFilters"-->
+                        <!--                                  :title="filter.name"-->
+                        <!--                                  :field="data?.characteristics?.[filter?.slug]"/>-->
                     </template>
                 </div>
                 <div class="box-item">
@@ -69,8 +70,9 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import Editor from "primevue/editor";
-import ScrollPanel from "primevue/scrollpanel";
+import Editor from "primevue/editor"
+import ScrollPanel from "primevue/scrollpanel"
+import Chips from "primevue/chips"
 
 export default {
     name: "EditProducts",
@@ -92,10 +94,18 @@ export default {
 
         this.description += this.data?.description
         this.labels = this.data?.labels
+        for (const item in this.data.characteristics) {
+            if (!this.options[item]) {
+                this.$set(this.options, item, [])
+            }
+
+            this.options[item] = this.data.characteristics[item]
+        }
     },
     components: {
         Editor,
         ScrollPanel,
+        Chips,
         InputBox: () => import('~/components/Forms/InputBox'),
         ImageBox: () => import('@/components/Forms/ImageBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
@@ -112,7 +122,8 @@ export default {
 
             category: '',
             subCategory: '',
-            labels: []
+            labels: [],
+            options: {}
         }
     },
     computed: {
@@ -157,6 +168,7 @@ export default {
             this.$set(this.boxData, 'description', this.description)
             this.$set(this.boxData, 'hidden', false)
             this.$set(this.boxData, '_id', this.data._id)
+            this.$set(this.boxData, 'characteristics', this.options)
 
             if (!this.boxData.file) {
                 this.boxData.file = this.data.images
@@ -216,5 +228,24 @@ textarea::placeholder {
     font-size: 40px;
     line-height: 110%;
     color: var(--gray-2);
+}
+
+.p-chips {
+    display: grid;
+    width: 100%;
+    height: 60px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: var(--black);
+    position: relative;
+    z-index: 3;
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 12px;
+}
+
+.p-chips-input-token {
+    background: var(--gray-1);
 }
 </style>

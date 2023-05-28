@@ -126,7 +126,6 @@ const actions = {
             })
     },
     editMainSlider(_, data) {
-        console.log(data)
         const {file, _id, ...dataWithoutFile} = data
         const formData = new FormData()
         formData.append('data', JSON.stringify(dataWithoutFile))
