@@ -35,7 +35,8 @@
                                 v-for="(aboutSlide, n) in aboutSlider" :key="n"
                                 :type="'slide'"
                                 :hide="false"
-                                @remove="removeSlide('about')"
+                                @remove="removeAboutSlider(aboutSlide._id, n)"
+                                @edit="editSlide('about', aboutSlide)"
 
                             />
                             <ImageBox
@@ -122,6 +123,12 @@ export default {
         },
         removeSlide(id, item) {
             this.$store.dispatch('removeMainSlider', {
+                _id: id,
+                item: item
+            })
+        },
+        removeAboutSlider(id, item){
+            this.$store.dispatch('removeAboutSlider', {
                 _id: id,
                 item: item
             })

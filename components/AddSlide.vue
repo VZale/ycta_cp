@@ -2,8 +2,8 @@
     <div class="add-slide">
         <InputBox v-if="slider === 'main'" :readonly="true" :value="position" @update="setField"
                   :title="'Посиция Слайда'" :field="'position'"/>
-        <InputBox @update="setField" :title="'Заголовок Слайда'" :field="'title'"/>
-        <InputBox @update="setField" :title="'Короткое Описание'" :field="'description'"/>
+        <InputBox v-if="slider === 'main'" @update="setField" :title="'Заголовок Слайда'" :field="'title'"/>
+        <InputBox v-if="slider === 'main'" @update="setField" :title="'Короткое Описание'" :field="'description'"/>
         <ImageBox
             @updateImages="setField"
             :field="'file'"

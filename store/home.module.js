@@ -35,7 +35,7 @@ export const mutations = {
     },
     setAboutSlider(_, data) {
         for (const item in data) {
-            Vue.set(state.mainSlider, item, data[item])
+            Vue.set(state.aboutSlider, item, data[item])
         }
     },
     addAboutSlider(_, data) {
@@ -58,6 +58,13 @@ const actions = {
                 this.commit('setMainSlider', ans)
                 this.commit('initPage', 'slider')
             })
+    },
+    getAboutSlider() {
+      RestService.get('/sliders/about')
+          .then(ans => {
+              this.commit('setAboutSlider', ans)
+              this.commit('initPage', 'slider')
+          })
     },
     addMainSlider(_, data) {
         const {file, ...dataWithoutFile} = data
@@ -88,7 +95,7 @@ const actions = {
             }, 100)
         })
             .then(ans => {
-                this.commit('addMainSlider', ans)
+                this.commit('addMainSlider', ...ans)
             })
     },
     addAboutSlider(_, data) {
@@ -150,7 +157,13 @@ const actions = {
                 this.commit('removeMainSlide', item)
             })
     },
-
+    removeAboutSlider(context, data) {
+        const item = data.item
+        RestService.delete(`/slider/about/${data._id}`)
+            .then(() => {
+                this.commit('removeMainSlide', item)
+            })
+    },
 }
 
 export default {

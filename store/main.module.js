@@ -173,6 +173,7 @@ const actions = {
                         this.dispatch('getCategories')
                         this.dispatch('getSubcategories')
                         this.dispatch('getMainSlider')
+                        this.dispatch('getAboutSlider')
                         if (this.$router.currentRoute.name !== 'filters') {
                             this.$router.push('/filters')
                         }
@@ -205,6 +206,7 @@ const actions = {
                     this.dispatch('getCategories')
                     this.dispatch('getSubcategories')
                     this.dispatch('getMainSlider')
+                    this.dispatch('getAboutSlider')
                     if (this.$router.currentRoute.name !== 'filters') {
                         this.$router.push('/filters')
                     }

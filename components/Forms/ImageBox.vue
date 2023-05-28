@@ -55,9 +55,10 @@ export default {
         }
     },
     mounted() {
-        if (this.image) {
+        if (this.image && typeof this.image === "string") {
             this.images.push(this.image)
-            this.file.push(this.file)
+        } else if(this.image) {
+            this.images = this.image
         }
 
         if (!this.images[0]?.length) {
@@ -222,5 +223,4 @@ export default {
     border-radius: 100%;
     cursor: pointer;
 }
-
 </style>

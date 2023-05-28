@@ -1,10 +1,10 @@
 <template>
     <div class="edit-slide">
-        <InputBox @update="setField" :value="data.title" :title="'Заголовок Слайда'" :field="'title'"/>
-        <InputBox @update="setField" :value="data.description" :title="'Короткое Описание'" :field="'description'"/>
+        <InputBox v-if="slider === 'main'" @update="setField" :value="data.title" :title="'Заголовок Слайда'" :field="'title'"/>
+        <InputBox v-if="slider === 'main'" @update="setField" :value="data.description" :title="'Короткое Описание'" :field="'description'"/>
         <ImageBox
             @updateImages="setField"
-            :image="data['image']"
+            :image="slider === 'main' ? data['image'] : data['images']"
             :field="'file'"
             :label="`Загрузите фотографи${slider === 'main' ? 'ю' : 'и'}, котор${slider === 'main' ? 'ая' : 'ые'} будут отображаться в слайдере`"
             :btn-text="'Добавить фото(jpeg, png)'"/>
