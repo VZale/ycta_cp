@@ -17,9 +17,7 @@ export const getters = {
 
 export const mutations = {
     setMainSlider(_, data) {
-        for (const item in data) {
-            Vue.set(state.mainSlider, item, data[item])
-        }
+        state.mainSlider = data
     },
     addMainSlider(_, data) {
         let count = state.mainSlider.length
@@ -94,6 +92,7 @@ const actions = {
             })
     },
     addAboutSlider(_, data) {
+        data.position = "0"
         const {file, ...dataWithoutFile} = data
         const formData = new FormData()
         formData.append('data', JSON.stringify(dataWithoutFile))
@@ -105,28 +104,29 @@ const actions = {
             formData.append('file', '')
         }
 
-        // RestService.post('/sliders/about', formData, {
-        //     headers: {
-        //         'Content-Type': 'multipart/form-data'
-        //     },
-        // }, error => {
-        //     switch (error) {
-        //         case 'INVALID_FILE':
-        //             this.commit('setErrorMessage', 'Указан неверный файл изображения')
-        //             break
-        //         default :
-        //             this.commit('setErrorMessage', 'Данный товар уже добавлен')
-        //             break
-        //     }
-        //     setTimeout(() => {
-        //         this.commit('setErrorMessage', '')
-        //     }, 100)
-        // })
-        //     .then(ans => {
-        //         this.commit('addAboutSlider', ans)
-        //     })
+        RestService.post('/sliders/about', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+        }, error => {
+            switch (error) {
+                case 'INVALID_FILE':
+                    this.commit('setErrorMessage', 'Указан неверный файл изображения')
+                    break
+                default :
+                    this.commit('setErrorMessage', 'Данный товар уже добавлен')
+                    break
+            }
+            setTimeout(() => {
+                this.commit('setErrorMessage', '')
+            }, 100)
+        })
+            .then(ans => {
+                this.commit('addAboutSlider', ans)
+            })
     },
-    editMainSlider(_,data) {
+    editMainSlider(_, data) {
+        console.log(data)
         const {file, _id, ...dataWithoutFile} = data
         const formData = new FormData()
         formData.append('data', JSON.stringify(dataWithoutFile))

@@ -2,6 +2,7 @@
     <div class="form-item base-input" :class="{'is-focus': inputIsActive || value}">
         <p>{{ title }}</p>
         <input v-model="inputData" type="text"
+               :disabled="readonly"
                @focus="inputIsActive = true, $store.commit('disableErrorClass')"
                @blur="removeFocus()">
     </div>
@@ -19,6 +20,10 @@ export default {
         value: {
             type: [String, Array],
             default: null
+        },
+        readonly: {
+            type: Boolean,
+            default: false
         }
     },
     mounted() {

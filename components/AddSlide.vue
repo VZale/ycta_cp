@@ -1,5 +1,7 @@
 <template>
     <div class="add-slide">
+        <InputBox v-if="slider === 'main'" :readonly="true" :value="position" @update="setField"
+                  :title="'Посиция Слайда'" :field="'position'"/>
         <InputBox @update="setField" :title="'Заголовок Слайда'" :field="'title'"/>
         <InputBox @update="setField" :title="'Короткое Описание'" :field="'description'"/>
         <ImageBox
@@ -14,9 +16,16 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex"
+
 export default {
     name: "AddSlide",
     props: ['slider'],
+    mounted() {
+        if (this.slider === 'main') {
+            this.slideData.position = this.position
+        }
+    },
     components: {
         InputBox: () => import('~/components/Forms/InputBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
@@ -24,15 +33,30 @@ export default {
     },
     data() {
         return {
-            filterData: {},
+            slideData: {},
         }
     },
     methods: {
         setField(inputData) {
-            this.$set(this.filterData, inputData.field, inputData.inputData)
+            this.$set(this.slideData, inputData.field, inputData.inputData)
         },
         sendBoxData() {
-            this.$emit('add', this.filterData)
+            this.$emit('add', this.slideData)
+        }
+    },
+    computed: {
+        ...mapGetters(['mainSlider']),
+        position() {
+            let maxPosition = Number.NEGATIVE_INFINITY
+            for (const key in this.mainSlider) {
+                if (this.mainSlider.hasOwnProperty(key) && this.mainSlider[key].hasOwnProperty('position')) {
+                    const currentPosition = this.mainSlider[key].position
+                    if (currentPosition > maxPosition) {
+                        maxPosition = currentPosition
+                    }
+                }
+            }
+            return (maxPosition + 1).toString()
         }
     }
 }

@@ -204,6 +204,7 @@ const actions = {
                     this.dispatch('getFilters')
                     this.dispatch('getCategories')
                     this.dispatch('getSubcategories')
+                    this.dispatch('getMainSlider')
                     if (this.$router.currentRoute.name !== 'filters') {
                         this.$router.push('/filters')
                     }
