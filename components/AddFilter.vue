@@ -92,6 +92,7 @@ textarea::placeholder {
 .p-chips {
     display: grid;
     width: 100%;
+    min-height: 60px;
     border: none;
     outline: none;
     background-color: transparent;

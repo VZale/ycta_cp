@@ -14,7 +14,7 @@
             <div class="item" @click="add">
                 <span class="material-icons">add_circle</span>
                 <p>{{ btnText }}</p>
-                <input type="file" @change="addImage" v-if="field === 'file'">
+                <input type="file" multiple @change="addImage" v-if="field === 'file'">
             </div>
         </div>
         <template v-if="field !== 'slide'">
@@ -106,14 +106,20 @@ export default {
             this.$emit('updateImages', field)
         },
         addImage(event) {
-            const file = event.target.files[0]
-            const reader = new FileReader()
-            reader.readAsDataURL(file)
-            reader.onload = () => {
-                this.images.push(reader.result)
-                this.file.push(file)
+            const files = event.target.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    this.images.push(reader.result);
+                    this.file.push(file);
+                };
             }
-            this.sendImageArray()
+
+            this.sendImageArray();
         },
         remove(index) {
             if (this.field === 'file') {
