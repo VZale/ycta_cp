@@ -201,3 +201,6 @@ label {
     background-color: var(--gray-1) !important;
     border-radius: 12px !important;
     }
+.p-chips .p-chips-multiple-container {
+    flex-wrap: wrap;
+}

@@ -92,7 +92,6 @@ textarea::placeholder {
 .p-chips {
     display: grid;
     width: 100%;
-    height: 60px;
     border: none;
     outline: none;
     background-color: transparent;
@@ -103,6 +102,8 @@ textarea::placeholder {
     font-weight: 400;
     margin-bottom: 0;
 }
+
+
 
 .p-chips-input-token {
     background: var(--gray-1);
