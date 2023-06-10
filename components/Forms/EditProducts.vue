@@ -173,7 +173,6 @@ export default {
 
             this.$store.commit('setEditBox', false)
             this.$store.commit('setPage', 'default')
-            console.log(this.boxData)
             this.$emit('save-changes', this.boxData)
         },
     },
