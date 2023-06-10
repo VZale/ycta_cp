@@ -71,7 +71,7 @@ textarea {
     position: relative;
     z-index: 3;
     font-weight: 400;
-    height: 60px;
+    min-height: 60px;
     padding: 14px;
 }
 

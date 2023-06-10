@@ -25,7 +25,7 @@
             :src="image !== 'no-image' ? 'https://api.kirpichkrasnodar.ru/file/download/'+ image : require(`@/assets/no-image.png`)"
             :alt="image">
         <div class="product-info" v-if="type === 'product'">
-            <span class="price">{{ price }}</span>
+            <span class="price">{{ price.toFixed(2) }}₽</span>
             <span class="sub-title">{{ title }}</span>
         </div>
         <ButtonBox v-if="design && type !== 'Category' && type !== 'product'" :total="total" :design="design"
@@ -169,6 +169,7 @@ export default {
 
 .card img {
     object-fit: cover;
+    border-radius: 10px;
 }
 
 .markers {
@@ -310,6 +311,7 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-top: 15px;
 }
 
 .product-info .price {
@@ -325,7 +327,9 @@ export default {
 }
 
 .more-info {
-    position: relative;
+    position: absolute;
+    top: 35px;
+    left: 30px;
     z-index: 10;
     display: grid;
     grid-template-columns: repeat(2, max-content);

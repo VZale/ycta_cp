@@ -5,23 +5,23 @@
                 <div class="box-item">
                     <template>
                         <label> Введите название товара <span class="require">*</span></label>
-                        <InputBox :value="data.name" @update="setField" :title="'Название товара'" :field="'name'"/>
+                        <InputBox :value="data?.name" @update="setField" :title="'Название товара'" :field="'name'"/>
                     </template>
                     <template>
                         <label> Введите стоимость товара <span class="require">*</span></label>
-                        <InputBox :value="data.price?.toString()" @update="setField" :title="'Стоимость товара'"
+                        <InputBox :value="data?.price?.toString()" @update="setField" :title="'Стоимость товара'"
                                   :field="'price'"/>
                     </template>
                     <template>
                         <label> Выберите категорию <span class="require">*</span></label>
-                        <SelectBox :choosingId="data.category_id" :placeholder="'Выберите категорию'"
+                        <SelectBox :choosingId="data?.category_id" :placeholder="'Выберите категорию'"
                                    :field="'category_id'"
                                    :options="categories"
                                    @choosing="setCategory"/>
                     </template>
                     <template>
                         <label> Подкатегория товара <span class="require">*</span></label>
-                        <SelectBox :choosingId="data.sub_category_id" :placeholder="'Выберите подкатегорию'"
+                        <SelectBox :choosingId="data?.sub_category_id" :placeholder="'Выберите подкатегорию'"
                                    :field="'sub_category_id'"
                                    :options="subcategories"
                                    @choosing="setSubcategory"/>
@@ -30,17 +30,16 @@
                 <div class="box-item">
                     <ImageBox
                         @updateImages="setField"
-                        :image="data['images']"
+                        :image="data['images'] ? data['images'] : []"
                         :field="'file'"
                         :label="'Загрузите фотографии, которые будут отображаться в карточке товара'"
                         :btn-text="'Добавить фото(jpeg, png)'"/>
                 </div>
-                <div class="box-item" v-if="filtersAll.length">
-                    <template v-for="filter in filtersAll" v-if="filtersAll.length">
-                        <Chips v-model="options[filter?.slug]" separator=","/>
-                        <!--                        <InputBox :value="data?.characteristics?.[filter?.slug]?.join(' ')" @update="setFilters"-->
-                        <!--                                  :title="filter.name"-->
-                        <!--                                  :field="data?.characteristics?.[filter?.slug]"/>-->
+                <div class="box-item filters" v-if="filtersAll.length">
+                    <template v-for="(filter, i) in filtersAll" v-if="filtersAll.length">
+                        <Chips @focused="setFocus" :index="i" @add="setFilters"
+                               :focused="filter?.name" :slug="filter.slug"
+                               :chips="data?.characteristics?.[filter?.slug]"/>
                     </template>
                 </div>
                 <div class="box-item">
@@ -48,9 +47,9 @@
                     <Editor v-model="description" editorStyle="height: 320px"/>
                 </div>
                 <div class="box-item">
-                    <CheckBox :state="data.labels.indexOf('hot') >= 0" :field="'hot'" :title="'Хит продажи'"
+                    <CheckBox :state="data?.labels?.indexOf('hot') >= 0" :field="'hot'" :title="'Хит продажи'"
                               @update="setLabels"/>
-                    <CheckBox :state="data.labels.indexOf('discount') >= 0" :field="'discount'"
+                    <CheckBox :state="data?.labels?.indexOf('discount') >= 0" :field="'discount'"
                               :title="'Скидка на товар'"
                               @update="setLabels"/>
                 </div>
@@ -72,7 +71,6 @@
 import {mapGetters} from 'vuex'
 import Editor from "primevue/editor"
 import ScrollPanel from "primevue/scrollpanel"
-import Chips from "primevue/chips"
 
 export default {
     name: "EditProducts",
@@ -89,23 +87,23 @@ export default {
     },
     mounted() {
         if (this.data?.same_products_id) {
-            this.$store.dispatch('getSameproducts', this.data.same_products_id)
+            this.$store.dispatch('getSameproducts', this.data?.same_products_id)
         }
 
         this.description += this.data?.description
         this.labels = this.data?.labels
-        for (const item in this.data.characteristics) {
+        for (const item in this.data?.characteristics) {
             if (!this.options[item]) {
                 this.$set(this.options, item, [])
             }
 
-            this.options[item] = this.data.characteristics[item]
+            this.options[item] = this.data?.characteristics[item]
         }
     },
     components: {
         Editor,
         ScrollPanel,
-        Chips,
+        Chips: () => import('@/components/Forms/Chips'),
         InputBox: () => import('~/components/Forms/InputBox'),
         ImageBox: () => import('@/components/Forms/ImageBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
@@ -135,6 +133,9 @@ export default {
         ])
     },
     methods: {
+        setFocus(focused) {
+            this.focused = focused
+        },
         setField(inputData) {
             this.$set(this.boxData, inputData.field, inputData.inputData)
         },
@@ -145,11 +146,7 @@ export default {
             this.$set(this.boxData, inputData.field, inputData.inputData)
         },
         setFilters(inputData) {
-            if (!this.boxData.characteristics) {
-                this.$set(this.boxData, 'characteristics', {})
-            }
-
-            this.$set(this.boxData.characteristics, inputData.field, inputData.inputData)
+            this.options[this.focused] = inputData
         },
         setLabels(inputData) {
             if (!this.boxData.labels) {
@@ -167,11 +164,11 @@ export default {
         sendBoxData() {
             this.$set(this.boxData, 'description', this.description)
             this.$set(this.boxData, 'hidden', false)
-            this.$set(this.boxData, '_id', this.data._id)
+            this.$set(this.boxData, '_id', this.data?._id)
             this.$set(this.boxData, 'characteristics', this.options)
 
             if (!this.boxData.file) {
-                this.boxData.file = this.data.images
+                this.boxData.file = this.data?.images
             }
 
             this.$store.commit('setEditBox', false)
@@ -230,22 +227,7 @@ textarea::placeholder {
     color: var(--gray-2);
 }
 
-.p-chips {
-    display: grid;
-    width: 100%;
-    min-height: 60px;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    color: var(--black);
-    position: relative;
-    z-index: 3;
-    font-size: 18px;
-    font-weight: 400;
-    margin-bottom: 12px;
-}
-
-.p-chips-input-token {
-    background: var(--gray-1);
+.box-item.filters {
+    gap: 15px;
 }
 </style>

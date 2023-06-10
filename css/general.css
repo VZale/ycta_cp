@@ -179,7 +179,7 @@ label {
 .base-input {
     background: var(--gray-1);
     border-radius: 8px;
-    height: 60px;
+    min-height: 60px;
     color: var(--gray-4);
     position: relative;
     padding: 0 14px;

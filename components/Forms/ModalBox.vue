@@ -51,7 +51,7 @@ export default {
 }
 
 .modal {
-    width: 675px;
+    width: 800px;
     min-height: 300px;
     position: absolute;
     background: #FFFFFF;

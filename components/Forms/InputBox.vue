@@ -85,6 +85,7 @@ export default {
 input {
     height: 100%;
     width: 100%;
+    min-height: 60px;
     outline: none;
     background-color: transparent;
     color: var(--black);

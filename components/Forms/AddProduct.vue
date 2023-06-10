@@ -33,8 +33,10 @@
                 </div>
                 <div class="box-item" v-if="filtersAll.length">
                     <template v-for="(filter, i) in filtersAll">
-                        <Chips @focus="setFocus(filter)" v-model="filterData[filter.slug]" separator=","
-                               :placeholder="filter.name"/>
+                        <div class="filter-helper">
+                            <Chips @focused="setFocus" :index="i" @add="setFilters"
+                                   :focused="filter.name" :slug="filter.slug" :chips="filterData[filter.slug]"/>
+                        </div>
                     </template>
                 </div>
                 <div class="box-item">
@@ -62,10 +64,9 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import Chips from "primevue/chips"
 import Editor from 'primevue/editor'
 import ScrollPanel from "primevue/scrollpanel"
-import AutoComplete from 'primevue/autocomplete';
+import AutoComplete from 'primevue/autocomplete'
 
 import('primevue/resources/themes/saga-blue/theme.css')
 import('primevue/resources/primevue.min.css')
@@ -83,10 +84,10 @@ export default {
         this.$store.commit('clearReletedProducts')
     },
     components: {
-        Chips,
         Editor,
         ScrollPanel,
         AutoComplete,
+        Chips: () => import('@/components/Forms/Chips'),
         InputBox: () => import('~/components/Forms/InputBox'),
         ImageBox: () => import('@/components/Forms/ImageBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
@@ -99,6 +100,8 @@ export default {
             boxData: {},
             description: '',
             filterData: [],
+            search: '',
+            focused: ''
         }
     },
     computed: {
@@ -128,7 +131,7 @@ export default {
                 this.$set(this.boxData, 'characteristics', {})
             }
 
-            this.boxData.characteristics[inputData.field] = inputData.inputData.toLowerCase().trim().split(' ')
+            this.boxData.characteristics[this.focused] = inputData
         },
         setLabels(inputData) {
             if (!this.boxData.labels) {
@@ -139,13 +142,6 @@ export default {
         sendBoxData() {
             this.$set(this.boxData, 'description', this.description)
             this.$set(this.boxData, 'hidden', false)
-            if (!this.boxData.characteristics) {
-                this.$set(this.boxData, 'characteristics', {})
-            }
-
-            this.boxData.characteristics = {
-                ...this.filterData
-            }
 
             this.$store.commit('setShowBox', false)
             this.$store.commit('setPage', 'default')
@@ -203,22 +199,46 @@ textarea::placeholder {
     color: var(--gray-2);
 }
 
-.p-chips {
-    display: grid;
-    width: 100%;
-    min-height: 60px;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    color: var(--black);
-    position: relative;
-    z-index: 3;
-    font-size: 18px;
-    font-weight: 400;
+.filter-helper {
+    display: flex;
+    flex-direction: column-reverse;
     margin-bottom: 20px;
 }
 
-.p-chips-input-token {
-    background: var(--gray-1);
+.filters-help {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(55, 57, 64, 0.2);
 }
+
+.filters-help span {
+    border-radius: 8px;
+    background-color: var(--black);
+    color: var(--white);
+    padding: 6px;
+    cursor: pointer;
+}
+
+/*.p-chips {*/
+/*    display: grid;*/
+/*    width: 100%;*/
+/*    min-height: 60px;*/
+/*    border: none;*/
+/*    outline: none;*/
+/*    background-color: transparent;*/
+/*    color: var(--black);*/
+/*    position: relative;*/
+/*    z-index: 3;*/
+/*    font-size: 18px;*/
+/*    font-weight: 400;*/
+/*    margin-bottom: 20px;*/
+/*}*/
+
+/*.p-chips-input-token {*/
+/*    background: var(--gray-1);*/
+/*}*/
 </style>

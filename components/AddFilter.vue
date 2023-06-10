@@ -4,8 +4,9 @@
             <option>Выберите фильтр</option>
             <option   v-for="(filter, i) in filtersAll" :value="filter">{{ filter.name }}</option>
         </select>
-        <label>Введите один или более пунктов фильтрации, через "," / "Enter"</label>
-        <Chips v-model="options" separator="," placeholder="Пункты фильтрации"/>
+        <label>Введите один или более пунктов фильтрации, через "Enter"</label>
+        <Chips @focused="setFocus" :index="0" @add="setFilters" :search="false"
+               :focused="curFilter.name" :slug="curFilter.name"/>
         <div class="add-button">
             <ButtonBox @update="sendBoxData()" :design="['button','red','large','right']" :title="'Добавить фильтр'"/>
         </div>
@@ -13,8 +14,7 @@
 </template>
 
 <script>
-import Chips from 'primevue/chips'
-import {mapGetters} from "vuex";
+import {mapGetters} from "vuex"
 
 import('primevue/resources/themes/lara-light-blue/theme.css')
 import('primevue/resources/primevue.min.css')
@@ -22,7 +22,7 @@ import('primeicons/primeicons.css')
 export default {
     name: "AddFilter",
     components: {
-        Chips,
+        Chips: () => import('@/components/Forms/Chips'),
         InputBox: () => import('~/components/Forms/InputBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox')
     },
@@ -39,6 +39,12 @@ export default {
     methods: {
         setField(inputData) {
             this.$set(this.filterData, inputData.field, inputData.inputData.trim())
+        },
+        setFilters(inputData) {
+            this.options = inputData
+        },
+        setFocus(focused) {
+            this.focused = focused
         },
         sendBoxData() {
             let field = {
@@ -78,7 +84,7 @@ textarea {
     position: relative;
     z-index: 3;
     font-weight: 400;
-    height: 60px;
+    min-height: 60px;
     padding: 14px;
 }
 

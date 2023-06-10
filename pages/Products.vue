@@ -83,7 +83,8 @@ export default {
             isLoading: false,
             pagesShown: 0,
             offset: 0,
-            limit: 18
+            limit: 18,
+            currentProduct: {}
         }
     },
     computed: {

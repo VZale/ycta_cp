@@ -1,8 +1,9 @@
 <template>
     <div class="edit-filter">
-        <InputBox :value="editingFilter.name" @update="setField" :title="'Название фильтра'" :field="'name'"/>
-        <label>Введите один или более пунктов фильтрации, через "," / "Enter"</label>
-        <Chips v-model="options" separator="," placeholder="Пункты фильтрации"/>
+        <InputBox :readonly="true" :value="editingFilter.name" @update="setField" :title="'Название фильтра'" :field="'name'"/>
+        <label>Введите один или более пунктов фильтрации, "Enter"</label>
+        <Chips @focused="setFocus" :index="0" @add="value => options = value" :search="false"
+               :focused="editingFilter.name" :slug="editingFilter.name" :chips="options"/>
         <div class="add-button">
             <ButtonBox @update="sendBoxData()" :design="['button','red','large','right']" :title="'Добавить фильтр'"/>
         </div>
@@ -11,7 +12,6 @@
 
 <script>
 import {mapGetters} from "vuex"
-import Chips from "primevue/chips"
 
 import('primevue/resources/themes/saga-blue/theme.css')
 import('primevue/resources/primevue.min.css')
@@ -19,7 +19,7 @@ import('primeicons/primeicons.css')
 export default {
     name: "EditFilter",
     components: {
-        Chips,
+        Chips: () => import('@/components/Forms/Chips'),
         InputBox: () => import('~/components/Forms/InputBox'),
         ButtonBox: () => import('@/components/Forms/ButtonBox')
     },
@@ -36,6 +36,9 @@ export default {
         ...mapGetters(['editingFilter'])
     },
     methods: {
+        setFocus(focused) {
+            this.focused = focused
+        },
         setField(inputData) {
             this.$set(this.filterData, inputData.field, inputData.inputData.trim())
         },
@@ -78,7 +81,7 @@ textarea {
     position: relative;
     z-index: 3;
     font-weight: 400;
-    height: 60px;
+    min-height: 60px;
     padding: 14px;
 }
 
