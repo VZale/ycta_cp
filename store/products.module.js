@@ -86,7 +86,7 @@ export const mutations = {
 }
 
 const actions = {
-    getProducts(context,data) {
+    getProducts(context, data) {
         RestService.get(`/products?limit=18&offset=${data?.offset || 0}`)
             .then(ans => {
                 this.commit('setProducts', ans)
@@ -119,15 +119,15 @@ const actions = {
             for (const item in file) {
                 formData.append('file', file[item])
             }
-        }else {
+        } else {
             formData.append('file', '')
         }
         RestService.post('/products', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             },
-        },  error => {
-            switch (error){
+        }, error => {
+            switch (error) {
                 case 'INVALID_FILE':
                     this.commit('setErrorMessage', 'Указан неверный файл изображения')
                     break
@@ -154,11 +154,14 @@ const actions = {
     },
 
     editProduct(context, data) {
+        console.log('dis', data)
         const {file, _id, hidden, ...dataWithoutFile} = data
         const formData = new FormData()
         formData.append('data', JSON.stringify(dataWithoutFile))
-        if (file) {
-            formData.append('file', file[0])
+        if (file && Object.keys(file).length) {
+            for (const item in file) {
+                formData.append('file', file[item])
+            }
         } else {
             formData.append('file', '')
         }
