@@ -59,7 +59,7 @@ export default {
             this.images.push(this.image)
         } else if(this.image) {
             this.images = this.image
-            this.file = this.image
+            // this.file = this.image
         }
 
         if (!this.images[0]?.length) {
@@ -99,6 +99,7 @@ export default {
             return 'https://api.kirpichkrasnodar.ru/file/download/' + item
         },
         sendImageArray() {
+            this.file = this.file.concat(this.image)
             let field = {
                 field: this.field,
                 inputData: this.file
