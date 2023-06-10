@@ -59,7 +59,10 @@ export default {
             this.images.push(this.image)
         } else if(this.image) {
             this.images = this.image
+            this.file = this.image
         }
+
+        console.log(this.file)
 
         if (!this.images[0]?.length) {
             this.images = []
