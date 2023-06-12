@@ -61,6 +61,11 @@ export const mutations = {
 
     setProducts(context, data) {
         for (const item in data) {
+            for (const n in data[item]) {
+                if (n === 'images'){
+                    data[item][n] = data[item][n].reverse()
+                }
+            }
             Vue.set(state.products, item, data[item])
         }
     },
@@ -154,10 +159,20 @@ const actions = {
     },
 
     editProduct(context, data) {
-        console.log('dis', data)
-        const {file, _id, hidden, ...dataWithoutFile} = data
+        const {file ,_id, hidden, ...dataWithoutFile} = data
+        const images = []
+
+        data.file.forEach((item) => {
+            if (/\.(png|jpg|jpeg)$/.test(item)) {
+                images.push(item)
+            }
+        })
+
+        dataWithoutFile.images = images
+
         const formData = new FormData()
         formData.append('data', JSON.stringify(dataWithoutFile))
+
         if (file && Object.keys(file).length) {
             for (const item in file) {
                 formData.append('file', file[item])
