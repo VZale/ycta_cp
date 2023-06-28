@@ -39,7 +39,7 @@ import {mapGetters} from "vuex"
 export default {
     props: {
         chips: {
-            type: Object
+            type: [Array, Object]
         },
         focused: {
             type: String

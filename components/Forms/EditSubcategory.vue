@@ -41,7 +41,7 @@ export default {
     },
     props: {
         data: {
-            type: Object
+            type: [Array, Object]
         },
         type: {
             type: String
