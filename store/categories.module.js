@@ -89,8 +89,8 @@ const actions = {
                 'Content-Type': 'multipart/form-data'
             },
         })
-            .then(() => {
-                this.commit('editCategory', data)
+            .then((ans) => {
+                this.commit('editCategory', ans)
             })
     },
     updateCategory(context, data) {

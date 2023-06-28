@@ -52,6 +52,10 @@ export default {
         },
         image: {
             type: [Array, String]
+        },
+        from: {
+            type: String,
+            default: ''
         }
     },
     mounted() {
@@ -99,7 +103,12 @@ export default {
             return 'https://api.kirpichkrasnodar.ru/file/download/' + item
         },
         sendImageArray() {
-            this.file = this.file.concat(this.image)
+            if (this.from !== 'category'){
+                this.file = this.file.concat(this.image).filter(value => {
+                    return value !== undefined && value !== null
+                })
+            }
+
             let field = {
                 field: this.field,
                 inputData: this.file
@@ -130,6 +139,8 @@ export default {
             } else {
                 this.$store.commit('removeReletedProducts', index)
             }
+
+            this.sendImageArray()
         },
         add() {
             if (this.field === 'file') {

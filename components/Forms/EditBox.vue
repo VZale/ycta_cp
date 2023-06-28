@@ -19,7 +19,9 @@
                         :image="data['image']"
                         :field="'file'"
                         :label="'Загрузите фотографии, которые будут отображаться в карточке товара'"
-                        :btn-text="'Добавить фото(jpeg, png)'"/>
+                        :btn-text="'Добавить фото(jpeg, png)'"
+                        :from="'category'"
+                    />
                 </div>
                 <div class="box-item">
                     <label>Описание <span class="require">*</span></label>

@@ -140,6 +140,7 @@ export default {
             this.boxData.labels.push(inputData.field)
         },
         sendBoxData() {
+            console.log(this.boxData)
             this.$set(this.boxData, 'description', this.description)
             this.$set(this.boxData, 'hidden', false)
 

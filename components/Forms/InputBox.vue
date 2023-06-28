@@ -1,8 +1,9 @@
 <template>
-    <div class="form-item base-input" :class="{'is-focus': inputIsActive || value}">
+    <div class="form-item base-input" :class="{'is-focus': inputIsActive || value, 'red': error}">
         <p>{{ title }}</p>
         <input v-model="inputData" type="text"
                :disabled="readonly"
+               @keyup="error = false"
                @focus="inputIsActive = true, $store.commit('disableErrorClass')"
                @blur="removeFocus()">
     </div>
@@ -33,11 +34,16 @@ export default {
     data() {
         return {
             inputIsActive: false,
-            inputData: ""
+            inputData: "",
+            error: false
         }
     },
     methods: {
         sendInputData() {
+            if (this.inputData) {
+                this.error = true
+                return
+            }
             let field = {
                 field: this.field,
                 inputData: this.inputData
