@@ -12,7 +12,6 @@
                 </template>
                 <li>
                     <input
-                        v-if="currentFocused"
                         ref="chipsInput"
                         type="text"
                         @keypress.enter="add()"
@@ -97,6 +96,9 @@ export default {
         },
         add() {
             if (this.chip.trim() !== '' && this.currentFocused) {
+                if (!this.chipsList[this.currentFocused]) {
+                    this.chipsList[this.currentFocused] = []
+                }
                 this.chipsList[this.currentFocused]?.push(this.chip)
                 this.chip = ''
                 this.$nextTick(() => {
@@ -117,11 +119,9 @@ export default {
         },
         focusInput() {
             this.currentFocused = this.focused
-            if (this.currentFocused) {
-                this.$nextTick(() => {
-                    this.$refs.chipsInput?.focus()
-                })
-            }
+            this.$nextTick(() => {
+                this.$refs.chipsInput?.focus()
+            })
             this.$emit("focused", this.slug)
         },
         updateChip(value) {

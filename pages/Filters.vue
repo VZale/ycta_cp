@@ -52,7 +52,7 @@ import Toast from 'primevue/toast';
 export default {
     name: "Filters",
     mounted() {
-      this.$store.dispatch('getAllFilter')
+      this.$store.dispatch('getFilters')
     },
     components: {
         PageNotFound,

@@ -1,9 +1,6 @@
 <template>
     <div class="add-filter">
-        <select class="select-box base-input" v-model="curFilter">
-            <option>Выберите фильтр</option>
-            <option   v-for="(filter, i) in filtersAll" :value="filter">{{ filter.name }}</option>
-        </select>
+        <InputBox @update="setField" :title="'Название фильтра'" :field="'name'"/>
         <label>Введите один или более пунктов фильтрации, через "Enter"</label>
         <Chips @focused="setFocus" :index="0" @add="setFilters" :search="false"
                :focused="curFilter.name" :slug="curFilter.name"/>
@@ -30,7 +27,7 @@ export default {
         return {
             filterData: {},
             options: [],
-            curFilter: 'Выберите фильтр'
+            curFilter: {}
         }
     },
     computed: {
@@ -38,7 +35,9 @@ export default {
     },
     methods: {
         setField(inputData) {
-            this.$set(this.filterData, inputData.field, inputData.inputData.trim())
+            this.$set(this.curFilter, 'name', inputData.inputData)
+            this.$set(this.curFilter, 'slug', inputData.inputData)
+
         },
         setFilters(inputData) {
             this.options = inputData

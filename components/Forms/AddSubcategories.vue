@@ -33,7 +33,7 @@ export default {
     name: "AddSubcategories",
     mounted() {
         if (this.page === 'product') {
-            this.$store.dispatch('getAllFilter')
+            this.$store.dispatch('getFilters')
         }
 
         if (!this.initPages['categories']) {

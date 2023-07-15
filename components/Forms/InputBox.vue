@@ -40,7 +40,7 @@ export default {
     },
     methods: {
         sendInputData() {
-            if (this.inputData) {
+            if (!this.inputData) {
                 this.error = true
                 return
             }
