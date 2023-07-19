@@ -51,7 +51,7 @@ export default {
                 inputData: this.options
             }
             this.$set(this.filterData, 'name', this.curFilter.name)
-            this.$set(this.filterData, 'slug', this.curFilter.slug)
+            this.$set(this.filterData, 'slug', this.curFilter.slug.toLowerCase())
             this.$set(this.filterData, field.field, field.inputData)
             this.$set(this.filterData, 'hidden', false)
             this.$emit('add', this.filterData)
