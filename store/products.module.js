@@ -63,7 +63,7 @@ export const mutations = {
         for (const item in data) {
             for (const n in data[item]) {
                 if (n === 'images'){
-                    data[item][n] = data[item][n].reverse()
+                    data[item][n] = data[item][n]
                 }
             }
             Vue.set(state.products, item, data[item])
@@ -92,7 +92,7 @@ export const mutations = {
 
 const actions = {
     getProducts(context, data) {
-        RestService.get(`/products?limit=18&offset=${data?.offset || 0}`)
+        RestService.get(`/products?limit=18&offset=${data?.offset || 1}`)
             .then(ans => {
                 this.commit('setProducts', ans)
                 this.commit('initPage', 'products')

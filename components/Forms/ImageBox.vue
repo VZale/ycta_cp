@@ -5,13 +5,21 @@
             <CheckBox :title="'Использовать заглушку'" v-if="checkbox && field !== 'slide'"/>
         </div>
         <div class="images-container">
-            <template v-for="(item, index) in field === 'relatedProducts' ? reletedProducts : images">
+            <draggable v-if="from === 'product'" :list="images" class="draggable">
+                <template v-for="(item, index) in field === 'relatedProducts' ? reletedProducts : images">
+                    <div class="item">
+                        <img :src="getPath(item)" alt="">
+                        <span class="material-icons close" @click="remove(index)">close</span>
+                    </div>
+                </template>
+            </draggable>
+            <template v-else v-for="(item, index) in field === 'relatedProducts' ? reletedProducts : images">
                 <div class="item">
                     <img :src="getPath(item)" alt="">
                     <span class="material-icons close" @click="remove(index)">close</span>
                 </div>
             </template>
-            <div class="item" @click="add">
+            <div class="item add" @click="add">
                 <span class="material-icons">add_circle</span>
                 <p>{{ btnText }}</p>
                 <input type="file" multiple @change="addImage" v-if="field === 'file'">
@@ -31,9 +39,9 @@
         </template>
     </div>
 </template>
-
 <script>
 import {mapGetters} from "vuex"
+import draggable from 'vuedraggable'
 
 export default {
     props: {
@@ -73,6 +81,7 @@ export default {
     },
     name: "ImageBox",
     components: {
+        draggable,
         ProductsList: () => import('@/components/ProductsList'),
         ButtonBox: () => import('@/components/Forms/ButtonBox'),
         Card: () => import("@/components/Card"),
@@ -208,9 +217,12 @@ export default {
     text-align: center;
     align-items: center;
     justify-content: center;
+    padding: 0 10px;
+}
+
+.images-container .item.add {
     border: 5px dashed var(--gray-2);
     color: var(--gray-4);
-    padding: 0 10px;
 }
 
 .images-container .item img {
@@ -225,6 +237,12 @@ export default {
     height: 100%;
     position: absolute;
     cursor: pointer;
+}
+
+.draggable {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .close {

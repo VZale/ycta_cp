@@ -45,7 +45,7 @@ export default {
         return {
             isLoading: false,
             pagesShown: 0,
-            offset: 0,
+            offset: 1,
             limit: 18
         }
     },

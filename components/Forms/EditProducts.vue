@@ -32,6 +32,7 @@
                         @updateImages="setField"
                         :image="data['images'] ? data['images'] : []"
                         :field="'file'"
+                        :from="'product'"
                         :label="'Загрузите фотографии, которые будут отображаться в карточке товара'"
                         :btn-text="'Добавить фото(jpeg, png)'"/>
                 </div>
