@@ -303,10 +303,6 @@ export default {
     width: fit-content;
 }
 
-.title {
-    word-break: break-all;
-}
-
 .product-info {
     display: flex;
     flex-direction: column;
