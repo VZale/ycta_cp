@@ -4,7 +4,7 @@ import Vue from "vue"
 export const state = {
     chosenProducts: {},
     reletedProducts: {},
-    products: {},
+    products: [],
     sameProducts: {},
 }
 
@@ -66,7 +66,7 @@ export const mutations = {
                     data[item][n] = data[item][n]
                 }
             }
-            Vue.set(state.products, item, data[item])
+            state.products.push(data[item])
         }
     },
     addProduct(context, data) {
@@ -92,7 +92,7 @@ export const mutations = {
 
 const actions = {
     getProducts(context, data) {
-        RestService.get(`/products?limit=18&offset=${data?.offset || 1}`)
+        RestService.get(`/products?limit=10&offset=${data?.offset || 1}`)
             .then(ans => {
                 this.commit('setProducts', ans)
                 this.commit('initPage', 'products')
@@ -159,7 +159,7 @@ const actions = {
     },
 
     editProduct(context, data) {
-        const {file ,_id, hidden, ...dataWithoutFile} = data
+        const {file, _id, hidden, ...dataWithoutFile} = data
         const images = []
 
         data.file.forEach((item) => {

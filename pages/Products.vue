@@ -53,9 +53,6 @@ import Toast from 'primevue/toast';
 export default {
     name: "Products",
     mounted() {
-        this.txPagesShown = 0
-        this.loadMore()
-
         const intersectionObserver = new IntersectionObserver(entries => {
             if (entries[0]?.isIntersecting && !this.isLoading) {
                 this.loadMore()
@@ -81,7 +78,7 @@ export default {
     data() {
         return {
             isLoading: false,
-            pagesShown: 0,
+            pagesShown: 1,
             offset: 1,
             limit: 18,
             currentProduct: {}
