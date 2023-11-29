@@ -26,7 +26,7 @@
 
                                     />
                                 </template>
-                                <div class="end" ref="end"></div>
+                                <span class="end" ref="end"><br></span>
                             </div>
                         </template>
                         <WarningMessage v-else :warning-message="'Начните добавлять товары и они появятся здесь'"/>
@@ -54,12 +54,12 @@ export default {
     name: "Products",
     mounted() {
         const intersectionObserver = new IntersectionObserver(entries => {
-            if (entries[0]?.isIntersecting && !this.isLoading) {
+            if (entries[0].isIntersecting && !this.isLoading) {
                 this.loadMore()
             }
-        }, {
-            threshold: 1.0
         })
+
+        console.log(this.$refs.end)
         if (this.$refs.end) {
             intersectionObserver.observe(this.$refs.end)
         }

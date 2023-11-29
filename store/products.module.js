@@ -92,7 +92,12 @@ export const mutations = {
 
 const actions = {
     getProducts(context, data) {
-        RestService.get(`/products?limit=10&offset=${data?.offset || 1}`)
+        if (!data) {
+            data = {}
+            data.offset = 1
+        }
+
+        RestService.get(`/products?limit=15&offset=${data.offset}`)
             .then(ans => {
                 this.commit('setProducts', ans)
                 this.commit('initPage', 'products')
