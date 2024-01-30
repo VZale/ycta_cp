@@ -153,7 +153,6 @@ const actions = {
         const {file, ...dataWithoutFile} = data
         const formData = new FormData()
         dataWithoutFile.price = dataWithoutFile.price.replace(/,/g, '.');
-        console.log(dataWithoutFile)
         formData.append('data', JSON.stringify(dataWithoutFile))
         if (file && Object.keys(file).length) {
             for (const item in file) {
