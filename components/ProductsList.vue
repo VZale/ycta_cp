@@ -1,7 +1,7 @@
 <template>
     <div class="products-list" v-if="Object.keys(products).length">
         <template v-for="(product, i) in products">
-            <Card v-if="!product.hidden"
+            <Card v-if="!product?.hidden"
                   :id="product"
                   :type="'product'"
                   :title="product.name"

@@ -152,6 +152,8 @@ const actions = {
     addProduct(context, data) {
         const {file, ...dataWithoutFile} = data
         const formData = new FormData()
+        dataWithoutFile.price = dataWithoutFile.price.replace(/,/g, '.');
+        console.log(dataWithoutFile)
         formData.append('data', JSON.stringify(dataWithoutFile))
         if (file && Object.keys(file).length) {
             for (const item in file) {
@@ -169,8 +171,14 @@ const actions = {
                 case 'INVALID_FILE':
                     this.commit('setErrorMessage', 'Указан неверный файл изображения')
                     break
+                case 'SERVER_ERROR':
+                    this.commit('setErrorMessage', 'Server Error')
+                    break
+                case 'INVALID_DESCRIPTION':
+                    this.commit('setErrorMessage', 'Описание не заполнено')
+                    break
                 default :
-                    this.commit('setErrorMessage', 'Данный товар уже добавлен')
+                    this.commit('setErrorMessage', 'Данный товар уже добавлен / ошибка сервера')
                     break
             }
             setTimeout(() => {

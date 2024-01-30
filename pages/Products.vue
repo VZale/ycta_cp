@@ -12,7 +12,7 @@
                         <template v-if="Object.keys(products).length">
                             <div class="cards">
                                 <template v-for="(product, i) in products">
-                                    <Card v-if="!product.hidden"
+                                    <Card v-if="!product?.hidden"
                                           :type="'product'"
                                           :title="product.name"
                                           :price="product.price"

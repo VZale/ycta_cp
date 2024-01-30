@@ -44,7 +44,7 @@ export default {
             })
         },
         hide(product) {
-            product.hidden = !product.hidden
+            product.hidden = !product?.hidden
             this.$store.dispatch(`update${this.page}`, {
                 _id: product._id,
                 hidden: product.hidden
