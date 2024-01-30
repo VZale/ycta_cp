@@ -6,6 +6,7 @@ export const state = {
     reletedProducts: {},
     products: [],
     sameProducts: {},
+    currentSameProductId: null
 }
 
 export const getters = {
@@ -28,6 +29,10 @@ export const getters = {
 
 export const mutations = {
     chooseProduct(context, data) {
+        if (!data.data) {
+            return
+        }
+
         if (!state.chosenProducts[data.id]) {
             Vue.set(state.chosenProducts, data.id, {})
         }
@@ -43,8 +48,15 @@ export const mutations = {
         Vue.set(state, 'reletedProducts', data)
     },
 
-    removeReletedProducts(context, id) {
-        state.reletedProducts.splice(id, 1)
+    addToRelatedProducts(context, data) {
+        for (const item in data) {
+            state.reletedProducts.images.push(data[item])
+        }
+    },
+
+    removeRelatedProducts(context, id) {
+        state.reletedProducts.ids.splice(id, 1)
+        state.reletedProducts.images.splice(id, 1)
     },
 
     removeProduct(context, data) {
@@ -62,7 +74,7 @@ export const mutations = {
     setProducts(context, data) {
         for (const item in data) {
             for (const n in data[item]) {
-                if (n === 'images'){
+                if (n === 'images') {
                     data[item][n] = data[item][n]
                 }
             }
@@ -103,23 +115,39 @@ const actions = {
                 this.commit('initPage', 'products')
             })
     },
-    getSameproducts(context, data) {
+    getSameProducts(context, data) {
+        Vue.set(state, 'currentSameProductId', data)
         RestService.get(`/same_product/${data}`)
             .then((ans) => {
                 this.commit('chooseProduct', ans.products)
-                let images = []
-                for (const item in ans.products) {
-                    images.push(ans.products[item].images[0])
+                let sameProducts = {
+                    images: [],
+                    ids: []
                 }
-                this.commit('setReletedProducts', images)
+                for (const item in ans.products) {
+                    sameProducts.images.push(ans.products[item].images[0])
+                    sameProducts.ids.push(ans.products[item]._id)
+                }
+                this.commit('setReletedProducts', sameProducts)
             })
     },
-    addSameproducts(context, data) {
+    addSameProducts(context, data) {
         RestService.post('/same_products', data.sameproduct)
             .then((ans) => {
                 data.data.same_products_id = ans._id
                 this.dispatch('addProduct', data.data)
             })
+    },
+    addToSameProducts(context, data) {
+        let productData = {
+            products: data,
+            manager_id: context.rootGetters['user']._id
+        }
+        RestService.put(`/same_product/${state.currentSameProductId}`, productData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+        })
     },
     addProduct(context, data) {
         const {file, ...dataWithoutFile} = data
@@ -164,7 +192,7 @@ const actions = {
     },
 
     editProduct(context, data) {
-        const {file, _id, hidden, ...dataWithoutFile} = data
+        const {file, _id, hidden, same_products_id, ...dataWithoutFile} = data
         const images = []
 
         data.file.forEach((item) => {

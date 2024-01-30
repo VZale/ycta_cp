@@ -78,6 +78,7 @@ export default {
 .grid .modal {
     width: calc(100% - 360px);
     height: calc(100% - 200px);
+    gap: 20px 0;
 }
 
 .grid .close {

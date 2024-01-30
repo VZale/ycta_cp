@@ -59,7 +59,6 @@ export default {
             }
         })
 
-        console.log(this.$refs.end)
         if (this.$refs.end) {
             intersectionObserver.observe(this.$refs.end)
         }
@@ -98,7 +97,7 @@ export default {
         addProduct(productData) {
             if (productData.same_products_id?.length) {
                 const {same_products_id, ...data} = productData;
-                this.$store.dispatch('addSameproducts', {
+                this.$store.dispatch('addSameProducts', {
                     sameproduct: {
                         products: same_products_id,
                         hidden: false
@@ -123,6 +122,7 @@ export default {
             })
         },
         saveProduct(data) {
+            this.$store.dispatch('addToSameProducts', data.same_products_id)
             this.$store.dispatch('editProduct', data)
             this.$store.commit('setEditBox', false)
         },

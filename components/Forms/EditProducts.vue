@@ -88,7 +88,7 @@ export default {
     },
     mounted() {
         if (this.data?.same_products_id) {
-            this.$store.dispatch('getSameproducts', this.data?.same_products_id)
+            this.$store.dispatch('getSameProducts', this.data?.same_products_id)
         }
 
         this.description += this.data?.description
@@ -130,7 +130,8 @@ export default {
             'fields',
             'categories',
             'subcategories',
-            'filtersAll'
+            'filtersAll',
+            'reletedProducts'
         ])
     },
     methods: {
@@ -167,6 +168,17 @@ export default {
             this.$set(this.boxData, 'hidden', false)
             this.$set(this.boxData, '_id', this.data?._id)
             this.$set(this.boxData, 'characteristics', this.options)
+            let sameProducts = []
+
+            if (this.boxData.same_products_id) {
+                for (const item in this.reletedProducts.ids) {
+                    sameProducts.push(this.reletedProducts.ids[item]);
+                }
+
+                sameProducts = sameProducts.concat(this.boxData['same_products_id']);
+
+                this.$set(this.boxData, 'same_products_id', sameProducts);
+            }
 
             if (!this.boxData.file) {
                 this.boxData.file = this.data?.images

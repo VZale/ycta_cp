@@ -6,14 +6,14 @@
         </div>
         <div class="images-container">
             <draggable v-if="from === 'product'" :list="images" class="draggable">
-                <template v-for="(item, index) in field === 'relatedProducts' ? reletedProducts : images">
+                <template v-for="(item, index) in field === 'relatedProducts' ? reletedProducts.images : images">
                     <div class="item">
                         <img :src="getPath(item)" alt="">
                         <span class="material-icons close" @click="remove(index)">close</span>
                     </div>
                 </template>
             </draggable>
-            <template v-else v-for="(item, index) in field === 'relatedProducts' ? reletedProducts : images">
+            <template v-else v-for="(item, index) in field === 'relatedProducts' ? reletedProducts.images : images">
                 <div class="item">
                     <img :src="getPath(item)" alt="">
                     <span class="material-icons close" @click="remove(index)">close</span>
@@ -146,7 +146,8 @@ export default {
                 this['file'].splice(index, 1)
                 this['images'].splice(index, 1)
             } else {
-                this.$store.commit('removeReletedProducts', index)
+                this.$store.commit('removeRelatedProducts', index)
+                this.showSelectedProducts()
             }
 
             this.sendImageArray()
@@ -166,7 +167,7 @@ export default {
         showSelectedProducts() {
             let images = Object.values(this.chosenProducts).map(el => el.data.images[0]);
             let ids = Object.values(this.chosenProducts).map(el => el.data._id);
-            this.$store.commit('setReletedProducts', images)
+            this.$store.commit('addToRelatedProducts', images)
             this.$store.commit('clearChosenProducts')
 
             this.showProductListModal = false
